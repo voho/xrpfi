@@ -1,0 +1,31 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#root {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.news-menu {
+    flex-grow: 0.5;
+}
+
+.news-list {
+    flex-grow: 1;
+    align-self: stretch;
+    overflow-y: scroll;
+}
+
+.news-content {
+    flex-grow: 2.5;
+}

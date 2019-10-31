@@ -9,7 +9,7 @@ interface NewsListProps {
 export const NewsList: React.FC<NewsListProps> = (props) => {
     return (
         <div>
-            {props.news.map(news => <NewsListItem news={news}/>)}
+            {props.news.map(news => <NewsListItem news={news} selectNewsHandler={(guid) => console.log(guid)}/>)}
         </div>
     );
 };
