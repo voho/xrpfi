@@ -16,5 +16,8 @@ export interface News {
     url: string,
     title: string,
     body: string,
-    tags: string[]
+    tags: string[],
+    sourceUrls: string[],
+    externalUrls: string[]
+    imageUrls: string[]
 }

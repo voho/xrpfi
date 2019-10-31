@@ -1,6 +1,6 @@
 import React from "react";
 import {News} from "../model/model";
-import {NewsListItem} from "./NewsListItem";
+import {NewsItem} from "./NewsItem";
 
 interface NewsListProps {
     news: News[]
@@ -8,8 +8,8 @@ interface NewsListProps {
 
 export const NewsList: React.FC<NewsListProps> = (props) => {
     return (
-        <div>
-            {props.news.map(news => <NewsListItem news={news} selectNewsHandler={(guid) => console.log(guid)}/>)}
-        </div>
+        <>
+            {props.news.map(news => <NewsItem news={news}/>)}
+        </>
     );
 };

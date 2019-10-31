@@ -1,8 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700');
+
 body, html {
+    background-color: #111111;
+    color: #666666;
+    line-height: 1.2;
+    font-family: Ubuntu, Avenir, sans-serif;
+    font-size: 12pt;
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
+}
+
+a {
+    color: #528ede;
+    text-decoration: none;
+}
+
+div, p {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: white;
+    font-size: 120%;
+    font-weight: normal;
+}
+
+h1 span {
+    color: #333;
 }
 
 #root {
@@ -17,15 +44,97 @@ body, html {
 }
 
 .news-menu {
-    flex-grow: 0.5;
+
 }
+
 
 .news-list {
     flex-grow: 1;
     align-self: stretch;
     overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    width: 50%;
 }
 
+.news-control {
+    padding: 1em;
+    text-align: center;
+}
+
+.price-indicator {
+    padding: 2em 0;
+}
+
+.price-indicator p {
+    text-align: right;
+}
+
+.price-symbol {
+    font-size: 90%;
+}
+
+.price-value {
+    display: inline-block;
+    color: #ccc;
+    font-size: 120%;
+}
+
+.price-change, .price-change-label {
+    font-size: 80%;
+    padding-left: 1ex;
+    padding-right: 1ex;
+}
+
+
 .news-content {
-    flex-grow: 2.5;
+    flex-grow: 1;
+    width: 50%;
+}
+
+.news-item {
+    background-color: #161616;
+    border: 1px solid #222222;
+    display: flex;
+    margin: 1ex;
+    padding: 1ex 1em;
+    align-items: center;
+}
+
+.news-item:hover {
+    background-color: #202020;
+}
+
+.news-item-main {
+    flex-grow: 1;
+}
+
+.news-item-image {
+
+}
+
+.news-item-flags {
+    font-size: 80%;
+    padding: 0 0 1ex 0;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: #111111;
+}
+
+*::-webkit-scrollbar {
+    width: 1ex;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #333333;
+    border: 1px solid #000;
+    border-radius: 1ex;
+}
+
+.color-negative {
+    color: #dc3545;
+}
+
+.color-positive {
+    color: #4cdc52;
 }
