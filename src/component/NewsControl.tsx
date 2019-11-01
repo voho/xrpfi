@@ -1,11 +1,11 @@
 import React, {useContext, useEffect} from "react";
 import logoSrc from "../image/logo.svg";
-import {GlobalReducerContext} from "../model/reducer";
 import {scheduleRegularTickersUpdate} from "../service/api";
+import {UseTickersReducerContext} from "../service/TickersReducer";
 import {PriceIndicator} from "./PriceIndicator";
 
 export const NewsControl = () => {
-    const context = useContext(GlobalReducerContext);
+    const context = useContext(UseTickersReducerContext);
     const tickers = context.state.tickers || {xrp_btc_change1d: 0, xrp_btc_price: 0, xrp_usb_change1d: 0, xrp_usd_price: 0};
 
     useEffect(() => { scheduleRegularTickersUpdate(context.dispatch); }, []);

@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from "react";
-import {News} from "../model/model";
-import {GlobalReducerContext} from "../model/reducer";
 import {scheduleRegularNewsUpdate} from "../service/api";
+import {News} from "../service/model";
+import {UseNewsReducerContext} from "../service/NewsReducer";
 import {NewsControl} from "./NewsControl";
 import {NewsDetail} from "./NewsDetail";
 import {NewsList} from "./NewsList";
@@ -18,7 +18,7 @@ function findNews(param: News[], selected?: string): News | undefined {
 }
 
 export const NewsCenter = () => {
-    const context = useContext(GlobalReducerContext);
+    const context = useContext(UseNewsReducerContext);
 
     useEffect(() => { scheduleRegularNewsUpdate(context.dispatch); }, []);
 

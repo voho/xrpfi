@@ -1,11 +1,18 @@
-export interface GlobalState {
-    newsLoading: boolean,
-    newsLoadingError?: string,
+export interface Action {
+    type: string
+}
+
+export interface NewsState {
+    loading: boolean,
+    error?: string,
     news?: News[]
-    selectedNewsGuid?: string,
+    selectedNewsGuid?: string
+}
+
+export interface TickersState {
     tickers?: Tickers,
-    tickersLoading: boolean,
-    tickersLoadingError?: string
+    loading: boolean,
+    error?: string
 }
 
 export interface Tickers {

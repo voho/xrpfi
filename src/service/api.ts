@@ -1,6 +1,7 @@
 import React from "react";
-import {Root} from "../model/model";
-import {Action, NewsLoadErrorAction, NewsLoadStartAction, NewsLoadSuccessAction, TickersLoadSuccessAction} from "../model/reducer";
+import {Action, Root} from "./model";
+import {NewsLoadErrorAction, NewsLoadStartAction, NewsLoadSuccessAction} from "./NewsReducer";
+import {TickersLoadSuccessAction} from "./TickersReducer";
 
 const priceUrl = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=XRP&tsyms=BTC,USD";
 const rootJsonUrl = "https://xrpfi.s3-eu-west-1.amazonaws.com/root.json";
@@ -9,30 +10,33 @@ const TICKERS_UPDATE_INTERVAL_MS = 10000;
 const NEWS_UPDATE_INTERVAL_MS = 30000;
 
 export function scheduleRegularTickersUpdate(dispatch: React.Dispatch<Action>) {
-    fetch(priceUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Invalid response: " + response.status);
-            }
-            return response.json();
-        })
-        .then(responseJson => {
-            dispatch({
-                type: "tickers_load_success",
-                tickers: {
-                    xrp_btc_price: responseJson.RAW.XRP.BTC.PRICE * 100000000,
-                    xrp_usd_price: responseJson.RAW.XRP.USD.PRICE,
-                    xrp_btc_change1d: responseJson.RAW.XRP.BTC.CHANGEPCT24HOUR / 100.0,
-                    xrp_usb_change1d: responseJson.RAW.XRP.USD.CHANGEPCT24HOUR / 100.0
+    const callback = () => {
+        fetch(priceUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Invalid response: " + response.status);
                 }
-            } as TickersLoadSuccessAction);
+                return response.json();
+            })
+            .then(responseJson => {
+                dispatch({
+                    type: "tickers_load_success",
+                    tickers: {
+                        xrp_btc_price: responseJson.RAW.XRP.BTC.PRICE * 100000000,
+                        xrp_usd_price: responseJson.RAW.XRP.USD.PRICE,
+                        xrp_btc_change1d: responseJson.RAW.XRP.BTC.CHANGEPCT24HOUR / 100.0,
+                        xrp_usb_change1d: responseJson.RAW.XRP.USD.CHANGEPCT24HOUR / 100.0
+                    }
+                } as TickersLoadSuccessAction);
+            })
+            .catch(error => {
+                dispatch({type: "tickers_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
+            });
 
+        setTimeout(callback, TICKERS_UPDATE_INTERVAL_MS);
+    };
 
-            setTimeout(() => {scheduleRegularNewsUpdate(dispatch);}, TICKERS_UPDATE_INTERVAL_MS);
-        })
-        .catch(error => {
-            dispatch({type: "tickers_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
-        });
+    callback();
 }
 
 export function scheduleRegularNewsUpdate(dispatch: React.Dispatch<Action>) {

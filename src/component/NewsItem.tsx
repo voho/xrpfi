@@ -6,8 +6,8 @@ import {faVideo} from "@fortawesome/free-solid-svg-icons/faVideo";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import React, {useContext} from "react";
-import {News} from "../model/model";
-import {GlobalReducerContext, SelectAction} from "../model/reducer";
+import {News} from "../service/model";
+import {NewsSelectAction, UseNewsReducerContext} from "../service/NewsReducer";
 import "./NewsItem.scss";
 
 interface NewsItemProps {
@@ -60,7 +60,7 @@ const NewsDate: React.FC<NewsItemProps> = (props) => {
 };
 
 export const NewsItem: React.FC<NewsItemProps> = (props) => {
-    const context = useContext(GlobalReducerContext);
+    const context = useContext(UseNewsReducerContext);
 
     const classes = ["news-item"];
 
@@ -69,7 +69,7 @@ export const NewsItem: React.FC<NewsItemProps> = (props) => {
     }
 
     return (
-        <div className={classes.join(" ")} onClick={() => context.dispatch(({type: "news_select", selected: props.news.guid} as SelectAction))}>
+        <div className={classes.join(" ")} onClick={() => context.dispatch(({type: "news_select", selected: props.news.guid} as NewsSelectAction))}>
             <div className={"news-item-main"}>
                 <p className={"news-item-flags"}>
                     <NewsFlags news={props.news}/>

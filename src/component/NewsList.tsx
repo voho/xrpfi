@@ -1,5 +1,5 @@
 import React from "react";
-import {News} from "../model/model";
+import {News} from "../service/model";
 import {NewsItem} from "./NewsItem";
 
 interface NewsListProps {
