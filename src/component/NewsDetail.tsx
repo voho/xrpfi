@@ -10,18 +10,27 @@ function createMarkup(html: string) {
     return {__html: html};
 }
 
-export const NewsDetail: React.FC<NewsDetailProps> = (props) => {
+const NoNewsSelected = () => {
+    return <p className={"empty-news"}>No News selected.</p>;
+};
+
+const NewsSelected: React.FC<NewsDetailProps> = (props) => {
     if (!props.selectedNews) {
-        return <p>No News selected.</p>;
+        return <NoNewsSelected/>;
     }
 
     return (
+        <>
+            <h2>{props.selectedNews!.title}</h2>
+            <div className={"external"} dangerouslySetInnerHTML={createMarkup(props.selectedNews!.body)}/>
+        </>
+    );
+};
+
+export const NewsDetail: React.FC<NewsDetailProps> = (props) => {
+    return (
         <div className={"inside"}>
-            <h3>{props.selectedNews!.title}</h3>
-            <div dangerouslySetInnerHTML={createMarkup(props.selectedNews!.body)}/>
-            <div>
-                <pre>{JSON.stringify(props.selectedNews!, null, 2)}</pre>
-            </div>
+            <NewsSelected selectedNews={props.selectedNews}/>
         </div>
     );
 };

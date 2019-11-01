@@ -1,16 +1,14 @@
-.news-content {
-  font-size: 120%;
+.inside {
   line-height: 1.5;
-  flex-grow: 1;
-  align-self: stretch;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  min-width: 40%;
-  max-width: 50%;
-  width: 45%;
+  padding: 2em;
 
-  p {
-    padding: 1.5em 0 1ex 0;
+  h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    padding: 1em 0 1ex 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #cccccc;
   }
 
   img {
@@ -23,8 +21,13 @@
     margin-top: 1em;
   }
 
-  .inside {
-    padding: 2em;
+  .external {
+
+  }
+
+  .empty-news {
+    font-size: 200%;
+    text-align: center;
   }
 }
 

@@ -10,7 +10,7 @@ export interface TickersLoadErrorAction extends Action {
 }
 
 interface UseTickersReducerContextState {
-    state: Partial<TickersState>,
+    state: TickersState,
     dispatch: React.Dispatch<Action>
 }
 

@@ -2,7 +2,7 @@
 
 body, html {
     background-color: #111111;
-    color: #666666;
+    color: #999999;
     line-height: 1.2;
     font-family: "Ubuntu Condensed", Avenir, sans-serif;
     font-size: 13pt;
@@ -15,6 +15,10 @@ body, html {
 a {
     color: #528ede;
     text-decoration: none;
+}
+
+a:hover {
+    color: white;
 }
 
 div, p {
@@ -31,16 +35,6 @@ div, p {
     align-content: center;
     width: 100%;
     height: 100%;
-}
-
-.news-list {
-    flex-grow: 1;
-    align-self: stretch;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-    min-width: 40%;
-    max-width: 50%;
-    width: 45%;
 }
 
 *::-webkit-scrollbar-track {

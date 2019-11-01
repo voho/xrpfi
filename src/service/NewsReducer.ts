@@ -18,13 +18,16 @@ export interface NewsLoadErrorAction extends Action {
 }
 
 interface UseNewsReducerContextState {
-    state: Partial<NewsState>,
+    state: NewsState,
     dispatch: React.Dispatch<Action>
 }
 
 export const newsReducer = (state: NewsState, action: Action): NewsState => {
     switch (action.type) {
         case "news_select":
+            if (state.selectedNewsGuid === (action as NewsSelectAction).selected) {
+                return {...state, selectedNewsGuid: undefined};
+            }
             return {...state, selectedNewsGuid: (action as NewsSelectAction).selected};
         case "news_load_start":
             return {...state, loading: true, error: undefined};
