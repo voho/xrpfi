@@ -1,4 +1,5 @@
 import React from "react";
+import "./LoadingIndicator.scss";
 
 interface LoadingIndicatorProps {
     title: string,
@@ -7,11 +8,5 @@ interface LoadingIndicatorProps {
 }
 
 export const LoadingIndicator: React.FC<LoadingIndicatorProps> = (props) => {
-    if (props.loading) {
-        return <>Loading...</>;
-    }
-    if (props.error) {
-        return <>Error: {props.error}</>;
-    }
-    return null;
+    return <p className={"loading-indicator"}>{props.title} {props.loading ? "..." : props.error ? "❌" : "✔️"}</p>;
 };

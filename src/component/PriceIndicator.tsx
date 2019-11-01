@@ -28,19 +28,17 @@ const Change: React.FC<{ value: number }> = (props) => {
 
 export const PriceIndicator: React.FC<PriceIndicatorProps> = (props) => {
     return (
-        <>
-            <div className={"price-indicator"}>
-                <p>
-                    <span className={"price-symbol"}>{props.symbol}</span>
-                </p>
-                <p>
-                    <span className={"price-value"}>{toFixedWithoutZeroes(props.price, 3)}</span>
-                </p>
-                <p>
-                    <span className={"price-change"}><Change value={props.change}/></span>
-                    <span className={"price-change-label"}>{props.changeLabel}</span>
-                </p>
-            </div>
-        </>
+        <div className={"price-indicator"}>
+            <p>
+                <span className={"price-symbol"}>{props.symbol}</span>
+            </p>
+            <p>
+                <span className={"price-value"}>{toFixedWithoutZeroes(props.price, 3)}</span>
+            </p>
+            <p>
+                <span className={"price-change"}><Change value={props.change}/></span>
+                <span className={"price-change-label"}>{props.changeLabel}</span>
+            </p>
+        </div>
     );
 };
