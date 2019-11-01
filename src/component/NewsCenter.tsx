@@ -1,27 +1,10 @@
 import React, {useContext, useEffect} from "react";
 import {News} from "../model/model";
-import {Action, GlobalReducerContext, LoadErrorAction, LoadSuccessAction} from "../model/reducer";
-import {fetchRoot} from "../service/api";
+import {GlobalReducerContext} from "../model/reducer";
+import {scheduleRegularNewsUpdate} from "../service/api";
 import {NewsControl} from "./NewsControl";
 import {NewsDetail} from "./NewsDetail";
 import {NewsList} from "./NewsList";
-
-function scheduleUpdate(dispatch: React.Dispatch<Action>) {
-    const callback = () => {
-        fetchRoot()
-            .then(newState => {
-                dispatch({type: "load_success", data: newState} as LoadSuccessAction);
-            })
-            .catch(error => {
-                dispatch({type: "load_error", errorMessage: error.toString()} as LoadErrorAction);
-            });
-
-        setTimeout(callback, 30000);
-    };
-
-    callback();
-}
-
 
 function findNews(param: News[], selected?: string): News | undefined {
     if (!selected) {
@@ -37,7 +20,7 @@ function findNews(param: News[], selected?: string): News | undefined {
 export const NewsCenter = () => {
     const context = useContext(GlobalReducerContext);
 
-    useEffect(() => { scheduleUpdate(context.dispatch); }, []);
+    useEffect(() => { scheduleRegularNewsUpdate(context.dispatch); }, []);
 
     return (
         <>
@@ -45,10 +28,10 @@ export const NewsCenter = () => {
                 <NewsControl/>
             </div>
             <div className={"news-list"}>
-                {context.state.root && <NewsList news={context.state.root!.news}/>}
+                {context.state.news && <NewsList news={context.state.news}/>}
             </div>
             <div className={"news-content"}>
-                {context.state.root && <NewsDetail selectedNews={findNews(context.state.root!.news, context.state.selected)}/>}
+                {context.state.news && <NewsDetail selectedNews={findNews(context.state.news, context.state.selectedNewsGuid)}/>}
             </div>
         </>
     );

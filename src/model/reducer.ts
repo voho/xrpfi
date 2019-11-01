@@ -1,5 +1,5 @@
 import React from "react";
-import {GlobalState, Root} from "./model";
+import {GlobalState, News, Tickers} from "./model";
 
 export interface Action {
     type: string
@@ -9,11 +9,23 @@ export interface SelectAction extends Action {
     selected: string;
 }
 
-export interface LoadSuccessAction extends Action {
-    data: Root;
+export interface NewsLoadStartAction extends Action {
+
 }
 
-export interface LoadErrorAction extends Action {
+export interface NewsLoadSuccessAction extends Action {
+    news: News[]
+}
+
+export interface NewsLoadErrorAction extends Action {
+    errorMessage: string;
+}
+
+export interface TickersLoadSuccessAction extends Action {
+    tickers: Tickers
+}
+
+export interface TickersLoadErrorAction extends Action {
     errorMessage: string;
 }
 
@@ -24,16 +36,23 @@ interface UseReducerContextState {
 
 export const globalReducer = (state: GlobalState, action: Action): GlobalState => {
     switch (action.type) {
-        case "select":
-            return {...state, selected: (action as SelectAction).selected};
-        case "load_start":
-            return {...state, loading: true, error: undefined};
-        case "load_success":
-            return {...state, loading: false, root: (action as LoadSuccessAction).data};
-        case "load_error":
-            return {...state, loading: false, error: (action as LoadErrorAction).errorMessage};
+        case "news_select":
+            return {...state, selectedNewsGuid: (action as SelectAction).selected};
+        case "news_load_start":
+            return {...state, newsLoading: true, newsLoadingError: undefined};
+        case "news_load_success":
+            return {...state, newsLoading: false, news: (action as NewsLoadSuccessAction).news};
+        case "news_load_error":
+            return {...state, newsLoading: false, newsLoadingError: (action as NewsLoadErrorAction).errorMessage};
+        case "tickers_load_start":
+            return {...state, tickersLoading: true, tickersLoadingError: undefined};
+        case "tickers_load_success":
+            return {...state, tickersLoading: false, tickers: (action as TickersLoadSuccessAction).tickers};
+        case "tickers_load_error":
+            return {...state, tickersLoading: false, tickersLoadingError: (action as TickersLoadErrorAction).errorMessage};
         default:
-            throw new Error("Unexpected action: " + JSON.stringify(action));
+            console.error("Unexpected action: " + JSON.stringify(action));
+            return state;
     }
 };
 

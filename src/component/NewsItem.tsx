@@ -64,12 +64,12 @@ export const NewsItem: React.FC<NewsItemProps> = (props) => {
 
     const classes = ["news-item"];
 
-    if (context.state.selected === props.news.guid) {
+    if (context.state.selectedNewsGuid === props.news.guid) {
         classes.push("active");
     }
 
     return (
-        <div className={classes.join(" ")} onClick={() => context.dispatch(({type: "select", selected: props.news.guid} as SelectAction))}>
+        <div className={classes.join(" ")} onClick={() => context.dispatch(({type: "news_select", selected: props.news.guid} as SelectAction))}>
             <div className={"news-item-main"}>
                 <p className={"news-item-flags"}>
                     <NewsFlags news={props.news}/>

@@ -5,7 +5,7 @@ import {NewsCenter} from "./component/NewsCenter";
 import {globalReducer, GlobalReducerContext} from "./model/reducer";
 
 export const App: React.FC = () => {
-    const [state, dispatch] = useReducer(globalReducer, {loading: false});
+    const [state, dispatch] = useReducer(globalReducer, {newsLoading: false, tickersLoading: false});
 
     return (
         <GlobalReducerContext.Provider value={{state, dispatch}}>
