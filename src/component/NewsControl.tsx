@@ -25,7 +25,7 @@ function scheduleUpdate(setState: PriceUpdater) {
                 xrp_usb_change1d: responseJson.RAW.XRP.USD.CHANGEPCT24HOUR / 100.0
             });
 
-            setTimeout(() => {scheduleUpdate(setState);}, 30000);
+            setTimeout(() => {scheduleUpdate(setState);}, 10000);
         });
 }
 
@@ -41,7 +41,6 @@ export const NewsControl: React.FC<NewsControlProps> = (props) => {
     return (
         <div className={"news-control"}>
             <img src={logoSrc} width={50} alt={"XRP"}/><br/>
-            <h1>XRP<span>.fi</span></h1>
             <PriceIndicator symbol={"XRP/USD"} price={ticker.xrp_usd_price} change={ticker.xrp_usb_change1d} changeLabel={"1d"}/>
             <PriceIndicator symbol={"XRP/BTC"} price={ticker.xrp_btc_price} change={ticker.xrp_btc_change1d} changeLabel={"1d"}/>
         </div>

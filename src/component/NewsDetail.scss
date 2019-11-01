@@ -1,0 +1,30 @@
+.news-content {
+  font-size: 120%;
+  line-height: 1.5;
+  flex-grow: 1;
+  align-self: stretch;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  min-width: 40%;
+  max-width: 50%;
+  width: 45%;
+
+  p {
+    padding: 1.5em 0 1ex 0;
+  }
+
+  img {
+    border-radius: 1ex;
+    max-width: 50% !important;
+    max-height: 50% !important;
+    width: auto;
+    height: auto;
+    margin-bottom: 1em;
+    margin-top: 1em;
+  }
+
+  .inside {
+    padding: 2em;
+  }
+}
+

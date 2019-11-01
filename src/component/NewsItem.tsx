@@ -1,5 +1,6 @@
 import {faYoutube} from "@fortawesome/free-brands-svg-icons";
-import {faReddit} from "@fortawesome/free-brands-svg-icons/faReddit";
+import {faGithub} from "@fortawesome/free-brands-svg-icons/faGithub";
+import {faRedditAlien} from "@fortawesome/free-brands-svg-icons/faRedditAlien";
 import {faTwitter} from "@fortawesome/free-brands-svg-icons/faTwitter";
 import {faVideo} from "@fortawesome/free-solid-svg-icons/faVideo";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -7,17 +8,18 @@ import moment from "moment";
 import React, {useContext} from "react";
 import {News} from "../model/model";
 import {GlobalReducerContext, SelectAction} from "../model/reducer";
+import "./NewsItem.scss";
 
 interface NewsItemProps {
     news: News
 }
 
 const Image: React.FC<NewsItemProps> = (props) => {
-    return <img height={40} alt={""} src={props.news.imageUrls ? props.news.imageUrls[0] : ""}/>;
+    return <img alt={""} src={props.news.imageUrls ? props.news.imageUrls[0] : ""}/>;
 };
 
 const Title: React.FC<NewsItemProps> = (props) => {
-    return <a href={props.news.url}>{props.news.title}</a>;
+    return <a onClick={(e) => {e.preventDefault();}} href={props.news.url}>{props.news.title}</a>;
 };
 
 const NewsFlags: React.FC<NewsItemProps> = (props) => {
@@ -29,13 +31,16 @@ const NewsFlags: React.FC<NewsItemProps> = (props) => {
 
     switch (props.news.sourceId) {
         case "youtube":
-            flags.push(<FontAwesomeIcon icon={faYoutube}/>);
+            flags.push(<FontAwesomeIcon color={"#ff0000"} icon={faYoutube}/>);
             break;
         case "reddit":
-            flags.push(<FontAwesomeIcon icon={faReddit}/>);
+            flags.push(<FontAwesomeIcon color={"#ff4500"} icon={faRedditAlien}/>);
             break;
         case "twitter":
-            flags.push(<FontAwesomeIcon icon={faTwitter}/>);
+            flags.push(<FontAwesomeIcon color={"#1da1f2"} icon={faTwitter}/>);
+            break;
+        case "github":
+            flags.push(<FontAwesomeIcon icon={faGithub}/>);
             break;
     }
 

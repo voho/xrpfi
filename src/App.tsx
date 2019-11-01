@@ -1,3 +1,4 @@
+import "normalize.css";
 import React, {useReducer} from "react";
 import "./App.css";
 import {NewsCenter} from "./component/NewsCenter";

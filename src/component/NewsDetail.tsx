@@ -1,5 +1,6 @@
 import React from "react";
 import {News} from "../model/model";
+import "./NewsDetail.scss";
 
 interface NewsDetailProps {
     selectedNews?: News
@@ -15,9 +16,12 @@ export const NewsDetail: React.FC<NewsDetailProps> = (props) => {
     }
 
     return (
-        <div>
+        <div className={"inside"}>
             <h3>{props.selectedNews!.title}</h3>
             <div dangerouslySetInnerHTML={createMarkup(props.selectedNews!.body)}/>
+            <div>
+                <pre>{JSON.stringify(props.selectedNews!, null, 2)}</pre>
+            </div>
         </div>
     );
 };
