@@ -22,7 +22,7 @@ const Title: React.FC<NewsItemProps> = (props) => {
     return <a onClick={(e) => {e.preventDefault();}} href={props.news.url}>{props.news.title}</a>;
 };
 
-const NewsFlags: React.FC<NewsItemProps> = (props) => {
+export const NewsFlags: React.FC<NewsItemProps> = (props) => {
     const flags = [];
 
     if (props.news.videoId) {
@@ -51,11 +51,11 @@ const NewsFlags: React.FC<NewsItemProps> = (props) => {
     return <span>{flags}</span>;
 };
 
-const NewsSource: React.FC<NewsItemProps> = (props) => {
+export const NewsSource: React.FC<NewsItemProps> = (props) => {
     return <span><a href={props.news.sourceHomeUrl} target={"_blank"}>{props.news.sourceName}</a></span>;
 };
 
-const NewsDate: React.FC<NewsItemProps> = (props) => {
+export const NewsDate: React.FC<NewsItemProps> = (props) => {
     return <span>{moment(props.news.date).fromNow()}</span>;
 };
 

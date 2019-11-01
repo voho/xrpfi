@@ -21,8 +21,20 @@
     margin-top: 1em;
   }
 
-  .external {
+  .flags span {
+    padding-right: 1em;
+  }
 
+  .flags svg {
+    padding-right: 3pt;
+  }
+
+  .flags button {
+    margin-right: 1em;
+  }
+
+  .external {
+    margin-top: 1em;
   }
 
   .empty-news {
