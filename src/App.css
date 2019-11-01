@@ -53,7 +53,9 @@ h1 span {
     align-self: stretch;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
-    width: 50%;
+    min-width: 40%;
+    max-width: 50%;
+    width: 45%;
 }
 
 .news-control {
@@ -81,14 +83,15 @@ h1 span {
 
 .price-change, .price-change-label {
     font-size: 80%;
-    padding-left: 1ex;
-    padding-right: 1ex;
+    padding: 0 3pt;
 }
 
 
 .news-content {
     flex-grow: 1;
-    width: 50%;
+    min-width: 40%;
+    max-width: 50%;
+    width: 45%;
 }
 
 .news-item {
@@ -102,6 +105,27 @@ h1 span {
 
 .news-item:hover {
     background-color: #202020;
+}
+
+.news-item.active {
+    background-color: #000000;
+    border: 1px solid #333333;
+}
+
+.news-item-flags {
+    color: #666666;
+}
+
+.news-item-flags a {
+    color: #999999;
+}
+
+.news-item-flags span {
+    padding-right: 1em;
+}
+
+.news-item-flags svg {
+    padding: 0 3pt;
 }
 
 .news-item-main {

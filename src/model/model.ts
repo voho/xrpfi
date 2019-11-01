@@ -19,5 +19,9 @@ export interface News {
     tags: string[],
     sourceUrls: string[],
     externalUrls: string[]
-    imageUrls: string[]
+    imageUrls: string[],
+    videoId: string | null,
+    sourceId: string,
+    sourceName: string,
+    sourceHomeUrl: string
 }
