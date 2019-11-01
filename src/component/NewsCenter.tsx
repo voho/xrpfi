@@ -16,10 +16,10 @@ function scheduleUpdate(dispatch: React.Dispatch<Action>) {
                 dispatch({type: "load_error", errorMessage: error.toString()} as LoadErrorAction);
             });
 
-        setTimeout(callback, 5000);
+        setTimeout(callback, 30000);
     };
 
-    setTimeout(callback, 100);
+    callback();
 }
 
 
