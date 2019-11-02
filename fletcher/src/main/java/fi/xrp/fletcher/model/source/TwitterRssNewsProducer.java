@@ -5,8 +5,8 @@ import com.google.common.base.Strings;
 import com.google.common.net.UrlEscapers;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
-import fi.xrp.fletcher.service.CustomHttpClient;
 import fi.xrp.fletcher.service.http.AbstractJsonHandler;
+import fi.xrp.fletcher.service.http.CustomHttpClient;
 import fi.xrp.fletcher.utility.TextUtility;
 import lombok.Builder;
 import lombok.Singular;
@@ -19,7 +19,7 @@ import java.util.Set;
 public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
     private static final int META_TIMEOUT_MS = 10000;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final String alias;
     private final String name;
@@ -37,17 +37,17 @@ public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
 
     @Override
     public String getFeedUrl() {
-        return "http://queryfeed.net/twitter?q=from%3A%40" + alias + "&title-type=tweet-text-full&order-by=recent&geocode=&omit-direct=on";
+        return "http://queryfeed.net/twitter?q=from%3A%40" + this.alias + "&title-type=tweet-text-full&order-by=recent&geocode=&omit-direct=on";
     }
 
     @Override
     public String getHomeUrl() {
-        return String.format("http://twitter.com/%s", alias);
+        return String.format("http://twitter.com/%s", this.alias);
     }
 
     @Override
     public String getTitle() {
-        return String.format("Twitter: @%s", alias);
+        return String.format("Twitter: @%s", this.alias);
     }
 
     @Override
@@ -58,15 +58,15 @@ public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
 
         database.attachAvatarUrl(
                 guid,
-                String.format("http://avatars.io/twitter/%s/small", alias),
-                String.format("http://avatars.io/twitter/%s/medium", alias),
-                String.format("http://avatars.io/twitter/%s/large", alias)
+                String.format("http://avatars.io/twitter/%s/small", this.alias),
+                String.format("http://avatars.io/twitter/%s/medium", this.alias),
+                String.format("http://avatars.io/twitter/%s/large", this.alias)
         );
 
-        database.attachTwitterSource(guid, alias, null);
+        database.attachTwitterSource(guid, this.alias, null);
 
-        if (!Strings.isNullOrEmpty(name) && !Strings.isNullOrEmpty(position) && !Strings.isNullOrEmpty(company)) {
-            database.attachPerson(guid, name, position, company);
+        if (!Strings.isNullOrEmpty(this.name) && !Strings.isNullOrEmpty(this.position) && !Strings.isNullOrEmpty(this.company)) {
+            database.attachPerson(guid, this.name, this.position, this.company);
         }
 
         customHttpClient.executeAsyncHttpGet(oembedUrl, META_TIMEOUT_MS, new AbstractJsonHandler() {
@@ -81,7 +81,7 @@ public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
                     database.attachTitle(guid, TextUtility.htmlUnescape(bodyPlainText));
                 }
                 if (!Strings.isNullOrEmpty(author)) {
-                    database.attachTwitterSource(guid, alias, author);
+                    database.attachTwitterSource(guid, TwitterRssNewsProducer.this.alias, author);
                 }
             }
 
@@ -96,7 +96,7 @@ public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
 
             @Override
             public void onThrowable(final Throwable error) {
-                logger.error("Error while fetching OEMBED.", error);
+                TwitterRssNewsProducer.this.logger.error("Error while fetching OEMBED.", error);
             }
         });
     }

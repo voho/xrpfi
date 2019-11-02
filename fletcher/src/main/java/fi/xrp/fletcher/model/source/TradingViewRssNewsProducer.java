@@ -2,8 +2,8 @@ package fi.xrp.fletcher.model.source;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
-import fi.xrp.fletcher.service.CustomHttpClient;
 import fi.xrp.fletcher.service.http.AbstractJsoupXmlHandler;
+import fi.xrp.fletcher.service.http.CustomHttpClient;
 import lombok.Builder;
 import lombok.Singular;
 import org.jsoup.nodes.Document;
@@ -14,9 +14,9 @@ import java.util.Locale;
 import java.util.Set;
 
 public class TradingViewRssNewsProducer extends AbstractRssNewsProducer {
-    private final static int META_TIMEOUT_MS = 10000;
+    private static final int META_TIMEOUT_MS = 10000;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final String sort;
     private final String time;
@@ -32,12 +32,12 @@ public class TradingViewRssNewsProducer extends AbstractRssNewsProducer {
 
     @Override
     public String getTitle() {
-        return String.format("Trading View Idea for %s", symbol.toUpperCase(Locale.ROOT));
+        return String.format("Trading View Idea for %s", this.symbol.toUpperCase(Locale.ROOT));
     }
 
     @Override
     public String getFeedUrl() {
-        return String.format("http://www.tradingview.com/feed/?sort=%s&time=%s&symbol=%s", sort, time, symbol);
+        return String.format("http://www.tradingview.com/feed/?sort=%s&time=%s&symbol=%s", this.sort, this.time, this.symbol);
     }
 
     @Override
@@ -49,17 +49,17 @@ public class TradingViewRssNewsProducer extends AbstractRssNewsProducer {
         customHttpClient.executeAsyncHttpGet(rssFeedEntry.getUri(), META_TIMEOUT_MS, new AbstractJsoupXmlHandler() {
             @Override
             public void onSuccess(final Document document) throws Exception {
-                if (isLong(document)) {
+                if (TradingViewRssNewsProducer.this.isLong(document)) {
                     database.markAsBullish(guid);
                 }
-                if (isShort(document)) {
+                if (TradingViewRssNewsProducer.this.isShort(document)) {
                     database.markAsBearish(guid);
                 }
             }
 
             @Override
             public void onThrowable(final Throwable error) {
-                logger.error("Error while fetching trading metadata.", error);
+                TradingViewRssNewsProducer.this.logger.error("Error while fetching trading metadata.", error);
             }
         });
     }

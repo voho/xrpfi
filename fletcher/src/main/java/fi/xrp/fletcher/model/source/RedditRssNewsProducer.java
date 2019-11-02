@@ -5,8 +5,8 @@ import com.google.common.base.Strings;
 import com.google.common.html.HtmlEscapers;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
-import fi.xrp.fletcher.service.CustomHttpClient;
 import fi.xrp.fletcher.service.http.AbstractJsonHandler;
+import fi.xrp.fletcher.service.http.CustomHttpClient;
 import lombok.Builder;
 import lombok.Singular;
 import org.asynchttpclient.Response;
@@ -19,7 +19,7 @@ import java.util.Set;
 public class RedditRssNewsProducer extends AbstractRssNewsProducer {
     private static final int META_TIMEOUT_MS = 10000;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final String sub;
 
@@ -31,33 +31,33 @@ public class RedditRssNewsProducer extends AbstractRssNewsProducer {
 
     @Override
     public String getFeedUrl() {
-        return String.format("http://www.reddit.com/r/%s/.rss", sub);
+        return String.format("http://www.reddit.com/r/%s/.rss", this.sub);
     }
 
     @Override
     public String getHomeUrl() {
-        return String.format("http://www.reddit.com/r/%s/", sub);
+        return String.format("http://www.reddit.com/r/%s/", this.sub);
     }
 
     @Override
     public String getTitle() {
-        return String.format("Reddit: /r/%s", sub);
+        return String.format("Reddit: /r/%s", this.sub);
     }
 
     @Override
     protected void updateDatabase(final CustomHttpClient customHttpClient, final NewsGraph database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         super.updateDatabase(customHttpClient, database, guid, rssFeed, rssFeedEntry);
 
-        database.attachRedditSource(guid, sub);
+        database.attachRedditSource(guid, this.sub);
 
         customHttpClient.executeAsyncHttpGet(rssFeedEntry.getLink() + ".json", META_TIMEOUT_MS, new AbstractJsonHandler() {
             @Override
             public void onSuccess(final JsonNode jsonTree) {
-                final long upvotes = getUpVotes(jsonTree);
-                final double upvoteRatio = getUpVoteRatio(jsonTree);
+                final long upvotes = RedditRssNewsProducer.this.getUpVotes(jsonTree);
+                final double upvoteRatio = RedditRssNewsProducer.this.getUpVoteRatio(jsonTree);
                 database.attachRating(guid, upvoteRatio, 1.0, upvotes);
 
-                final String thumbnailUrl = getThumbnailUrl(jsonTree);
+                final String thumbnailUrl = RedditRssNewsProducer.this.getThumbnailUrl(jsonTree);
                 if (!Strings.isNullOrEmpty(thumbnailUrl)) {
                     database.attachBody(guid, String.format(
                             "<a href='%s'><img src='%s' alt='' /></a>",
@@ -68,18 +68,18 @@ public class RedditRssNewsProducer extends AbstractRssNewsProducer {
 
             @Override
             public void onFailure(final Response response) throws Exception {
-                logger.error("Error while fetching reddit metadata.");
+                RedditRssNewsProducer.this.logger.error("Error while fetching reddit metadata.");
             }
 
             @Override
             public void onThrowable(final Throwable error) {
-                logger.error("Error while fetching reddit metadata.", error);
+                RedditRssNewsProducer.this.logger.error("Error while fetching reddit metadata.", error);
             }
         });
     }
 
-    private String getThumbnailUrl(JsonNode jsonTree) {
-        String type = jsonTree.at("/0/data/children/0/data/media/type").asText();
+    private String getThumbnailUrl(final JsonNode jsonTree) {
+        final String type = jsonTree.at("/0/data/children/0/data/media/type").asText();
 
         switch (type.toLowerCase(Locale.ROOT)) {
             case "imgur.com":

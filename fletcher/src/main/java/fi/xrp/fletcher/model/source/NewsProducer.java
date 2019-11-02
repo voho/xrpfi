@@ -1,7 +1,7 @@
 package fi.xrp.fletcher.model.source;
 
 import com.google.common.collect.Sets;
-import fi.xrp.fletcher.service.CustomHttpClient;
+import fi.xrp.fletcher.service.http.CustomHttpClient;
 import lombok.Getter;
 
 import java.util.EnumSet;
@@ -64,13 +64,13 @@ public interface NewsProducer {
         }
 
         public boolean test(final Set<String> tags) {
-            if (!whitelist.isEmpty()) {
-                if (Sets.intersection(tags, whitelist).isEmpty()) {
+            if (!this.whitelist.isEmpty()) {
+                if (Sets.intersection(tags, this.whitelist).isEmpty()) {
                     return false;
                 }
             }
-            if (!blacklist.isEmpty()) {
-                return Sets.intersection(tags, blacklist).isEmpty();
+            if (!this.blacklist.isEmpty()) {
+                return Sets.intersection(tags, this.blacklist).isEmpty();
             }
             return true;
         }

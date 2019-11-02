@@ -2,7 +2,7 @@ package fi.xrp.fletcher.model.source;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
-import fi.xrp.fletcher.service.CustomHttpClient;
+import fi.xrp.fletcher.service.http.CustomHttpClient;
 import lombok.Builder;
 import lombok.Singular;
 import org.jdom.Element;
@@ -23,21 +23,21 @@ public class YouTubeRssNewsProducer extends AbstractRssNewsProducer {
 
     @Override
     public String getFeedUrl() {
-        return String.format("http://www.youtube.com/feeds/videos.xml?channel_id=%s", channelId);
+        return String.format("http://www.youtube.com/feeds/videos.xml?channel_id=%s", this.channelId);
     }
 
     @Override
     public String getHomeUrl() {
-        return String.format("http://www.youtube.com/channel/%s", channelId);
+        return String.format("http://www.youtube.com/channel/%s", this.channelId);
     }
 
     @Override
     public String getTitle() {
-        return String.format("YouTube: %s (channel)", channelName);
+        return String.format("YouTube: %s (channel)", this.channelName);
     }
 
     @Override
-    protected void updateDatabase(final CustomHttpClient customHttpClient, final NewsGraph database, final String guid, SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
+    protected void updateDatabase(final CustomHttpClient customHttpClient, final NewsGraph database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         super.updateDatabase(customHttpClient, database, guid, rssFeed, rssFeedEntry);
 
         final String videoId = rssFeedEntry.getUri().replace("yt:video:", "");
@@ -91,7 +91,7 @@ public class YouTubeRssNewsProducer extends AbstractRssNewsProducer {
             }
         }
 
-        database.attachYoutubeSource(guid, channelId, channelName, videoId, viewCount);
+        database.attachYoutubeSource(guid, this.channelId, this.channelName, videoId, viewCount);
         if (ratingAverage != null && ratingCount != null) {
             database.attachRating(guid, ratingAverage, 5.0, ratingCount);
         }

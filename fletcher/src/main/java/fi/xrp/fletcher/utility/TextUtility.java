@@ -3,9 +3,6 @@ package fi.xrp.fletcher.utility;
 import com.google.common.base.Strings;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Entities;
@@ -14,38 +11,30 @@ import org.jsoup.safety.Whitelist;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public final class TextUtility {
-    private static final String NO_FIELD = "default";
-
-    @NonNull
-    public static Set<String> getKeywords(@NonNull final String title) {
+    public static @NonNull Set<String> getKeywords(final @NonNull String title) {
         try {
             return new TreeSet<>(tokenize(title));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return Collections.emptySet();
         }
     }
 
-    @NonNull
-    public static List<String> tokenize(@NonNull final String text) throws IOException {
-        try (
-                final EnglishAnalyzer analyzer = new EnglishAnalyzer();
-                final TokenStream stream = analyzer.tokenStream(NO_FIELD, text)
-        ) {
-            final List<String> tokens = new ArrayList<>();
-            stream.reset();
-            while (stream.incrementToken()) {
-                final CharTermAttribute attribute = stream.getAttribute(CharTermAttribute.class);
-                tokens.add(attribute.toString());
-            }
-            return tokens;
-        }
+    public static @NonNull List<String> tokenize(final @NonNull String text) throws IOException {
+        return Arrays
+                .stream(text.split("\\s+"))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public static String htmlUnescape(@Nullable final String html) {
@@ -99,10 +88,10 @@ public final class TextUtility {
             return null;
         }
 
-        StringBuilder out = new StringBuilder(in.length());
+        final StringBuilder out = new StringBuilder(in.length());
 
         for (int i = 0; i < in.length(); i++) {
-            char current = in.charAt(i);
+            final char current = in.charAt(i);
             if ((current == 0x9) ||
                     (current == 0xA) ||
                     (current == 0xD) ||
