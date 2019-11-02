@@ -9,6 +9,9 @@ import fi.xrp.fletcher.service.CustomS3Client;
 import java.io.IOException;
 
 public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> {
+    private static final String BUCKET = "xrpfi";
+    private static final String KEY = "root.json";
+
     private final CustomS3Client customS3Client;
 
     public Handler() {
@@ -19,7 +22,7 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
     @Override
     public HandlerResponse handleRequest(HandlerRequest handlerRequest, Context context) {
         try {
-            customS3Client.writeJsonToS3("xrpfi", "test.json", "Hi!");
+            customS3Client.writeJsonToS3(BUCKET, KEY, "{news:[]}");
             return new HandlerResponse();
         } catch (IOException e) {
             throw new RuntimeException(e);
