@@ -1,7 +1,7 @@
 package fi.xrp.fletcher.model.source;
 
 import com.google.common.collect.Sets;
-import fi.xrp.fletcher.service.Clients;
+import fi.xrp.fletcher.service.CustomHttpClient;
 import lombok.Getter;
 
 import java.util.EnumSet;
@@ -15,7 +15,7 @@ public interface NewsProducer {
 
     String getTitle();
 
-    void scheduleAsyncUpdate(Clients clients, NewsListener listener, NewsGraph database);
+    void scheduleAsyncUpdate(CustomHttpClient customHttpClient, NewsListener listener, NewsGraph database);
 
     enum Tag {
         SOCIAL("Social media"),

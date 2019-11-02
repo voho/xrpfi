@@ -33,13 +33,8 @@ public class NewsStorageService implements NewsListener, NewsGraph {
     private static final int MAX_VIEW_SIZE = 50;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final Map<String, News> guidToNews;
-    private final Map<NewsProducer, NewsSourceMeta> producerMeta;
-
-    public NewsStorageService() {
-        this.guidToNews = new HashMap<>();
-        this.producerMeta = new HashMap<>();
-    }
+    private final Map<String, News> guidToNews = new HashMap<>();
+    private final Map<NewsProducer, NewsSourceMeta> producerMeta = new HashMap<>();
 
     public synchronized NewsResponse getNews(final NewsRequest serviceRequest) {
         final NewsResponse response = new NewsResponse();

@@ -3,7 +3,7 @@ package fi.xrp.fletcher.service;
 import fi.xrp.fletcher.model.source.NewsGraph;
 import fi.xrp.fletcher.model.source.NewsListener;
 import fi.xrp.fletcher.model.source.NewsProducer;
-import fi.xrp.fletcher.model.source.config.NewsSourceConfiguration;
+import fi.xrp.fletcher.model.source.NewsSourceConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,14 +19,14 @@ public class NewsSourceRefreshService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final Clients clients;
+    private final CustomHttpClient customHttpClient;
     private final NewsListener newsListener;
     private final NewsGraph graph;
     private final ScheduledExecutorService executorService;
     private final List<NewsProducer> sources;
 
-    public NewsSourceRefreshService(final Clients clients, final NewsSourceConfiguration newsSourceConfiguration, final NewsListener newsListener, final NewsGraph graph) {
-        this.clients = clients;
+    public NewsSourceRefreshService(final CustomHttpClient customHttpClient, final NewsSourceConfiguration newsSourceConfiguration, final NewsListener newsListener, final NewsGraph graph) {
+        this.customHttpClient = customHttpClient;
         this.newsListener = newsListener;
         this.graph = graph;
         this.sources = newsSourceConfiguration.getSources();
@@ -38,7 +38,7 @@ public class NewsSourceRefreshService {
 
     private void scheduleAsyncUpdate() {
         for (final NewsProducer source : sources) {
-            source.scheduleAsyncUpdate(clients, newsListener, graph);
+            source.scheduleAsyncUpdate(customHttpClient, newsListener, graph);
         }
     }
 

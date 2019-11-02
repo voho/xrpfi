@@ -2,16 +2,14 @@ package fi.xrp.fletcher.service;
 
 import com.google.common.net.HttpHeaders;
 import fi.xrp.fletcher.service.http.AbstractHandler;
+import lombok.RequiredArgsConstructor;
 import org.asynchttpclient.AsyncHttpClient;
 
 import java.net.URI;
 
-public class Clients {
+@RequiredArgsConstructor
+public class CustomHttpClient {
     private final AsyncHttpClient asyncHttpClient;
-
-    public Clients(final AsyncHttpClient asyncHttpClient) {
-        this.asyncHttpClient = asyncHttpClient;
-    }
 
     public void executeAsyncHttpGet(final String url, final int timeoutMs, final AbstractHandler handler) {
         asyncHttpClient

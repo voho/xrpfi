@@ -8,7 +8,7 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndImage;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
-import fi.xrp.fletcher.service.Clients;
+import fi.xrp.fletcher.service.CustomHttpClient;
 import fi.xrp.fletcher.service.http.AbstractBasicXmlHandler;
 import fi.xrp.fletcher.utility.BasicUtility;
 import fi.xrp.fletcher.utility.TextUtility;
@@ -61,10 +61,10 @@ public abstract class AbstractRssNewsProducer implements NewsProducer {
     }
 
     @Override
-    public void scheduleAsyncUpdate(final Clients clients, final NewsListener listener, final NewsGraph database) {
+    public void scheduleAsyncUpdate(final CustomHttpClient customHttpClient, final NewsListener listener, final NewsGraph database) {
         listener.onUpdateStarted(this);
 
-        clients.executeAsyncHttpGet(getFeedUrl(), new AbstractBasicXmlHandler() {
+        customHttpClient.executeAsyncHttpGet(getFeedUrl(), new AbstractBasicXmlHandler() {
             @Override
             public void onSuccess(final Document document) throws Exception {
                 listener.onUpdateCompleted(AbstractRssNewsProducer.this);
@@ -74,7 +74,7 @@ public abstract class AbstractRssNewsProducer implements NewsProducer {
                     final SyndFeed romeFeed = input.build(document);
                     romeFeed.getEntries().forEach(entry -> {
                         final SyndEntry rssFeedEntry = (SyndEntry) entry;
-                        updateDatabase(clients, database, romeFeed, rssFeedEntry);
+                        updateDatabase(customHttpClient, database, romeFeed, rssFeedEntry);
                     });
                 } catch (FeedException e) {
                     logger.error("Cannot parse " + getFeedUrl(), e);
@@ -130,21 +130,21 @@ public abstract class AbstractRssNewsProducer implements NewsProducer {
         return BasicUtility.hash(uri);
     }
 
-    private void updateDatabase(final Clients clients, final NewsGraph database, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
+    private void updateDatabase(final CustomHttpClient customHttpClient, final NewsGraph database, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         final String guid = getGuid(rssFeedEntry);
 
-        if (shouldUpdateDatabase(clients, database, guid, rssFeed, rssFeedEntry)) {
-            updateDatabase(clients, database, guid, rssFeed, rssFeedEntry);
+        if (shouldUpdateDatabase(customHttpClient, database, guid, rssFeed, rssFeedEntry)) {
+            updateDatabase(customHttpClient, database, guid, rssFeed, rssFeedEntry);
         }
     }
 
-    private boolean shouldUpdateDatabase(final Clients clients, final NewsGraph database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
+    private boolean shouldUpdateDatabase(final CustomHttpClient customHttpClient, final NewsGraph database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         final Set<String> keywords = TextUtility.getKeywords(rssFeedEntry.getTitle());
 
         return !tags.contains(Tag.NEEDS_FILTERING) || applyFilter(keywords, rssFeedEntry.getTitle());
     }
 
-    protected void updateDatabase(final Clients clients, final NewsGraph database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
+    protected void updateDatabase(final CustomHttpClient customHttpClient, final NewsGraph database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         final String sourceImageUrl = getFeedSourceImage(rssFeed);
         final String titleFromFeed = contentToText(rssFeed.getTitleEx());
         final String title = Strings.isNullOrEmpty(titleFromFeed) ? getTitle() : titleFromFeed;

@@ -2,7 +2,7 @@ package fi.xrp.fletcher.model.source;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
-import fi.xrp.fletcher.service.Clients;
+import fi.xrp.fletcher.service.CustomHttpClient;
 import lombok.Builder;
 import lombok.Singular;
 import org.jdom.Element;
@@ -37,8 +37,8 @@ public class YouTubeRssNewsProducer extends AbstractRssNewsProducer {
     }
 
     @Override
-    protected void updateDatabase(final Clients clients, final NewsGraph database, final String guid, SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
-        super.updateDatabase(clients, database, guid, rssFeed, rssFeedEntry);
+    protected void updateDatabase(final CustomHttpClient customHttpClient, final NewsGraph database, final String guid, SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
+        super.updateDatabase(customHttpClient, database, guid, rssFeed, rssFeedEntry);
 
         final String videoId = rssFeedEntry.getUri().replace("yt:video:", "");
         Double ratingAverage = null;

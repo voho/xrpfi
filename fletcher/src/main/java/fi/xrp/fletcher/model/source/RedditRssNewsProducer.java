@@ -5,7 +5,7 @@ import com.google.common.base.Strings;
 import com.google.common.html.HtmlEscapers;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
-import fi.xrp.fletcher.service.Clients;
+import fi.xrp.fletcher.service.CustomHttpClient;
 import fi.xrp.fletcher.service.http.AbstractJsonHandler;
 import lombok.Builder;
 import lombok.Singular;
@@ -45,12 +45,12 @@ public class RedditRssNewsProducer extends AbstractRssNewsProducer {
     }
 
     @Override
-    protected void updateDatabase(final Clients clients, final NewsGraph database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
-        super.updateDatabase(clients, database, guid, rssFeed, rssFeedEntry);
+    protected void updateDatabase(final CustomHttpClient customHttpClient, final NewsGraph database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
+        super.updateDatabase(customHttpClient, database, guid, rssFeed, rssFeedEntry);
 
         database.attachRedditSource(guid, sub);
 
-        clients.executeAsyncHttpGet(rssFeedEntry.getLink() + ".json", META_TIMEOUT_MS, new AbstractJsonHandler() {
+        customHttpClient.executeAsyncHttpGet(rssFeedEntry.getLink() + ".json", META_TIMEOUT_MS, new AbstractJsonHandler() {
             @Override
             public void onSuccess(final JsonNode jsonTree) {
                 final long upvotes = getUpVotes(jsonTree);

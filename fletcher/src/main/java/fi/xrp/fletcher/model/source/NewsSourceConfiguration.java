@@ -1,13 +1,5 @@
-package fi.xrp.fletcher.model.source.config;
+package fi.xrp.fletcher.model.source;
 
-
-import fi.xrp.fletcher.model.source.GenericRssNewsProducer;
-import fi.xrp.fletcher.model.source.GitHubRssNewsProducer;
-import fi.xrp.fletcher.model.source.NewsProducer;
-import fi.xrp.fletcher.model.source.RedditRssNewsProducer;
-import fi.xrp.fletcher.model.source.TradingViewRssNewsProducer;
-import fi.xrp.fletcher.model.source.TwitterRssNewsProducer;
-import fi.xrp.fletcher.model.source.YouTubeRssNewsProducer;
 
 import java.util.HashSet;
 import java.util.List;
