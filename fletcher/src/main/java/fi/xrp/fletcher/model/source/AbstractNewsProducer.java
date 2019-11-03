@@ -24,6 +24,11 @@ public abstract class AbstractNewsProducer<T> implements NewsProducer {
 
     protected final Set<Tag> tags;
 
+    @Override
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
     public AbstractNewsProducer(final Set<Tag> tags) {
         this.tags = tags;
     }
@@ -40,9 +45,7 @@ public abstract class AbstractNewsProducer<T> implements NewsProducer {
 
             @Override
             public void onValidResponse(final Response response, final T document) throws Exception {
-                status.onDatabaseUpdateStarted(AbstractNewsProducer.this);
-                updateDatabase(document, database);
-                status.onDatabaseUpdateFinished(AbstractNewsProducer.this);
+                status.onUpdateFinished(AbstractNewsProducer.this);
             }
 
             @Override
@@ -60,8 +63,6 @@ public abstract class AbstractNewsProducer<T> implements NewsProducer {
     }
 
     protected abstract List<News> mapFuture(T value);
-
-    protected abstract void updateDatabase(T document, NewsDatabase database) throws Exception;
 
     protected abstract T mapResponse(Response response) throws Exception;
 

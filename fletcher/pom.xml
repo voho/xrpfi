@@ -30,6 +30,7 @@
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
         <maven-shade-plugin.version>3.2.1</maven-shade-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <aws-java-sdk-cloudwatchmetrics.version>1.11.256</aws-java-sdk-cloudwatchmetrics.version>
     </properties>
 
     <build>
@@ -121,6 +122,11 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
             <version>${aws-java-sdk-s3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-cloudwatchmetrics</artifactId>
+            <version>${aws-java-sdk-cloudwatchmetrics.version}</version>
         </dependency>
         <dependency>
             <groupId>org.asynchttpclient</groupId>

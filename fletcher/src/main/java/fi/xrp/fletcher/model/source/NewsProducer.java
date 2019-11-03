@@ -1,22 +1,26 @@
 package fi.xrp.fletcher.model.source;
 
-import com.google.common.collect.Sets;
 import fi.xrp.fletcher.model.api.News;
 import fi.xrp.fletcher.service.http.CustomHttpClient;
 import lombok.Getter;
+import org.asynchttpclient.util.Utf8UrlEncoder;
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 
 public interface NewsProducer {
     String getHomeUrl();
 
     String getFeedUrl();
 
+    default String getId() {
+        return Utf8UrlEncoder.encodePath(getTitle().replace(" ", "-"));
+    }
+
     String getTitle();
+
+    Set<Tag> getTags();
 
     Future<List<News>> startAsyncUpdate(CustomHttpClient customHttpClient, NewsDatabase database, NewsProducerStatus status);
 
@@ -43,39 +47,6 @@ public interface NewsProducer {
 
         Tag(final String title) {
             this.title = title;
-        }
-    }
-
-    enum Mode {
-        DEFAULT("Default", EnumSet.noneOf(Tag.class), EnumSet.of(Tag.MICROBLOG)),
-        NEWS("News", EnumSet.of(Tag.NEWS), EnumSet.noneOf(Tag.class)),
-        MEDIA("Media", EnumSet.of(Tag.MEDIA), EnumSet.noneOf(Tag.class)),
-        COMMUNITY("Community", EnumSet.of(Tag.UNOFFICIAL), EnumSet.noneOf(Tag.class)),
-        OFFICIAL("Official", EnumSet.of(Tag.OFFICIAL), EnumSet.noneOf(Tag.class)),
-        TRADING("Trading", EnumSet.of(Tag.TRADING), EnumSet.noneOf(Tag.class)),
-        ALL("Everything", EnumSet.noneOf(Tag.class), EnumSet.noneOf(Tag.class));
-
-        @Getter
-        private final String title;
-        private final Set<String> whitelist;
-        private final Set<String> blacklist;
-
-        Mode(final String title, final Set<Tag> whitelist, final Set<Tag> blacklist) {
-            this.title = title;
-            this.whitelist = whitelist.stream().map(Enum::name).collect(Collectors.toSet());
-            this.blacklist = blacklist.stream().map(Enum::name).collect(Collectors.toSet());
-        }
-
-        public boolean test(final Set<String> tags) {
-            if (!whitelist.isEmpty()) {
-                if (Sets.intersection(tags, whitelist).isEmpty()) {
-                    return false;
-                }
-            }
-            if (!blacklist.isEmpty()) {
-                return Sets.intersection(tags, blacklist).isEmpty();
-            }
-            return true;
         }
     }
 }

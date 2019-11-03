@@ -8,20 +8,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.ALWAYS_IMPORTANT;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.DO_NOT_CLEANUP;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.DO_NOT_DELETE;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.EXCHANGE;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.FINANCIAL;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.MEDIA;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.MICROBLOG;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.NEEDS_FILTERING;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.NEWS;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.OFFICIAL;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.SOCIAL;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.SOFTWARE;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.TRADING;
-import static fi.xrp.fletcher.model.source.NewsProducer.Tag.UNOFFICIAL;
+import static fi.xrp.fletcher.model.source.NewsProducer.Tag.*;
 
 public class NewsSourceConfiguration {
     private final List<NewsProducer> sources = validate(Stream.of(
@@ -345,7 +332,6 @@ public class NewsSourceConfiguration {
                 GenericRssNewsProducer.builder().feedUrl("http://www.cryptoglobe.com/latest/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("http://www.cryptoground.com/feeds.xml?format=xml"),
                 GenericRssNewsProducer.builder().feedUrl("http://www.newsbtc.com/feed/"),
-                GenericRssNewsProducer.builder().feedUrl("http://xrpnewsonline.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("http://blokt.com/feed"),
                 GenericRssNewsProducer.builder().feedUrl("http://u.today/rss_feed"),
                 GenericRssNewsProducer.builder().feedUrl("http://abacusjournal.com/feed/"),

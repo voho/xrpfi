@@ -31,7 +31,7 @@ public class CustomHttpClient {
                                 return result;
                             } else {
                                 handler.onInvalidResponse(response);
-                                throw new IllegalStateException("Invalid response: " + response.getStatusCode());// TODO
+                                throw new IllegalStateException("Invalid response: " + response.getStatusCode() + " for " + url);// TODO
                             }
                         } catch (final Exception e) {
                             handler.onThrowable(e);

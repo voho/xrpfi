@@ -1,7 +1,7 @@
 package fi.xrp.fletcher.lambda;
 
 import fi.xrp.fletcher.model.api.News;
-import fi.xrp.fletcher.model.api.NewsSourceMeta;
+import fi.xrp.fletcher.model.api.NewsProducerStatus;
 import lombok.Value;
 
 import java.util.List;
@@ -9,5 +9,5 @@ import java.util.List;
 @Value
 public class HandlerResponse {
     List<News> news;
-    List<NewsSourceMeta> meta;
+    List<NewsProducerStatus> meta;
 }

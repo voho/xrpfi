@@ -44,6 +44,7 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
 
         try {
             final SyndFeedInput input = new SyndFeedInput();
+            document.normalizeDocument();
             final SyndFeed romeFeed = input.build(document);
 
             romeFeed.getEntries().forEach(entry -> {
@@ -51,7 +52,7 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
 
                 final String guid = getGuid(rssFeedEntry);
 
-                if (shouldUpdateDatabase(rssFeedEntry)) {
+                if (shouldIncludeEntry(rssFeedEntry)) {
                     news.add(getNews(guid, romeFeed, rssFeedEntry));
                 }
             });
@@ -66,7 +67,7 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
         return getDocumentBuilderFactory().newDocumentBuilder();
     }
 
-    protected DocumentBuilderFactory getDocumentBuilderFactory() {
+    protected DocumentBuilderFactory getDocumentBuilderFactory() throws Exception {
         final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setIgnoringComments(true);
         documentBuilderFactory.setIgnoringElementContentWhitespace(true);
@@ -87,24 +88,20 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
         return BasicUtility.hash(uri);
     }
 
-    @Override
-    protected void updateDatabase(final Document document, final NewsDatabase database) throws Exception {
-
-    }
-
-    private boolean shouldUpdateDatabase(final SyndEntry rssFeedEntry) {
+    private boolean shouldIncludeEntry(final SyndEntry rssFeedEntry) {
         return !tags.contains(Tag.NEEDS_FILTERING) || hasKeyword(rssFeedEntry.getTitle());
     }
 
     protected News getNews(final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         final News news = new News();
 
-        final String titleFromFeed = contentToText(rssFeed.getTitleEx());
-        final String title = Strings.isNullOrEmpty(titleFromFeed) ? getTitle() : titleFromFeed;
+        final String sourceTitleFromFeed = contentToText(rssFeed.getTitleEx());
+        final String sourceTitle = Strings.isNullOrEmpty(sourceTitleFromFeed) ? getTitle() : sourceTitleFromFeed;
 
         news.setDate(rssFeedEntry.getPublishedDate().getTime());
         news.setGuid(guid);
-        news.setTitle(title);
+        news.setTitle(contentToText(rssFeedEntry.getTitleEx()));
+        news.setSourceName(sourceTitle);
         news.setUrl(rssFeedEntry.getLink());
         news.setSourceFeedUrl(getFeedUrl());
         news.setSourceHomeUrl(getHomeUrl());
@@ -130,7 +127,7 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
 
         news.setTags(tags.stream().map(a -> a.name()).collect(Collectors.toSet()));
 
-        if (news.getTags().contains(Tag.ALWAYS_IMPORTANT) || isImportant(title)) {
+        if (news.getTags().contains(Tag.ALWAYS_IMPORTANT) || isImportant(sourceTitle)) {
             news.setImportant(true);
         }
 
