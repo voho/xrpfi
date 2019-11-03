@@ -1,11 +1,14 @@
 package fi.xrp.fletcher.model.source;
 
 import com.google.common.collect.Sets;
+import fi.xrp.fletcher.model.api.News;
 import fi.xrp.fletcher.service.http.CustomHttpClient;
 import lombok.Getter;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public interface NewsProducer {
@@ -15,7 +18,7 @@ public interface NewsProducer {
 
     String getTitle();
 
-    void scheduleAsyncUpdate(CustomHttpClient customHttpClient, NewsListener listener, NewsGraph database);
+    Future<List<News>> startAsyncUpdate(CustomHttpClient customHttpClient, NewsDatabase database, NewsProducerStatus status);
 
     enum Tag {
         SOCIAL("Social media"),
@@ -64,13 +67,13 @@ public interface NewsProducer {
         }
 
         public boolean test(final Set<String> tags) {
-            if (!this.whitelist.isEmpty()) {
-                if (Sets.intersection(tags, this.whitelist).isEmpty()) {
+            if (!whitelist.isEmpty()) {
+                if (Sets.intersection(tags, whitelist).isEmpty()) {
                     return false;
                 }
             }
-            if (!this.blacklist.isEmpty()) {
-                return Sets.intersection(tags, this.blacklist).isEmpty();
+            if (!blacklist.isEmpty()) {
+                return Sets.intersection(tags, blacklist).isEmpty();
             }
             return true;
         }

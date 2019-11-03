@@ -1,4 +1,4 @@
-package fi.xrp.fletcher.model.api;
+package fi.xrp.fletcher.lambda;
 
 import lombok.Value;
 

@@ -11,11 +11,7 @@ import org.jsoup.safety.Whitelist;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class TextUtility {
@@ -28,13 +24,7 @@ public final class TextUtility {
     }
 
     public static @NonNull List<String> tokenize(final @NonNull String text) throws IOException {
-        return Arrays
-                .stream(text.split("\\s+"))
-                .map(String::trim)
-                .map(String::toLowerCase)
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
+        return Arrays.stream(text.split("\\s+")).map(String::trim).filter(a -> !a.isEmpty()).distinct().sorted().collect(Collectors.toList());
     }
 
     public static String htmlUnescape(@Nullable final String html) {
@@ -78,7 +68,6 @@ public final class TextUtility {
      * <a href="http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char">the
      * standard</a>. This method will return an empty
      * String if the input is null or empty.
-     *
      * @param in The String whose non-valid characters we want to remove.
      * @return The in String, stripped of non-valid characters.
      */
