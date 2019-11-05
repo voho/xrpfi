@@ -1,7 +1,9 @@
 import "normalize.css";
 import React, {useEffect, useReducer} from "react";
+import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import "./App.css";
-import {NewsCenter} from "./component/NewsCenter";
+import {MetaCenter} from "./component/meta/MetaCenter";
+import {NewsCenter} from "./component/news/NewsCenter";
 import {scheduleRegularNewsUpdate, scheduleRegularTickersUpdate} from "./service/api";
 import {NewsState, TickersState} from "./service/model";
 import {newsReducer, UseNewsReducerContext} from "./service/NewsReducer";
@@ -21,7 +23,13 @@ export const App: React.FC = () => {
     return (
         <UseNewsReducerContext.Provider value={{state: newsState, dispatch: newsDispatch}}>
             <UseTickersReducerContext.Provider value={{state: tickersState, dispatch: tickersDispatch}}>
-                <NewsCenter/>
+                <BrowserRouter>
+                    <Switch>
+                        <Route path={"/meta"} component={MetaCenter}/>
+                        <Route path={"/"} component={NewsCenter}/>
+                        <Redirect to={"/"}/>
+                    </Switch>
+                </BrowserRouter>
             </UseTickersReducerContext.Provider>
         </UseNewsReducerContext.Provider>
     );

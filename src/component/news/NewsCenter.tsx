@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from "react";
-import {scheduleRegularNewsUpdate} from "../service/api";
-import {News} from "../service/model";
-import {UseNewsReducerContext} from "../service/NewsReducer";
+import {scheduleRegularNewsUpdate} from "../../service/api";
+import {News} from "../../service/model";
+import {UseNewsReducerContext} from "../../service/NewsReducer";
 import "./NewsCenter.scss";
 import {NewsControl} from "./NewsControl";
 import {NewsDetail} from "./NewsDetail";

@@ -5,7 +5,8 @@ export interface Action {
 export interface NewsState {
     loading: boolean,
     error?: string,
-    news?: News[]
+    news?: News[],
+    meta?: Meta[],
     selectedNewsGuid?: string
 }
 
@@ -23,7 +24,8 @@ export interface Tickers {
 }
 
 export interface Root {
-    news: News[]
+    news: News[],
+    meta: Meta[]
 }
 
 export interface News {
@@ -41,4 +43,14 @@ export interface News {
     sourceId: string,
     sourceName: string,
     sourceHomeUrl: string
+}
+
+export interface Meta {
+    feedUrl: string,
+    homeUrl: string,
+    lastError: string | null,
+    lastUpdateStartDate: number,
+    lastUpdateEndDate: number,
+    status: string
+    title: string
 }

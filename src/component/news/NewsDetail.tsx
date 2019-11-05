@@ -1,6 +1,6 @@
 import React from "react";
-import {News} from "../service/model";
-import {Button} from "./Button";
+import {News} from "../../service/model";
+import {Button} from "../common/Button";
 import "./NewsDetail.scss";
 import {NewsDate, NewsFlags, NewsSource} from "./NewsItem";
 

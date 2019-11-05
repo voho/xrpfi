@@ -1,5 +1,5 @@
 import React from "react";
-import {News} from "../service/model";
+import {News} from "../../service/model";
 import "./NewsDetail.scss";
 import {NewsItem} from "./NewsItem";
 

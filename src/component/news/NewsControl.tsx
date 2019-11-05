@@ -1,8 +1,8 @@
 import React, {useContext} from "react";
-import logoSrc from "../image/logo.svg";
-import {UseNewsReducerContext} from "../service/NewsReducer";
-import {UseTickersReducerContext} from "../service/TickersReducer";
-import {LoadingIndicator} from "./LoadingIndicator";
+import logoSrc from "../../image/logo.svg";
+import {UseNewsReducerContext} from "../../service/NewsReducer";
+import {UseTickersReducerContext} from "../../service/TickersReducer";
+import {LoadingIndicator} from "../common/LoadingIndicator";
 import {PriceIndicator} from "./PriceIndicator";
 
 export const NewsControl = () => {
