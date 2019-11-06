@@ -4,9 +4,12 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.Futures;
 import fi.xrp.fletcher.model.api.News;
+import fi.xrp.fletcher.service.NewsMerger;
+import fi.xrp.fletcher.service.NewsProducerStatusKeeper;
 import fi.xrp.fletcher.service.http.AsyncResponseHandler;
 import fi.xrp.fletcher.service.http.CustomHttpClient;
 import fi.xrp.fletcher.utility.TextUtility;
+import lombok.extern.slf4j.Slf4j;
 import org.asynchttpclient.Response;
 
 import java.net.URI;
@@ -14,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
 
+@Slf4j
 public abstract class AbstractNewsProducer<T> implements NewsProducer {
     private final Set<String> IMPORTANT_MARKERS = Sets.newHashSet(
             "launch", "launches", "launched", "launching", "breaking", "authorized", "authorised", "authorizes", "authorises", "authorize", "authorise"
@@ -34,7 +38,7 @@ public abstract class AbstractNewsProducer<T> implements NewsProducer {
     }
 
     @Override
-    public Future<List<News>> startAsyncUpdate(final CustomHttpClient customHttpClient, final NewsDatabase database, final NewsProducerStatus status) {
+    public Future<List<News>> startAsyncUpdate(final CustomHttpClient customHttpClient, final NewsMerger database, final NewsProducerStatusKeeper status) {
         status.onUpdateStarted(this);
 
         final Future<T> future = customHttpClient.executeAsyncHttpGet(getFeedUrl(), new AsyncResponseHandler<T>() {
@@ -59,8 +63,14 @@ public abstract class AbstractNewsProducer<T> implements NewsProducer {
             }
         });
 
-        return Futures.lazyTransform(future, this::mapFuture);
+        return Futures.lazyTransform(future, a -> {
+            final List<News> mapped = mapFuture(a);
+            mapped.forEach(b -> enrich(b, customHttpClient));
+            return mapped;
+        });
     }
+
+    protected abstract void enrich(News news, CustomHttpClient customHttpClient);
 
     protected abstract List<News> mapFuture(T value);
 

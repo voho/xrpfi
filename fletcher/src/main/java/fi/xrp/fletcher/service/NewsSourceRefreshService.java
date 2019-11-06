@@ -2,7 +2,6 @@ package fi.xrp.fletcher.service;
 
 import fi.xrp.fletcher.model.api.News;
 import fi.xrp.fletcher.model.api.NewsProducerStatus;
-import fi.xrp.fletcher.model.source.NewsDatabase;
 import fi.xrp.fletcher.model.source.NewsProducer;
 import fi.xrp.fletcher.model.source.NewsSourceConfiguration;
 import fi.xrp.fletcher.service.aws.CustomMetricsClient;
@@ -24,8 +23,8 @@ public class NewsSourceRefreshService {
     private final CustomHttpClient customHttpClient;
     private final CustomMetricsClient customMetricsClient;
     private final NewsSourceConfiguration sources;
-    private final NewsDatabase database;
-    private final fi.xrp.fletcher.model.source.NewsProducerStatus status;
+    private final NewsMerger database;
+    private final NewsProducerStatusKeeper status;
     private final Duration futuresTimeout;
 
     public void startAsyncUpdateAndWait() {
@@ -42,16 +41,17 @@ public class NewsSourceRefreshService {
             try {
                 final NewsProducerStatus meta = status.getStatus(entry.getKey());
                 final List<News> news = entry.getValue().get(futuresTimeout.toMillis(), TimeUnit.MILLISECONDS);
-                log.info("Obtained {} news from {}.", news.size(), entry.getKey().getTitle());
+                log.debug("{}: Fetched {} news", entry.getKey().getTitle(), news.size());
                 for (final NewsProducer.Tag tag : entry.getKey().getTags()) {
                     customMetricsClient.emitAfterUpdateNewsMetrics(tag.name(), entry.getKey().getId(), Math.max(0, meta.getLastUpdateEndDate() - meta.getLastUpdateStartDate()), news.size());
                 }
                 result.addAll(news);
             } catch (final Exception e) {
-                log.warn("Error while getting news in the given timeout: {}", e.getMessage());
+                log.warn("{}: Error while getting news in the given timeout: {}", entry.getKey().getTitle(), e.getMessage());
+                e.printStackTrace();
             }
         }
 
-        database.setNews(result);
+        database.updateNews(result);
     }
 }

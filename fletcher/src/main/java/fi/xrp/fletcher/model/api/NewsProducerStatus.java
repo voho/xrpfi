@@ -9,6 +9,7 @@ public class NewsProducerStatus {
     private String title;
     private long lastUpdateStartDate;
     private long lastUpdateEndDate;
+    private long lastUpdateNewsCount;
     private String lastError;
     private String status;
 }

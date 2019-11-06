@@ -7,6 +7,8 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndImage;
 import com.sun.syndication.io.SyndFeedInput;
 import fi.xrp.fletcher.model.api.News;
+import fi.xrp.fletcher.service.http.CustomHttpClient;
+import fi.xrp.fletcher.service.http.XmlAsyncResponseHandler;
 import fi.xrp.fletcher.utility.BasicUtility;
 import fi.xrp.fletcher.utility.TextUtility;
 import fi.xrp.fletcher.utility.UrlUtility;
@@ -14,9 +16,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.asynchttpclient.Response;
 import org.w3c.dom.Document;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,15 +26,6 @@ import java.util.stream.Collectors;
 abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
     AbstractRssNewsProducer(final Set<Tag> tags) {
         super(tags);
-    }
-
-    @Override
-    protected Document mapResponse(final Response response) throws Exception {
-        final DocumentBuilder documentBuilder = getDocumentBuilder();
-
-        try (final InputStream inputStream = response.getResponseBodyAsStream()) {
-            return documentBuilder.parse(inputStream);
-        }
     }
 
     @Override
@@ -63,21 +53,6 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
         return news;
     }
 
-    protected DocumentBuilder getDocumentBuilder() throws Exception {
-        return getDocumentBuilderFactory().newDocumentBuilder();
-    }
-
-    protected DocumentBuilderFactory getDocumentBuilderFactory() throws Exception {
-        final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilderFactory.setIgnoringComments(true);
-        documentBuilderFactory.setIgnoringElementContentWhitespace(true);
-        documentBuilderFactory.setValidating(false);
-        documentBuilderFactory.setXIncludeAware(false);
-        documentBuilderFactory.setCoalescing(false);
-        documentBuilderFactory.setExpandEntityReferences(false);
-        return documentBuilderFactory;
-    }
-
     private String getGuid(final SyndEntry rssFeedEntry) {
         String uri = rssFeedEntry.getUri();
         uri = uri.trim();
@@ -92,7 +67,7 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
         return !tags.contains(Tag.NEEDS_FILTERING) || hasKeyword(rssFeedEntry.getTitle());
     }
 
-    protected News getNews(final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
+    private News getNews(final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         final News news = new News();
 
         final String sourceTitleFromFeed = contentToText(rssFeed.getTitleEx());
@@ -127,15 +102,25 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
 
         news.setTags(tags.stream().map(a -> a.name()).collect(Collectors.toSet()));
 
-        if (news.getTags().contains(Tag.ALWAYS_IMPORTANT) || isImportant(sourceTitle)) {
+        if (news.getTags().contains(Tag.ALWAYS_IMPORTANT.name()) || isImportant(sourceTitle)) {
             news.setImportant(true);
         }
 
-        if (news.getTags().contains(Tag.UNOFFICIAL)) {
+        if (news.getTags().contains(Tag.UNOFFICIAL.name())) {
             news.setCommunity(true);
         }
 
         return news;
+    }
+
+    @Override
+    protected Document mapResponse(final Response response) throws Exception {
+        return new XmlAsyncResponseHandler().map(response);
+    }
+
+    @Override
+    protected void enrich(final News news, final CustomHttpClient customHttpClient) {
+        // NOP
     }
 
     private String getFeedSourceImage(final SyndFeed rssFeed) {

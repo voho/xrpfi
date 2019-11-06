@@ -1,6 +1,7 @@
 package fi.xrp.fletcher.service;
 
 import com.google.common.collect.Lists;
+import fi.xrp.fletcher.model.api.GlobalStatus;
 import fi.xrp.fletcher.model.api.NewsProducerStatus;
 import fi.xrp.fletcher.model.source.NewsProducer;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +12,11 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public class DefaultNewsProducerStatus implements fi.xrp.fletcher.model.source.NewsProducerStatus {
+public class NewsProducerStatusKeeperDefault implements NewsProducerStatusKeeper {
     private final Map<NewsProducer, NewsProducerStatus> statuses = new HashMap<>();
+
+    private long startTime;
+    private long endTime;
 
     @Override
     public List<NewsProducerStatus> getStatuses() {
@@ -27,8 +31,9 @@ public class DefaultNewsProducerStatus implements fi.xrp.fletcher.model.source.N
     @Override
     public void onUpdateStarted(final NewsProducer producer) {
         log.debug("Update Started: {}", producer.getTitle());
+        startTime = System.currentTimeMillis();
         final NewsProducerStatus status = getStatus(producer);
-        status.setLastUpdateStartDate(System.currentTimeMillis());
+        status.setLastUpdateStartDate(startTime);
         status.setHomeUrl(producer.getHomeUrl());
         status.setFeedUrl(producer.getFeedUrl());
         status.setTitle(producer.getTitle());
@@ -39,7 +44,8 @@ public class DefaultNewsProducerStatus implements fi.xrp.fletcher.model.source.N
     public void onUpdateFinished(final NewsProducer producer) {
         log.debug("DB Update Finished: {}", producer.getTitle());
         final NewsProducerStatus status = getStatus(producer);
-        status.setLastUpdateEndDate(System.currentTimeMillis());
+        endTime = System.currentTimeMillis();
+        status.setLastUpdateEndDate(endTime);
         status.setLastError(null);
         status.setStatus("DB_UPDATE_FINISHED");
     }
@@ -48,8 +54,18 @@ public class DefaultNewsProducerStatus implements fi.xrp.fletcher.model.source.N
     public void onUpdateFailed(final NewsProducer producer, final Object reason) {
         log.warn("Update failed: {}", producer.getTitle());
         final NewsProducerStatus status = getStatus(producer);
-        status.setLastUpdateEndDate(System.currentTimeMillis());
+        status.setLastUpdateEndDate(endTime);
         status.setLastError(Objects.toString(reason));
         status.setStatus("FAILED");
+    }
+
+    @Override
+    public GlobalStatus getGlobalStatus() {
+        final GlobalStatus status = new GlobalStatus();
+        status.setStartTime(startTime);
+        status.setEndTime(endTime);
+        status.setTotalNewsProducers(statuses.size());
+        status.setTotalNews(statuses.values().stream().mapToLong(NewsProducerStatus::getLastUpdateNewsCount).sum());
+        return status;
     }
 }

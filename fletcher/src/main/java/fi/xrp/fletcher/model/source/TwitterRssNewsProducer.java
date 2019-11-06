@@ -1,5 +1,7 @@
 package fi.xrp.fletcher.model.source;
 
+import com.google.common.collect.Sets;
+import com.google.common.net.UrlEscapers;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import fi.xrp.fletcher.model.api.News;
@@ -38,34 +40,23 @@ public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
         return String.format("Twitter: @%s", alias);
     }
 
-    /*
-    @Override
-    protected void updateDatabase(final NewsDatabase database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
-        super.updateDatabase(database, guid, rssFeed, rssFeedEntry);
-
-        final String oembedUrl = String.format("https://publish.twitter.com/oembed?format=json&dnt=true&theme=dark&url=%s", UrlEscapers.urlPathSegmentEscaper().escape(rssFeedEntry.getUri()));
-
-        database.attachExternalUrl(guid, oembedUrl);
-
-        database.attachAvatarUrl(
-                guid,
-                String.format("http://avatars.io/twitter/%s/small", alias),
-                String.format("http://avatars.io/twitter/%s/medium", alias),
-                String.format("http://avatars.io/twitter/%s/large", alias)
-        );
-
-        database.attachTwitterSource(guid, alias, null);
-
-        if (!Strings.isNullOrEmpty(name) && !Strings.isNullOrEmpty(position) && !Strings.isNullOrEmpty(company)) {
-            database.attachPerson(guid, name, position, company);
-        }
-    }*/
-
     @Override
     protected News getNews(final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         final News news = super.getNews(guid, rssFeed, rssFeedEntry);
-        // TODO more info
         news.setSourceId("twitter");
+        news.setPersonName(name);
+        news.setPersonPosition(position);
+        news.setPersonCompany(company);
+
+        final String twitterUrl = news.getUrl();
+        final String oembedUrl = String.format("https://publish.twitter.com/oembed?format=json&dnt=true&theme=dark&url=%s", UrlEscapers.urlPathSegmentEscaper().escape(twitterUrl));
+        news.setOembedUrl(oembedUrl);
+
+        news.setAvatarImageUrls(Sets.newHashSet(
+                String.format("http://avatars.io/twitter/%s/small", alias),
+                String.format("http://avatars.io/twitter/%s/medium", alias),
+                String.format("http://avatars.io/twitter/%s/large", alias)));
+
         return news;
     }
 }

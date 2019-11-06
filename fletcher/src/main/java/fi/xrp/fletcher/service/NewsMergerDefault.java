@@ -1,7 +1,6 @@
 package fi.xrp.fletcher.service;
 
 import fi.xrp.fletcher.model.api.News;
-import fi.xrp.fletcher.model.source.NewsDatabase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-public class NewsStorageService implements NewsDatabase {
+public class NewsMergerDefault implements NewsMerger {
     private final Duration maxNewsAge;
     private final int maxNewsCount;
     private final Map<String, News> guidToNews = new HashMap<>();
@@ -26,7 +25,6 @@ public class NewsStorageService implements NewsDatabase {
         return guidToNews
                 .values()
                 .stream()
-                .filter(a -> a.getDate() != null)
                 .filter(a -> a.getDate() != 0)
                 .filter(a -> now - a.getDate() <= maxNewsAge.toMillis())
                 .sorted(Comparator.comparingLong(News::getDate).reversed())
@@ -35,7 +33,7 @@ public class NewsStorageService implements NewsDatabase {
     }
 
     @Override
-    public void setNews(final List<News> news) {
+    public void updateNews(final List<News> news) {
         log.info("Adding {} news.", news.size());
         guidToNews.clear();
         news.forEach(n -> guidToNews.put(n.getGuid(), n));

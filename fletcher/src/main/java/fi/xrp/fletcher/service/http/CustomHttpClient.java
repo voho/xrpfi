@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
 public class CustomHttpClient {
     private final AsyncHttpClient asyncHttpClient;
 
-    public <T> Future<T> executeAsyncHttpGet(final String url, final AsyncResponseHandler<T> handler) {
+    public <T> Future<T> executeAsyncHttpGet(final String url, final ResponseMapper<T> mapper, final AsyncResponseHandler<T> handler) {
         return asyncHttpClient
                 .prepareGet(url)
                 .addHeader(HttpHeaders.USER_AGENT, "xrp.fi")
@@ -26,7 +26,7 @@ public class CustomHttpClient {
                         log.info("{}: {}", url, response.getStatusCode());
                         try {
                             if (response.hasResponseStatus() && response.hasResponseHeaders() && response.hasResponseBody() && response.getStatusCode() == 200) {
-                                final T result = handler.map(response);
+                                final T result = mapper.map(response);
                                 handler.onValidResponse(response, result);
                                 return result;
                             } else {

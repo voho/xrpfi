@@ -1,8 +1,7 @@
 package fi.xrp.fletcher.model.source;
 
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndFeed;
 import fi.xrp.fletcher.model.api.News;
+import fi.xrp.fletcher.service.http.CustomHttpClient;
 import lombok.Builder;
 import lombok.Singular;
 
@@ -37,10 +36,8 @@ public class GitHubRssNewsProducer extends AbstractRssNewsProducer {
     }
 
     @Override
-    protected News getNews(final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
-        // TODO more info
-        final News news = super.getNews(guid, rssFeed, rssFeedEntry);
+    protected void enrich(final News news, final CustomHttpClient customHttpClient) {
+        super.enrich(news, customHttpClient);
         news.setSourceId("github");
-        return news;
     }
 }

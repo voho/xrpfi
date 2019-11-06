@@ -43,7 +43,7 @@ public class YouTubeRssNewsProducer extends AbstractRssNewsProducer {
     }
 /*
     @Override
-    protected void updateDatabase(final NewsDatabase database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
+    protected void updateDatabase(final NewsMerger database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         super.updateDatabase(database, guid, rssFeed, rssFeedEntry);
 
         final String videoId = rssFeedEntry.getUri().replace("yt:video:", "");
