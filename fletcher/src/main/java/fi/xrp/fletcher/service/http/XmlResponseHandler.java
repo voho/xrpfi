@@ -7,7 +7,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 
-public class XmlAsyncResponseHandler implements ResponseMapper<Document> {
+public class XmlResponseHandler implements ResponseMapper<Document> {
     @Override
     public Document map(final Response response) throws Exception {
         final DocumentBuilder documentBuilder = getDocumentBuilder();
@@ -17,11 +17,11 @@ public class XmlAsyncResponseHandler implements ResponseMapper<Document> {
         }
     }
 
-    protected DocumentBuilder getDocumentBuilder() throws Exception {
+    private DocumentBuilder getDocumentBuilder() throws Exception {
         return getDocumentBuilderFactory().newDocumentBuilder();
     }
 
-    protected DocumentBuilderFactory getDocumentBuilderFactory() throws Exception {
+    private DocumentBuilderFactory getDocumentBuilderFactory() throws Exception {
         final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setIgnoringComments(true);
         documentBuilderFactory.setIgnoringElementContentWhitespace(true);

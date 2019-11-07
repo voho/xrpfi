@@ -19,13 +19,13 @@ public class CustomMetricsClient {
         final MetricDatum timeDatum = new MetricDatum()
                 .withMetricName("time")
                 .withUnit(StandardUnit.None)
-                .withValue(Double.valueOf(time))
+                .withValue((double) time)
                 .withDimensions(tagDimension);
 
         final MetricDatum countDatum = new MetricDatum()
                 .withMetricName("count")
                 .withUnit(StandardUnit.None)
-                .withValue(Double.valueOf(news))
+                .withValue((double) news)
                 .withDimensions(tagDimension);
 
         final PutMetricDataRequest request = new PutMetricDataRequest()

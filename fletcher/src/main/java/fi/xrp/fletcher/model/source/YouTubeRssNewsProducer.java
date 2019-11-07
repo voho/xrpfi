@@ -1,11 +1,14 @@
 package fi.xrp.fletcher.model.source;
 
+import com.google.common.collect.Sets;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import fi.xrp.fletcher.model.api.News;
 import lombok.Builder;
 import lombok.Singular;
+import org.jdom.Element;
 
+import java.util.List;
 import java.util.Set;
 
 public class YouTubeRssNewsProducer extends AbstractRssNewsProducer {
@@ -37,16 +40,10 @@ public class YouTubeRssNewsProducer extends AbstractRssNewsProducer {
     @Override
     protected News getNews(final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         final News news = super.getNews(guid, rssFeed, rssFeedEntry);
-        // TODO more info
-        news.setSourceId("youtube");
-        return news;
-    }
-/*
-    @Override
-    protected void updateDatabase(final NewsMerger database, final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
-        super.updateDatabase(database, guid, rssFeed, rssFeedEntry);
 
-        final String videoId = rssFeedEntry.getUri().replace("yt:video:", "");
+        news.setSourceId("youtube");
+        final String videoId = news.getUrl().replace("yt:video:", "");
+
         Double ratingAverage = null;
         Long ratingCount = null;
         Long viewCount = null;
@@ -72,7 +69,7 @@ public class YouTubeRssNewsProducer extends AbstractRssNewsProducer {
                                 case "thumbnail":
                                     break;
                                 case "description":
-                                    database.attachBody(guid, groupElement.getTextTrim());
+                                    news.setBody(groupElement.getTextTrim());
                                     break;
                                 case "community":
                                     for (final Element communityElement : (List<Element>) groupElement.getChildren()) {
@@ -97,15 +94,22 @@ public class YouTubeRssNewsProducer extends AbstractRssNewsProducer {
             }
         }
 
-        database.attachYoutubeSource(guid, channelId, channelName, videoId, viewCount);
-        if (ratingAverage != null && ratingCount != null) {
-            database.attachRating(guid, ratingAverage, 5.0, ratingCount);
+        news.setYoutubeChannelId(channelId);
+        news.setYoutubeChannelName(channelName);
+        news.setVideoId(videoId);
+        news.setViewCount(viewCount);
+
+        if (ratingAverage != null) {
+            news.setRatingCount(ratingCount);
+            news.setRatingAverage(ratingAverage);
+            news.setMaxRating(5.0);
         }
-        database.attachAvatarUrl(
-                guid,
+
+        news.setAvatarImageUrls(Sets.newHashSet(
                 String.format("http://img.youtube.com/vi/%s/default.jpg", videoId),
                 String.format("http://img.youtube.com/vi/%s/mqdefault.jpg", videoId),
-                String.format("http://img.youtube.com/vi/%s/hqdefault.jpg", videoId)
-        );
-    }*/
+                String.format("http://img.youtube.com/vi/%s/hqdefault.jpg", videoId)));
+
+        return news;
+    }
 }

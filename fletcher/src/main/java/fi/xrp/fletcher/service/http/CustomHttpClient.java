@@ -8,35 +8,29 @@ import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.Response;
 
 import java.net.URI;
-import java.util.concurrent.Future;
 
 @Slf4j
 @RequiredArgsConstructor
 public class CustomHttpClient {
     private final AsyncHttpClient asyncHttpClient;
 
-    public <T> Future<T> executeAsyncHttpGet(final String url, final ResponseMapper<T> mapper, final AsyncResponseHandler<T> handler) {
-        return asyncHttpClient
+    public <T> void executeAsyncHttpGet(final String url, final ResponseMapper<T> mapper, final AsyncResponseHandler<T> handler) {
+        asyncHttpClient
                 .prepareGet(url)
                 .addHeader(HttpHeaders.USER_AGENT, "xrp.fi")
                 .addHeader(HttpHeaders.REFERER, getReferer(url))
-                .execute(new AsyncCompletionHandler<T>() {
+                .execute(new AsyncCompletionHandler<Response>() {
                     @Override
-                    public T onCompleted(final Response response) throws Exception {
+                    public Response onCompleted(final Response response) throws Exception {
                         log.info("{}: {}", url, response.getStatusCode());
-                        try {
-                            if (response.hasResponseStatus() && response.hasResponseHeaders() && response.hasResponseBody() && response.getStatusCode() == 200) {
-                                final T result = mapper.map(response);
-                                handler.onValidResponse(response, result);
-                                return result;
-                            } else {
-                                handler.onInvalidResponse(response);
-                                throw new IllegalStateException("Invalid response: " + response.getStatusCode() + " for " + url);// TODO
-                            }
-                        } catch (final Exception e) {
-                            handler.onThrowable(e);
-                            throw e;
+
+                        if (response.hasResponseStatus() && response.hasResponseHeaders() && response.hasResponseBody() && response.getStatusCode() == 200) {
+                            handler.onValidResponse(mapper.map(response));
+                        } else {
+                            handler.onInvalidResponse(response);
                         }
+
+                        return response;
                     }
                 });
     }

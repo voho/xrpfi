@@ -43,6 +43,7 @@ public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
     @Override
     protected News getNews(final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         final News news = super.getNews(guid, rssFeed, rssFeedEntry);
+
         news.setSourceId("twitter");
         news.setPersonName(name);
         news.setPersonPosition(position);

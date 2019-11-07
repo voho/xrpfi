@@ -1,8 +1,6 @@
 package fi.xrp.fletcher.model.source;
 
 import fi.xrp.fletcher.model.api.News;
-import fi.xrp.fletcher.service.NewsMerger;
-import fi.xrp.fletcher.service.NewsProducerStatusKeeper;
 import fi.xrp.fletcher.service.http.CustomHttpClient;
 import lombok.Getter;
 import org.asynchttpclient.util.Utf8UrlEncoder;
@@ -24,7 +22,7 @@ public interface NewsProducer {
 
     Set<Tag> getTags();
 
-    Future<List<News>> startAsyncUpdate(CustomHttpClient customHttpClient, NewsMerger database, NewsProducerStatusKeeper status);
+    Future<List<News>> startAsyncUpdate(CustomHttpClient customHttpClient);
 
     enum Tag {
         SOCIAL("Social media"),

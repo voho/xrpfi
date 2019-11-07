@@ -1,5 +1,7 @@
 package fi.xrp.fletcher.service.http;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.asynchttpclient.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -7,16 +9,9 @@ import org.jsoup.nodes.Document;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+@RequiredArgsConstructor
 public class JsoupResponseMapper implements ResponseMapper<Document> {
-    private final String baseUri;
-
-    public JsoupResponseMapper() {
-        this("");
-    }
-
-    public JsoupResponseMapper(final String baseUri) {
-        this.baseUri = baseUri;
-    }
+    private final @NonNull String baseUri;
 
     @Override
     public Document map(final Response response) throws Exception {

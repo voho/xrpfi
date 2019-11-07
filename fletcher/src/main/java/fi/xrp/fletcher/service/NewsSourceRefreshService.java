@@ -32,7 +32,7 @@ public class NewsSourceRefreshService {
 
         for (final NewsProducer source : sources.getSources()) {
             log.debug("Adding future of {}.", source.getTitle());
-            newsFutures.put(source, source.startAsyncUpdate(customHttpClient, database, status));
+            newsFutures.put(source, source.startAsyncUpdate(customHttpClient));
         }
 
         final List<News> result = new ArrayList<>();

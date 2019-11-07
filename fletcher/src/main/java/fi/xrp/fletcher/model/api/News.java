@@ -27,6 +27,8 @@ public class News {
     private Set<String> avatarImageUrls = new HashSet<>(3);
     private String oembedUrl;
     private String videoId;
+    private String youtubeChannelId;
+    private String youtubeChannelName;
     private Long viewCount;
     private Long ratingCount;
     private Double ratingAverage;

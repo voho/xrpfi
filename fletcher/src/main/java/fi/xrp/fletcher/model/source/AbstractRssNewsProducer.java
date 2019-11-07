@@ -7,13 +7,12 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndImage;
 import com.sun.syndication.io.SyndFeedInput;
 import fi.xrp.fletcher.model.api.News;
-import fi.xrp.fletcher.service.http.CustomHttpClient;
-import fi.xrp.fletcher.service.http.XmlAsyncResponseHandler;
+import fi.xrp.fletcher.service.http.ResponseMapper;
+import fi.xrp.fletcher.service.http.XmlResponseHandler;
 import fi.xrp.fletcher.utility.BasicUtility;
 import fi.xrp.fletcher.utility.TextUtility;
 import fi.xrp.fletcher.utility.UrlUtility;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.asynchttpclient.Response;
 import org.w3c.dom.Document;
 
 import java.net.URI;
@@ -29,13 +28,13 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
     }
 
     @Override
-    protected List<News> mapFuture(final Document document) {
+    protected List<News> extractNews(final Document object) {
         final List<News> news = new LinkedList<>();
 
         try {
             final SyndFeedInput input = new SyndFeedInput();
-            document.normalizeDocument();
-            final SyndFeed romeFeed = input.build(document);
+            object.normalizeDocument();
+            final SyndFeed romeFeed = input.build(object);
 
             romeFeed.getEntries().forEach(entry -> {
                 final SyndEntry rssFeedEntry = (SyndEntry) entry;
@@ -53,6 +52,11 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
         return news;
     }
 
+    @Override
+    protected ResponseMapper<Document> getResponseMapper() {
+        return new XmlResponseHandler();
+    }
+
     private String getGuid(final SyndEntry rssFeedEntry) {
         String uri = rssFeedEntry.getUri();
         uri = uri.trim();
@@ -67,7 +71,7 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
         return !tags.contains(Tag.NEEDS_FILTERING) || hasKeyword(rssFeedEntry.getTitle());
     }
 
-    private News getNews(final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
+    protected News getNews(final String guid, final SyndFeed rssFeed, final SyndEntry rssFeedEntry) {
         final News news = new News();
 
         final String sourceTitleFromFeed = contentToText(rssFeed.getTitleEx());
@@ -111,16 +115,6 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
         }
 
         return news;
-    }
-
-    @Override
-    protected Document mapResponse(final Response response) throws Exception {
-        return new XmlAsyncResponseHandler().map(response);
-    }
-
-    @Override
-    protected void enrich(final News news, final CustomHttpClient customHttpClient) {
-        // NOP
     }
 
     private String getFeedSourceImage(final SyndFeed rssFeed) {
