@@ -3,9 +3,7 @@ package fi.xrp.fletcher.service.http;
 import com.google.common.net.HttpHeaders;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.asynchttpclient.AsyncCompletionHandler;
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.Response;
+import org.asynchttpclient.*;
 
 import java.net.URI;
 
@@ -15,24 +13,29 @@ public class CustomHttpClient {
     private final AsyncHttpClient asyncHttpClient;
 
     public <T> void executeAsyncHttpGet(final String url, final ResponseMapper<T> mapper, final AsyncResponseHandler<T> handler) {
-        asyncHttpClient
-                .prepareGet(url)
+        final AsyncCompletionHandler<Response> topLevelHandler = new AsyncCompletionHandler<Response>() {
+            @Override
+            public Response onCompleted(final Response response) throws Exception {
+                log.debug("{}: {}", url, response.getStatusCode());
+
+                if (response.hasResponseStatus() && response.hasResponseHeaders() && response.hasResponseBody() && response.getStatusCode() == 200) {
+                    handler.onValidResponse(mapper.map(response));
+                } else {
+                    handler.onInvalidResponse(response);
+                }
+
+                return response;
+            }
+        };
+
+        final Request request = Dsl
+                .get(url)
                 .addHeader(HttpHeaders.USER_AGENT, "xrp.fi")
                 .addHeader(HttpHeaders.REFERER, getReferer(url))
-                .execute(new AsyncCompletionHandler<Response>() {
-                    @Override
-                    public Response onCompleted(final Response response) throws Exception {
-                        log.info("{}: {}", url, response.getStatusCode());
+                .build();
 
-                        if (response.hasResponseStatus() && response.hasResponseHeaders() && response.hasResponseBody() && response.getStatusCode() == 200) {
-                            handler.onValidResponse(mapper.map(response));
-                        } else {
-                            handler.onInvalidResponse(response);
-                        }
-
-                        return response;
-                    }
-                });
+        asyncHttpClient.executeRequest(request,
+                topLevelHandler);
     }
 
     private String getReferer(final String url) {

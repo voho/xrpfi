@@ -14,7 +14,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 @Slf4j
 public abstract class AbstractNewsProducer<T> implements NewsProducer {
@@ -37,7 +36,7 @@ public abstract class AbstractNewsProducer<T> implements NewsProducer {
     }
 
     @Override
-    public Future<List<News>> startAsyncUpdate(final CustomHttpClient customHttpClient) {
+    public CompletableFuture<List<News>> startAsyncUpdate(final CustomHttpClient customHttpClient) {
         final CompletableFuture<List<News>> listFuture = new CompletableFuture<>();
         startAsyncUpdate(customHttpClient, listFuture);
         return listFuture;

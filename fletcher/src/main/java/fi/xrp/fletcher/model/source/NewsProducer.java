@@ -3,11 +3,10 @@ package fi.xrp.fletcher.model.source;
 import fi.xrp.fletcher.model.api.News;
 import fi.xrp.fletcher.service.http.CustomHttpClient;
 import lombok.Getter;
-import org.asynchttpclient.util.Utf8UrlEncoder;
 
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 
 public interface NewsProducer {
     String getHomeUrl();
@@ -15,14 +14,14 @@ public interface NewsProducer {
     String getFeedUrl();
 
     default String getId() {
-        return Utf8UrlEncoder.encodePath(getTitle().replace(" ", "-"));
+        return getClass().getSimpleName();
     }
 
     String getTitle();
 
     Set<Tag> getTags();
 
-    Future<List<News>> startAsyncUpdate(CustomHttpClient customHttpClient);
+    CompletableFuture<List<News>> startAsyncUpdate(CustomHttpClient customHttpClient);
 
     enum Tag {
         SOCIAL("Social media"),

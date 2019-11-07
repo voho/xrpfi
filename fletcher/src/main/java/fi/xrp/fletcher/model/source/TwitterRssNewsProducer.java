@@ -1,5 +1,6 @@
 package fi.xrp.fletcher.model.source;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.google.common.net.UrlEscapers;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -48,6 +49,19 @@ public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
         news.setPersonName(name);
         news.setPersonPosition(position);
         news.setPersonCompany(company);
+
+        if (!Strings.isNullOrEmpty(name)) {
+            news.setTitle(name);
+
+            if (!Strings.isNullOrEmpty(position)) {
+                news.setTitle(news.getTitle() + ", " + position);
+                if (!Strings.isNullOrEmpty(company)) {
+                    news.setTitle(news.getTitle() + " at " + company);
+                }
+            }
+        }
+
+        news.setTitle(String.format("%s (%s at %s)", name, position, company));
 
         final String twitterUrl = news.getUrl();
         final String oembedUrl = String.format("https://publish.twitter.com/oembed?format=json&dnt=true&theme=dark&url=%s", UrlEscapers.urlPathSegmentEscaper().escape(twitterUrl));
