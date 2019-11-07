@@ -29,6 +29,7 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
 
     private static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(3);
     private static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(5);
+    private static final Duration DEFAULT_FINAL_TIMEOUT = Duration.ofSeconds(30);
     private static final int MAX_REQUEST_RETRY = 3;
 
     private static final DefaultAsyncHttpClientConfig HTTP_CLIENT_CONFIG = Dsl
@@ -58,7 +59,7 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
                 final NewsMerger newsMerger = new NewsMergerDefault(Duration.ofDays(14), 50);
                 final NewsProducerStatusKeeper newsProducerStatusKeeper = new NewsProducerStatusKeeperDefault();
                 final NewsSourceConfiguration newsSourceConfiguration = new NewsSourceConfiguration();
-                final NewsSourceRefreshService newsSourceRefreshService = new NewsSourceRefreshService(customHttpClient, customMetricsClient, newsSourceConfiguration, newsMerger, newsProducerStatusKeeper, 40);
+                final NewsSourceRefreshService newsSourceRefreshService = new NewsSourceRefreshService(customHttpClient, customMetricsClient, newsSourceConfiguration, newsMerger, newsProducerStatusKeeper, DEFAULT_FINAL_TIMEOUT);
 
                 newsSourceRefreshService.startAsyncUpdateAndWait();
 
