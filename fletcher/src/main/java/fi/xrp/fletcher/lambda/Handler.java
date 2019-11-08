@@ -40,7 +40,7 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
     private static final String KEY = "root.json";
 
     private static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(3);
-    private static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(30);
+    private static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(20);
     private static final Duration DEFAULT_FINAL_TIMEOUT = Duration.ofSeconds(40);
     private static final int MAX_REQUEST_RETRY = 1;
 
@@ -52,10 +52,7 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
             .setConnectTimeout((int) DEFAULT_CONNECT_TIMEOUT.toMillis())
             .setRequestTimeout((int) DEFAULT_HTTP_TIMEOUT.toMillis())
             .setReadTimeout((int) DEFAULT_HTTP_TIMEOUT.toMillis())
-            .setMaxRedirects(2)
-            .setDisableHttpsEndpointIdentificationAlgorithm(true)
-            .setUseInsecureTrustManager(true)
-            .setKeepAlive(true)
+            .setMaxRedirects(3)
             .build();
 
     private final AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();

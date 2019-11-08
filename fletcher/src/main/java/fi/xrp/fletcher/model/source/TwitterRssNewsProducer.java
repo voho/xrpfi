@@ -52,7 +52,7 @@ public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
         news.setPersonCompany(company);
 
         if (!Strings.isNullOrEmpty(name)) {
-            news.setTitle(name);
+            news.setSourceName(name);
 
             if (!Strings.isNullOrEmpty(position)) {
                 news.setSourceName(news.getTitle() + ", " + position);

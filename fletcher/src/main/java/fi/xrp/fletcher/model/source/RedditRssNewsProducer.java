@@ -19,12 +19,12 @@ public class RedditRssNewsProducer extends AbstractRssNewsProducer {
 
     @Override
     public String getFeedUrl() {
-        return String.format("http://www.reddit.com/r/%s/.rss", sub);
+        return String.format("https://www.reddit.com/r/%s/.rss", sub);
     }
 
     @Override
     public String getHomeUrl() {
-        return String.format("http://www.reddit.com/r/%s/", sub);
+        return String.format("https://www.reddit.com/r/%s/", sub);
     }
 
     @Override

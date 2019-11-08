@@ -14,8 +14,19 @@ interface NewsItemProps {
     news: News
 }
 
+function getFirstUsableImage(news: News): string | undefined {
+    const urls: string[] = [];
+    (news.avatarImageUrls || []).forEach(imageUrl => urls.push(imageUrl));
+    (news.imageUrls || []).forEach(imageUrl => urls.push(imageUrl));
+    if (urls.length > 0) {
+        return urls[0];
+    }
+    return undefined;
+}
+
 const Image: React.FC<NewsItemProps> = (props) => {
-    return <img alt={""} src={props.news.imageUrls ? props.news.imageUrls[0] : ""}/>;
+    const imageUrl = getFirstUsableImage(props.news);
+    return <img alt={""} src={imageUrl}/>;
 };
 
 const Title: React.FC<NewsItemProps> = (props) => {

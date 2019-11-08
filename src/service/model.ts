@@ -41,7 +41,9 @@ export interface News {
     videoId: string | null,
     sourceId: string,
     sourceName: string,
-    sourceHomeUrl: string
+    sourceHomeUrl: string,
+    oembedUrl: string | null
+    avatarImageUrls: string[] | null
 }
 
 export interface Meta {
