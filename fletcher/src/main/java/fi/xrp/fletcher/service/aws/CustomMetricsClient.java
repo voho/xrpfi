@@ -11,26 +11,30 @@ import lombok.RequiredArgsConstructor;
 public class CustomMetricsClient {
     private final AmazonCloudWatch cloudWatch;
 
-    public void emitAfterUpdateNewsMetrics(final String tag, final String id, final long time, final long news) {
+    public void emitAfterUpdateNewsMetrics(final String tag, final String id, final long time, final boolean success) {
         final Dimension tagDimension = new Dimension()
                 .withName("Tag")
                 .withValue(tag);
 
+        final Dimension idDimension = new Dimension()
+                .withName("ID")
+                .withValue(id);
+
         final MetricDatum timeDatum = new MetricDatum()
                 .withMetricName("time")
-                .withUnit(StandardUnit.None)
+                .withUnit(StandardUnit.Milliseconds)
                 .withValue((double) time)
-                .withDimensions(tagDimension);
+                .withDimensions(tagDimension, idDimension);
 
-        final MetricDatum countDatum = new MetricDatum()
-                .withMetricName("count")
-                .withUnit(StandardUnit.None)
-                .withValue((double) news)
-                .withDimensions(tagDimension);
+        final MetricDatum faultDatum = new MetricDatum()
+                .withMetricName("fault")
+                .withUnit(StandardUnit.Count)
+                .withValue(success ? 0.0 : 1.0)
+                .withDimensions(tagDimension, idDimension);
 
         final PutMetricDataRequest request = new PutMetricDataRequest()
-                .withNamespace("fletcher/news")
-                .withMetricData(timeDatum, countDatum);
+                .withNamespace("fletcher/update")
+                .withMetricData(timeDatum, faultDatum);
 
         cloudWatch.putMetricData(request);
     }

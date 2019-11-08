@@ -3,12 +3,10 @@ package fi.xrp.fletcher.model.source;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import fi.xrp.fletcher.model.api.News;
-import fi.xrp.fletcher.service.http.AsyncResponseHandler;
 import fi.xrp.fletcher.service.http.CustomHttpClient;
 import fi.xrp.fletcher.service.http.ResponseMapper;
 import fi.xrp.fletcher.utility.TextUtility;
 import lombok.extern.slf4j.Slf4j;
-import org.asynchttpclient.Response;
 
 import java.net.URI;
 import java.util.List;
@@ -37,36 +35,26 @@ public abstract class AbstractNewsProducer<T> implements NewsProducer {
 
     @Override
     public CompletableFuture<List<News>> startAsyncUpdate(final CustomHttpClient customHttpClient) {
-        final CompletableFuture<List<News>> listFuture = new CompletableFuture<>();
-        startAsyncUpdate(customHttpClient, listFuture);
-        return listFuture;
+        return customHttpClient
+                .executeAsyncHttpGet(getFeedUrl(), getResponseMapper())
+                .thenApply(this::extractNews)
+                .thenApply(news -> {
+                    enrichNews(customHttpClient, news);
+                    return news;
+                });
     }
 
-    protected void startAsyncUpdate(final CustomHttpClient customHttpClient, final CompletableFuture<List<News>> listFuture) {
-        customHttpClient.executeAsyncHttpGet(getFeedUrl(), getResponseMapper(), new AsyncResponseHandler<T>() {
-            @Override
-            public void onValidResponse(final T object) {
-                final List<News> news = extractNews(object);
-                listFuture.complete(news);
-                startEnrichingNews(customHttpClient, news);
-            }
+    protected void enrichNews(final CustomHttpClient customHttpClient, final List<News> multipleNews) {
+        for (final News singleNews : multipleNews) {
+            enrichNews(customHttpClient, singleNews);
+        }
+    }
 
-            @Override
-            public void onInvalidResponse(final Response response) {
-                listFuture.completeExceptionally(new RuntimeException("Invalid response: " + response.getStatusCode()));
-            }
-        });
+    protected void enrichNews(final CustomHttpClient customHttpClient, final News news) {
+        // NOP
     }
 
     protected abstract List<News> extractNews(T object);
-
-    protected void startEnrichingNews(final CustomHttpClient customHttpClient, final List<News> news) {
-        news.forEach(n -> startEnrichingNews(customHttpClient, n));
-    }
-
-    protected void startEnrichingNews(final CustomHttpClient customHttpClient, final News news) {
-        // NOP
-    }
 
     protected abstract ResponseMapper<T> getResponseMapper();
 

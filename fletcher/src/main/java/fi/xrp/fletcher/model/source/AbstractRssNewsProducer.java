@@ -104,7 +104,7 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
             news.setExternalUrls(externalUrls);
         }
 
-        news.setTags(tags.stream().map(a -> a.name()).collect(Collectors.toSet()));
+        news.setTags(tags.stream().map(Enum::name).collect(Collectors.toSet()));
 
         if (news.getTags().contains(Tag.ALWAYS_IMPORTANT.name()) || isImportant(sourceTitle)) {
             news.setImportant(true);
@@ -140,6 +140,6 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
         if (Strings.isNullOrEmpty(value)) {
             return null;
         }
-        return StringEscapeUtils.unescapeHtml4(value);
+        return StringEscapeUtils.unescapeHtml4(value.trim());
     }
 }

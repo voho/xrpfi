@@ -7,18 +7,19 @@ import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import fi.xrp.fletcher.model.api.News;
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Singular;
 
 import java.util.Set;
 
 public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
-    private final String alias;
+    private final @NonNull String alias;
     private final String name;
     private final String position;
     private final String company;
 
     @Builder
-    public TwitterRssNewsProducer(final String alias, final String name, final String position, final String company, @Singular final Set<Tag> tags) {
+    public TwitterRssNewsProducer(final @NonNull String alias, final String name, final String position, final String company, @Singular final Set<Tag> tags) {
         super(tags);
         this.alias = alias;
         this.name = name;
@@ -54,14 +55,12 @@ public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
             news.setTitle(name);
 
             if (!Strings.isNullOrEmpty(position)) {
-                news.setTitle(news.getTitle() + ", " + position);
+                news.setSourceName(news.getTitle() + ", " + position);
                 if (!Strings.isNullOrEmpty(company)) {
-                    news.setTitle(news.getTitle() + " at " + company);
+                    news.setSourceName(news.getTitle() + " at " + company);
                 }
             }
         }
-
-        news.setTitle(String.format("%s (%s at %s)", name, position, company));
 
         final String twitterUrl = news.getUrl();
         final String oembedUrl = String.format("https://publish.twitter.com/oembed?format=json&dnt=true&theme=dark&url=%s", UrlEscapers.urlPathSegmentEscaper().escape(twitterUrl));

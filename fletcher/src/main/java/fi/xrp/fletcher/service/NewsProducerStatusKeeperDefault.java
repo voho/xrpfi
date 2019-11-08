@@ -4,6 +4,9 @@ import com.google.common.collect.Lists;
 import fi.xrp.fletcher.model.api.GlobalStatus;
 import fi.xrp.fletcher.model.api.NewsProducerStatus;
 import fi.xrp.fletcher.model.source.NewsProducer;
+import fi.xrp.fletcher.service.aws.CustomMetricsClient;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -12,11 +15,14 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
+@RequiredArgsConstructor
 public class NewsProducerStatusKeeperDefault implements NewsProducerStatusKeeper {
     private final Map<NewsProducer, NewsProducerStatus> statuses = new HashMap<>();
 
     private long startTime;
     private long endTime;
+
+    private final @NonNull CustomMetricsClient customMetricsClient;
 
     @Override
     public List<NewsProducerStatus> getStatuses() {
@@ -48,6 +54,10 @@ public class NewsProducerStatusKeeperDefault implements NewsProducerStatusKeeper
         status.setLastUpdateEndDate(endTime);
         status.setLastError(null);
         status.setStatus("DB_UPDATE_FINISHED");
+
+        for (final NewsProducer.Tag tag : producer.getTags()) {
+            customMetricsClient.emitAfterUpdateNewsMetrics(tag.name(), producer.getId(), endTime - startTime, true);
+        }
     }
 
     @Override
@@ -57,6 +67,10 @@ public class NewsProducerStatusKeeperDefault implements NewsProducerStatusKeeper
         status.setLastUpdateEndDate(endTime);
         status.setLastError(Objects.toString(reason));
         status.setStatus("FAILED");
+
+        for (final NewsProducer.Tag tag : producer.getTags()) {
+            customMetricsClient.emitAfterUpdateNewsMetrics(tag.name(), producer.getId(), endTime - startTime, false);
+        }
     }
 
     @Override

@@ -10,11 +10,11 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
-public class JsoupResponseMapper implements ResponseMapper<Document> {
+public class JsoupResponseMapper extends ValidatingResponseMapper<Document> {
     private final @NonNull String baseUri;
 
     @Override
-    public Document map(final Response response) throws Exception {
+    protected Document mapValid(final Response response) throws Exception {
         try (final InputStream inputStream = response.getResponseBodyAsStream()) {
             return Jsoup.parse(inputStream, StandardCharsets.UTF_8.name(), baseUri);
         }

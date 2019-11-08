@@ -7,12 +7,13 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fi.xrp.fletcher.model.api.News;
+import fi.xrp.fletcher.model.source.NewsProducer;
 import fi.xrp.fletcher.model.source.NewsSourceConfiguration;
 import fi.xrp.fletcher.service.NewsMerger;
 import fi.xrp.fletcher.service.NewsMergerDefault;
 import fi.xrp.fletcher.service.NewsProducerStatusKeeper;
 import fi.xrp.fletcher.service.NewsProducerStatusKeeperDefault;
-import fi.xrp.fletcher.service.NewsSourceRefreshService;
 import fi.xrp.fletcher.service.aws.CustomMetricsClient;
 import fi.xrp.fletcher.service.aws.CustomS3Client;
 import fi.xrp.fletcher.service.http.CustomHttpClient;
@@ -25,13 +26,20 @@ import org.asynchttpclient.cookie.ThreadSafeCookieStore;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> {
     private static final String BUCKET = "xrpfi";
     private static final String KEY = "root.json";
 
-    private static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(3);
+    private static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(5);
     private static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(10);
     private static final Duration DEFAULT_FINAL_TIMEOUT = Duration.ofSeconds(40);
     private static final int MAX_REQUEST_RETRY = 1;
@@ -44,7 +52,7 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
             .setConnectTimeout((int) DEFAULT_CONNECT_TIMEOUT.toMillis())
             .setRequestTimeout((int) DEFAULT_HTTP_TIMEOUT.toMillis())
             .setReadTimeout((int) DEFAULT_HTTP_TIMEOUT.toMillis())
-            .setMaxRedirects(3)
+            .setMaxRedirects(2)
             .setDisableHttpsEndpointIdentificationAlgorithm(true)
             .setUseInsecureTrustManager(true)
             .setKeepAlive(true)
@@ -57,15 +65,49 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
     public HandlerResponse handleRequest(final HandlerRequest handlerRequest, final Context context) {
         try {
             try (final AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient(HTTP_CLIENT_CONFIG)) {
-                final CustomS3Client customS3Client = new CustomS3Client(this.s3);
-                final CustomMetricsClient customMetricsClient = new CustomMetricsClient(this.cw);
+                final CustomS3Client customS3Client = new CustomS3Client(s3);
+                final CustomMetricsClient customMetricsClient = new CustomMetricsClient(cw);
                 final CustomHttpClient customHttpClient = new CustomHttpClient(asyncHttpClient);
                 final NewsMerger newsMerger = new NewsMergerDefault(Duration.ofDays(14), 50);
-                final NewsProducerStatusKeeper newsProducerStatusKeeper = new NewsProducerStatusKeeperDefault();
+                final NewsProducerStatusKeeper newsProducerStatusKeeper = new NewsProducerStatusKeeperDefault(customMetricsClient);
                 final NewsSourceConfiguration newsSourceConfiguration = new NewsSourceConfiguration();
-                final NewsSourceRefreshService newsSourceRefreshService = new NewsSourceRefreshService(customHttpClient, customMetricsClient, newsSourceConfiguration, newsMerger, newsProducerStatusKeeper, DEFAULT_FINAL_TIMEOUT);
 
-                newsSourceRefreshService.startAsyncUpdateAndWait();
+                final Map<NewsProducer, CompletableFuture<List<News>>> futures = new HashMap<>();
+
+                log.info("=== Firing queries for news ===");
+
+                for (final NewsProducer source : newsSourceConfiguration.getSources()) {
+                    futures.put(source, source.startAsyncUpdate(customHttpClient));
+                    newsProducerStatusKeeper.onUpdateStarted(source);
+                }
+
+                final Runnable endFuturesRunnable = () -> {
+                    log.info("=== Cancelling pending operations ===");
+                    futures.values().forEach(n -> n.cancel(false));
+                };
+
+                Executors.newSingleThreadScheduledExecutor().schedule(endFuturesRunnable, DEFAULT_FINAL_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+
+                log.info("=== Waiting for news ===");
+
+                final List<News> result = new ArrayList<>();
+
+                for (final Map.Entry<NewsProducer, CompletableFuture<List<News>>> entry : futures.entrySet()) {
+                    try {
+                        log.debug("Waiting for news...");
+                        final List<News> news = entry.getValue().get();
+                        log.info("{}: Fetched {} news", entry.getKey().getTitle(), news.size());
+                        newsProducerStatusKeeper.onUpdateFinished(entry.getKey());
+                        result.addAll(news);
+                    } catch (final Exception e) {
+                        log.warn("{}: Error while getting news in the given timeout: {}", entry.getKey().getTitle(), e.getMessage());
+                        newsProducerStatusKeeper.onUpdateFailed(entry.getKey(), e);
+                    }
+                }
+
+                log.info("=== Updating news ===");
+
+                newsMerger.updateNews(result);
 
                 final HandlerResponse response = new HandlerResponse(newsMerger.getMergedNews(), newsProducerStatusKeeper.getStatuses(), newsProducerStatusKeeper.getGlobalStatus());
                 customS3Client.writeJsonToS3(BUCKET, KEY, response);

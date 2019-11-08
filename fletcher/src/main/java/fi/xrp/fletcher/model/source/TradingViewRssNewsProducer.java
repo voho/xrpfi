@@ -4,13 +4,11 @@ import com.google.common.collect.Sets;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import fi.xrp.fletcher.model.api.News;
-import fi.xrp.fletcher.service.http.AsyncResponseHandler;
 import fi.xrp.fletcher.service.http.CustomHttpClient;
 import fi.xrp.fletcher.service.http.JsoupResponseMapper;
 import lombok.Builder;
 import lombok.Singular;
 import lombok.extern.slf4j.Slf4j;
-import org.asynchttpclient.Response;
 import org.jsoup.nodes.Document;
 
 import java.util.Locale;
@@ -48,25 +46,19 @@ public class TradingViewRssNewsProducer extends AbstractRssNewsProducer {
     }
 
     @Override
-    protected void startEnrichingNews(final CustomHttpClient customHttpClient, final News news) {
-        super.startEnrichingNews(customHttpClient, news);
+    protected void enrichNews(final CustomHttpClient customHttpClient, final News news) {
+        super.enrichNews(customHttpClient, news);
 
-        customHttpClient.executeAsyncHttpGet(news.getUrl(), new JsoupResponseMapper(news.getUrl()), new AsyncResponseHandler<Document>() {
-            @Override
-            public void onValidResponse(final Document object) {
-                if (isLong(object)) {
-                    news.setTags(Sets.union(news.getTags(), Sets.newHashSet(Tag.BULLISH.name())));
-                }
-                if (isShort(object)) {
-                    news.setTags(Sets.union(news.getTags(), Sets.newHashSet(Tag.BEARISH.name())));
-                }
-            }
-
-            @Override
-            public void onInvalidResponse(final Response response) {
-                // just ignore
-            }
-        });
+        customHttpClient
+                .executeAsyncHttpGet(news.getUrl(), new JsoupResponseMapper(news.getUrl()))
+                .thenAccept(document -> {
+                    if (isLong(document)) {
+                        news.setTags(Sets.union(news.getTags(), Sets.newHashSet(Tag.BULLISH.name())));
+                    }
+                    if (isShort(document)) {
+                        news.setTags(Sets.union(news.getTags(), Sets.newHashSet(Tag.BEARISH.name())));
+                    }
+                });
     }
 
     private boolean isShort(final Document document) {

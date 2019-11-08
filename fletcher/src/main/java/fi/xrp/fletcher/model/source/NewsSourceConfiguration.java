@@ -289,13 +289,9 @@ public class NewsSourceConfiguration {
 
     private Stream<GenericRssNewsProducer> regularNews() {
         return Stream.of(
-                GenericRssNewsProducer.builder().feedUrl("http://altcointoday.com/feed/"),
-                GenericRssNewsProducer.builder().feedUrl("http://coindiligent.com/feed"),
                 GenericRssNewsProducer.builder().feedUrl("http://ambcrypto.com/feed/"),
-                GenericRssNewsProducer.builder().feedUrl("http://bitcoinchaser.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("http://bitcoinist.com/feed"),
                 GenericRssNewsProducer.builder().feedUrl("http://bitcoinmagazine.com/feed"),
-                GenericRssNewsProducer.builder().feedUrl("http://bitpinas.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("http://blog.coinspectator.com/feed"),
                 GenericRssNewsProducer.builder().feedUrl("http://btcmanager.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("http://coindoo.com/feed/"),
@@ -317,7 +313,6 @@ public class NewsSourceConfiguration {
                 GenericRssNewsProducer.builder().feedUrl("http://feeds.feedburner.com/CoinDesk"),
                 GenericRssNewsProducer.builder().feedUrl("http://forklog.net/feed"),
                 GenericRssNewsProducer.builder().feedUrl("http://icoinblog.com/feed/"),
-                GenericRssNewsProducer.builder().feedUrl("http://masterthecrypto.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("http://news.bitcoin.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("http://nulltx.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("http://unhashed.com/feed/"),

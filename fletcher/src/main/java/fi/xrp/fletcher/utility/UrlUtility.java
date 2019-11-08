@@ -51,7 +51,7 @@ public final class UrlUtility {
                     if (uriFilter.test(uri)) {
                         result.add(uri.toString());
                     }
-                } catch (RuntimeException e) {
+                } catch (final RuntimeException e) {
                     // just ignore wrong URL
                 }
             }
@@ -72,5 +72,14 @@ public final class UrlUtility {
             }
         }
         return result;
+    }
+
+    public static String getBaseUri(final String url) {
+        try {
+            final URI uri = URI.create(url);
+            return uri.getScheme() + "://" + uri.getHost();
+        } catch (final Exception e) {
+            return url;
+        }
     }
 }
