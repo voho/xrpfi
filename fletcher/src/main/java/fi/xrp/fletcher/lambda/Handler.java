@@ -76,6 +76,8 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
 
                 log.info("=== Firing queries for news ===");
 
+                newsProducerStatusKeeper.onGlobalStart();
+
                 for (final NewsProducer source : newsSourceConfiguration.getSources()) {
                     futures.put(source, source.startAsyncUpdate(customHttpClient));
                     newsProducerStatusKeeper.onUpdateStarted(source);
@@ -84,6 +86,7 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
                 final Runnable endFuturesRunnable = () -> {
                     log.info("=== Cancelling pending operations ===");
                     futures.values().forEach(n -> n.cancel(false));
+                    newsProducerStatusKeeper.onGlobalFinished();
                 };
 
                 Executors.newSingleThreadScheduledExecutor().schedule(endFuturesRunnable, DEFAULT_FINAL_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
@@ -97,7 +100,7 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
                         log.debug("Waiting for news...");
                         final List<News> news = entry.getValue().get();
                         log.info("{}: Fetched {} news", entry.getKey().getTitle(), news.size());
-                        newsProducerStatusKeeper.onUpdateFinished(entry.getKey());
+                        newsProducerStatusKeeper.onUpdateFinished(entry.getKey(), news.size());
                         result.addAll(news);
                     } catch (final Exception e) {
                         log.warn("{}: Error while getting news in the given timeout: {}", entry.getKey().getTitle(), e.getMessage());

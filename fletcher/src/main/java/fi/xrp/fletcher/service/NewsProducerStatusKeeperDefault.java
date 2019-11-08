@@ -37,9 +37,8 @@ public class NewsProducerStatusKeeperDefault implements NewsProducerStatusKeeper
     @Override
     public void onUpdateStarted(final NewsProducer producer) {
         log.debug("Update Started: {}", producer.getTitle());
-        startTime = System.currentTimeMillis();
         final NewsProducerStatus status = getStatus(producer);
-        status.setLastUpdateStartDate(startTime);
+        status.setLastUpdateStartDate(System.currentTimeMillis());
         status.setHomeUrl(producer.getHomeUrl());
         status.setFeedUrl(producer.getFeedUrl());
         status.setTitle(producer.getTitle());
@@ -47,16 +46,19 @@ public class NewsProducerStatusKeeperDefault implements NewsProducerStatusKeeper
     }
 
     @Override
-    public void onUpdateFinished(final NewsProducer producer) {
+    public void onUpdateFinished(final NewsProducer producer, final long newsCount) {
         log.debug("DB Update Finished: {}", producer.getTitle());
         final NewsProducerStatus status = getStatus(producer);
-        endTime = System.currentTimeMillis();
-        status.setLastUpdateEndDate(endTime);
-        status.setLastError(null);
+        status.setLastUpdateEndDate(System.currentTimeMillis());
+        status.setLastUpdateNewsCount(newsCount);
         status.setStatus("DB_UPDATE_FINISHED");
 
         for (final NewsProducer.Tag tag : producer.getTags()) {
-            customMetricsClient.emitAfterUpdateNewsMetrics(tag.name(), producer.getId(), endTime - startTime, true);
+            customMetricsClient.emitAfterUpdateNewsMetrics(
+                    tag.name(),
+                    producer.getId(),
+                    status.getLastUpdateEndDate() - status.getLastUpdateStartDate(),
+                    true);
         }
     }
 
@@ -64,13 +66,27 @@ public class NewsProducerStatusKeeperDefault implements NewsProducerStatusKeeper
     public void onUpdateFailed(final NewsProducer producer, final Object reason) {
         log.warn("Update failed: {}", producer.getTitle());
         final NewsProducerStatus status = getStatus(producer);
-        status.setLastUpdateEndDate(endTime);
+        status.setLastUpdateFailureDate(System.currentTimeMillis());
         status.setLastError(Objects.toString(reason));
         status.setStatus("FAILED");
 
         for (final NewsProducer.Tag tag : producer.getTags()) {
-            customMetricsClient.emitAfterUpdateNewsMetrics(tag.name(), producer.getId(), endTime - startTime, false);
+            customMetricsClient.emitAfterUpdateNewsMetrics(
+                    tag.name(),
+                    producer.getId(),
+                    status.getLastUpdateFailureDate() - status.getLastUpdateStartDate(),
+                    false);
         }
+    }
+
+    @Override
+    public void onGlobalStart() {
+        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onGlobalFinished() {
+        endTime = System.currentTimeMillis();
     }
 
     @Override
@@ -79,7 +95,7 @@ public class NewsProducerStatusKeeperDefault implements NewsProducerStatusKeeper
         status.setStartTime(startTime);
         status.setEndTime(endTime);
         status.setTotalNewsProducers(statuses.size());
-        status.setTotalNews(statuses.values().stream().mapToLong(NewsProducerStatus::getLastUpdateNewsCount).sum());
+        status.setTotalNews(statuses.values().stream().map(NewsProducerStatus::getLastUpdateNewsCount).filter(Objects::nonNull).mapToLong(k -> k.longValue()).sum());
         return status;
     }
 }

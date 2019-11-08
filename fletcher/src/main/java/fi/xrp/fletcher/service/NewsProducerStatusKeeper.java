@@ -13,9 +13,13 @@ public interface NewsProducerStatusKeeper {
 
     void onUpdateStarted(NewsProducer producer);
 
-    void onUpdateFinished(NewsProducer producer);
+    void onUpdateFinished(NewsProducer producer, final long newsCount);
 
     void onUpdateFailed(NewsProducer producer, Object reason); // TODO better type
+
+    void onGlobalStart();
+
+    void onGlobalFinished();
 
     GlobalStatus getGlobalStatus();
 }

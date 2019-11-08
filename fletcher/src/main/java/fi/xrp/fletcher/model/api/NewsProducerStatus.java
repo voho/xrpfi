@@ -7,9 +7,10 @@ public class NewsProducerStatus {
     private String homeUrl;
     private String feedUrl;
     private String title;
-    private long lastUpdateStartDate;
-    private long lastUpdateEndDate;
-    private long lastUpdateNewsCount;
+    private Long lastUpdateStartDate;
+    private Long lastUpdateEndDate;
+    private Long lastUpdateFailureDate;
+    private Long lastUpdateNewsCount;
     private String lastError;
     private String status;
 }
