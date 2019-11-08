@@ -8,7 +8,11 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.xrp.fletcher.model.source.NewsSourceConfiguration;
-import fi.xrp.fletcher.service.*;
+import fi.xrp.fletcher.service.NewsMerger;
+import fi.xrp.fletcher.service.NewsMergerDefault;
+import fi.xrp.fletcher.service.NewsProducerStatusKeeper;
+import fi.xrp.fletcher.service.NewsProducerStatusKeeperDefault;
+import fi.xrp.fletcher.service.NewsSourceRefreshService;
 import fi.xrp.fletcher.service.aws.CustomMetricsClient;
 import fi.xrp.fletcher.service.aws.CustomS3Client;
 import fi.xrp.fletcher.service.http.CustomHttpClient;
@@ -28,9 +32,9 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
     private static final String KEY = "root.json";
 
     private static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(3);
-    private static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(5);
-    private static final Duration DEFAULT_FINAL_TIMEOUT = Duration.ofSeconds(30);
-    private static final int MAX_REQUEST_RETRY = 3;
+    private static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(10);
+    private static final Duration DEFAULT_FINAL_TIMEOUT = Duration.ofSeconds(40);
+    private static final int MAX_REQUEST_RETRY = 1;
 
     private static final DefaultAsyncHttpClientConfig HTTP_CLIENT_CONFIG = Dsl
             .config()
@@ -53,8 +57,8 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
     public HandlerResponse handleRequest(final HandlerRequest handlerRequest, final Context context) {
         try {
             try (final AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient(HTTP_CLIENT_CONFIG)) {
-                final CustomS3Client customS3Client = new CustomS3Client(s3);
-                final CustomMetricsClient customMetricsClient = new CustomMetricsClient(cw);
+                final CustomS3Client customS3Client = new CustomS3Client(this.s3);
+                final CustomMetricsClient customMetricsClient = new CustomMetricsClient(this.cw);
                 final CustomHttpClient customHttpClient = new CustomHttpClient(asyncHttpClient);
                 final NewsMerger newsMerger = new NewsMergerDefault(Duration.ofDays(14), 50);
                 final NewsProducerStatusKeeper newsProducerStatusKeeper = new NewsProducerStatusKeeperDefault();

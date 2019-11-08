@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,17 +32,17 @@ public class NewsSourceRefreshService {
 
         log.info("=== Firing queries for news ===");
 
-        for (final NewsProducer source : sources.getSources()) {
+        for (final NewsProducer source : this.sources.getSources()) {
             log.debug("Adding future of {}.", source.getTitle());
-            newsFutures.put(source, source.startAsyncUpdate(customHttpClient));
+            newsFutures.put(source, source.startAsyncUpdate(this.customHttpClient));
         }
 
-        Executors.newCachedThreadPool().submit(() -> {
-            Thread.sleep(futuresTimeout.toMillis());
-            log.info("Cancelling futures...");
+        final Runnable endFuturesRunnable = () -> {
+            log.info("=== Cancelling pending operations ===");
             newsFutures.values().forEach(n -> n.cancel(false));
-            return null;
-        });
+        };
+
+        Executors.newSingleThreadScheduledExecutor().schedule(endFuturesRunnable, this.futuresTimeout.toMillis(), TimeUnit.MILLISECONDS);
 
         log.info("=== Waiting for news ===");
 
@@ -53,7 +54,7 @@ public class NewsSourceRefreshService {
                 final List<News> news = entry.getValue().get();
                 log.info("{}: Fetched {} news", entry.getKey().getTitle(), news.size());
                 for (final NewsProducer.Tag tag : entry.getKey().getTags()) {
-                    customMetricsClient.emitAfterUpdateNewsMetrics(tag.name(), entry.getKey().getId(), 0, news.size());
+                    this.customMetricsClient.emitAfterUpdateNewsMetrics(tag.name(), entry.getKey().getId(), 0, news.size());
                 }
                 result.addAll(news);
             } catch (final Exception e) {
@@ -63,6 +64,6 @@ public class NewsSourceRefreshService {
 
         log.info("=== Updating news ===");
 
-        database.updateNews(result);
+        this.database.updateNews(result);
     }
 }
