@@ -1,17 +1,15 @@
-import React, {useContext} from "react";
-import {UseNewsReducerContext} from "../../service/NewsReducer";
+import React from "react";
 import {NewsControl} from "../news/NewsControl";
+import {SourcesStatus} from "./SourcesStatus";
 
 export const MetaCenter = () => {
-    const context = useContext(UseNewsReducerContext);
-
     return (
         <>
             <div className={"news-site-menu"}>
                 <NewsControl/>
             </div>
             <div className={"news-site-detail"}>
-                {JSON.stringify(context.state.meta)}
+                <SourcesStatus/>
             </div>
         </>
     );

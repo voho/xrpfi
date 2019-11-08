@@ -51,7 +51,7 @@ export function scheduleRegularNewsUpdate(dispatch: React.Dispatch<Action>) {
                 return response.json();
             })
             .then(newState => {
-                dispatch({type: "news_load_success", news: (newState as Root).news} as NewsLoadSuccessAction);
+                dispatch({type: "news_load_success", root: (newState as Root)} as NewsLoadSuccessAction);
             })
             .catch(error => {
                 dispatch({type: "news_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);

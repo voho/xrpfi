@@ -1,6 +1,7 @@
 import React from "react";
 import {News} from "../../service/model";
 import {Button} from "../common/Button";
+import {SourcesStatus} from "../meta/SourcesStatus";
 import "./NewsDetail.scss";
 import {NewsDate, NewsFlags, NewsSource} from "./NewsItem";
 
@@ -22,7 +23,7 @@ const NoNewsSelected = () => {
 
 const NewsSelected: React.FC<NewsDetailProps> = (props) => {
     if (!props.selectedNews) {
-        return <NoNewsSelected/>;
+        return <SourcesStatus/>;
     }
 
     const news = props.selectedNews!;

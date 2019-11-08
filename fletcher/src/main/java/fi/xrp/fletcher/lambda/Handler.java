@@ -39,8 +39,8 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
     private static final String BUCKET = "xrpfi";
     private static final String KEY = "root.json";
 
-    private static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(5);
-    private static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(10);
+    private static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(3);
+    private static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(30);
     private static final Duration DEFAULT_FINAL_TIMEOUT = Duration.ofSeconds(40);
     private static final int MAX_REQUEST_RETRY = 1;
 

@@ -5,8 +5,7 @@ export interface Action {
 export interface NewsState {
     loading: boolean,
     error?: string,
-    news?: News[],
-    meta?: Meta[],
+    root?: Root,
     selectedNewsGuid?: string
 }
 
