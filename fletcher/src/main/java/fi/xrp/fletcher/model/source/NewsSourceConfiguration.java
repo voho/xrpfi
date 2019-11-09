@@ -310,8 +310,6 @@ public class NewsSourceConfiguration {
                 GenericRssNewsProducer.builder().feedUrl("https://cryptodailygazette.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("https://ethereumworldnews.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("https://feeds.feedburner.com/CoinDesk"),
-                GenericRssNewsProducer.builder().feedUrl("https://forklog.net/feed"),
-                GenericRssNewsProducer.builder().feedUrl("https://icoinblog.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("https://news.bitcoin.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("https://nulltx.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("https://unhashed.com/feed/"),
@@ -330,7 +328,6 @@ public class NewsSourceConfiguration {
                 GenericRssNewsProducer.builder().feedUrl("https://u.today/rss_feed"),
                 GenericRssNewsProducer.builder().feedUrl("https://abacusjournal.com/feed/"),
                 GenericRssNewsProducer.builder().feedUrl("https://coinfomania.com/feed/"),
-                GenericRssNewsProducer.builder().feedUrl("https://ripple-guide.com/category/xrp-news/feed"),
                 GenericRssNewsProducer.builder().feedUrl("https://unchained.libsyn.com/unchained"),
                 GenericRssNewsProducer.builder().feedUrl("https://feeds.finance.yahoo.com/rss/2.0/headline?s=xrp-usd&lang=en-US"),
                 GenericRssNewsProducer.builder().feedUrl("https://feeds.finance.yahoo.com/rss/2.0/headline?s=xrp-btc&lang=en-US")

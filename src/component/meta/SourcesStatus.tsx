@@ -12,6 +12,16 @@ const SourceTableStatus: React.FC<{ status: string }> = (props) => {
     return <span className={className}>{props.status}</span>;
 };
 
+const SourceTableTiming: React.FC<{ start: number, end: number }> = (props) => {
+    const diff = (props.end - props.start) / 1000.0;
+    return (
+        <>
+            <br/>
+            <small>Latency: <b>{diff}</b> s</small>
+        </>
+    );
+};
+
 const SourceTableLastError: React.FC<{ error: string | null }> = (props) => {
     if (!props.error) {
         return null;
@@ -33,6 +43,7 @@ const SourceTableRow: React.FC<{ row: Meta }> = (props) => {
             </td>
             <td>
                 <SourceTableStatus status={props.row.status}/>
+                <SourceTableTiming start={props.row.lastUpdateStartDate} end={props.row.lastUpdateEndDate}/>
                 <SourceTableLastError error={props.row.lastError}/>
             </td>
         </tr>

@@ -39,12 +39,12 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
     private static final DefaultAsyncHttpClientConfig HTTP_CLIENT_CONFIG = Dsl
             .config()
             .setFollowRedirect(true)
-            .setConnectTimeout(3000)
-            .setRequestTimeout(10000)
-            .setKeepAlive(true)
-            .setReadTimeout(10000)
             .setMaxRedirects(2)
-            .setMaxRequestRetry(0)
+            .setConnectTimeout(40000)
+            .setRequestTimeout(40000)
+            .setKeepAlive(true)
+            .setReadTimeout(40000)
+            .setMaxRequestRetry(1)
             .build();
 
     private final AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
@@ -73,7 +73,7 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
                 }
 
                 Executors.newCachedThreadPool().submit(() -> {
-                    Thread.sleep(40000);
+                    Thread.sleep(45000);
                     log.info("=== Cancelling pending operations ===");
                     //futures.values().forEach(n -> n.cancel(false));
                     futures.values().forEach(n -> {
