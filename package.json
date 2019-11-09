@@ -10,7 +10,6 @@
   "scripts": {
     "server": "npm start --prefix backend",
     "client": "npm start --prefix frontend",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "npm run build --prefix frontend"
+    "start": "concurrently \"npm run server\" \"npm run client\""
   }
 }
