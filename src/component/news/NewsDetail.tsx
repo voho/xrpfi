@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {News} from "../../service/model";
 import {Button} from "../common/Button";
 import {SourcesStatus} from "../meta/SourcesStatus";
@@ -21,6 +21,39 @@ const NoNewsSelected = () => {
     return <p className={"empty-news"}>No News selected.</p>;
 };
 
+const VideoEmbed: React.FC<{ videoId: string }> = (props) => {
+    return (
+        <div className="video-embed">
+            <iframe className="embed-responsive-item"
+                    src={"https://www.youtube.com/embed/" + props.videoId + "&amp;feature=share?rel=0"}
+                    frameBorder="0"/>
+        </div>
+    );
+};
+
+const OEmbed: React.FC<{ oembedUrl: string }> = (props) => {
+    const [html, setHtml] = useState("<p>Loading...</p>");
+
+    useEffect(() => {
+        fetch(props.oembedUrl)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (json) {
+                if (json && json.html) {
+                    setHtml(json.html);
+                }
+            })
+            .catch(error => {
+                setHtml("Error: " + error.message);
+            });
+    });
+
+    return (
+        <div dangerouslySetInnerHTML={createMarkup(html)}/>
+    );
+};
+
 const NewsSelected: React.FC<NewsDetailProps> = (props) => {
     if (!props.selectedNews) {
         return <SourcesStatus/>;
@@ -30,6 +63,8 @@ const NewsSelected: React.FC<NewsDetailProps> = (props) => {
 
     return (
         <>
+            {news.videoId && <VideoEmbed videoId={news.videoId}/>}
+            {news.oembedUrl && <OEmbed oembedUrl={news.oembedUrl}/>}
             <h2>{props.selectedNews!.title}</h2>
             <p className={"flags"}>
                 <NewsOpen news={news}/>

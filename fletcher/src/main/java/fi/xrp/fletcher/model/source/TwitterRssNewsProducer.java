@@ -55,9 +55,9 @@ public class TwitterRssNewsProducer extends AbstractRssNewsProducer {
             news.setSourceName(name);
 
             if (!Strings.isNullOrEmpty(position)) {
-                news.setSourceName(news.getTitle() + ", " + position);
+                news.setSourceName(news.getSourceName() + ", " + position);
                 if (!Strings.isNullOrEmpty(company)) {
-                    news.setSourceName(news.getTitle() + " at " + company);
+                    news.setSourceName(news.getSourceName() + " at " + company);
                 }
             }
         }

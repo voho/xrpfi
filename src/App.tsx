@@ -2,7 +2,6 @@ import "normalize.css";
 import React, {useEffect, useReducer} from "react";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import "./App.css";
-import {MetaCenter} from "./component/meta/MetaCenter";
 import {NewsCenter} from "./component/news/NewsCenter";
 import {scheduleRegularNewsUpdate, scheduleRegularTickersUpdate} from "./service/api";
 import {NewsState, TickersState} from "./service/model";
@@ -25,7 +24,6 @@ export const App: React.FC = () => {
             <UseTickersReducerContext.Provider value={{state: tickersState, dispatch: tickersDispatch}}>
                 <BrowserRouter>
                     <Switch>
-                        <Route path={"/meta"} component={MetaCenter}/>
                         <Route path={"/"} component={NewsCenter}/>
                         <Redirect to={"/"}/>
                     </Switch>

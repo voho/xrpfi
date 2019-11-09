@@ -2,6 +2,7 @@ import React, {useContext} from "react";
 import {Meta} from "../../service/model";
 import {UseNewsReducerContext} from "../../service/NewsReducer";
 import "./SourcesStatus.scss";
+import {TradingChart} from "./TradingChart";
 
 const SourceTableStatus: React.FC<{ status: string }> = (props) => {
     const className = props.status === "DB_UPDATE_FINISHED"
@@ -59,6 +60,8 @@ export const SourcesStatus = () => {
 
     return (
         <>
+            <h2>Actual Price</h2>
+            <TradingChart/>
             <h2>News Sources</h2>
             <SourceTable rows={context.state.root!.meta || []}/>
         </>

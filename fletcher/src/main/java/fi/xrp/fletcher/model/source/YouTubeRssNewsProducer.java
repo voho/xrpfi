@@ -42,7 +42,7 @@ public class YouTubeRssNewsProducer extends AbstractRssNewsProducer {
         final News news = super.getNews(guid, rssFeed, rssFeedEntry);
 
         news.setSourceId("youtube");
-        final String videoId = news.getUrl().replace("yt:video:", "");
+        final String videoId = rssFeedEntry.getUri().replace("yt:video:", "");
 
         Double ratingAverage = null;
         Long ratingCount = null;
