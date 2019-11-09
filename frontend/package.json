@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:4000/",
   "dependencies": {
+    "@xrpfi/backend": "file:../backend",
     "@types/jest": "24.0.22",
     "@types/node": "12.12.7",
     "@types/react": "16.9.11",
