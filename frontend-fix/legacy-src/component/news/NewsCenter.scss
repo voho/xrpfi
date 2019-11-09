@@ -1,0 +1,22 @@
+.news-site-menu {
+}
+
+.news-site-list {
+  flex-grow: 1;
+  align-self: stretch;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  min-width: 40%;
+  max-width: 50%;
+  width: 45%;
+}
+
+.news-site-detail {
+  flex-grow: 1;
+  align-self: stretch;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  min-width: 40%;
+  max-width: 50%;
+  width: 45%;
+}
