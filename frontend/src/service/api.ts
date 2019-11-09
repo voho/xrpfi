@@ -1,5 +1,5 @@
 import React from "react";
-import {Action, Root} from "./model";
+import {Action, Root} from "../../../backend/src/model/model";
 import {NewsLoadErrorAction, NewsLoadStartAction, NewsLoadSuccessAction} from "./NewsReducer";
 import {TickersLoadSuccessAction} from "./TickersReducer";
 

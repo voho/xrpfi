@@ -1,10 +1,11 @@
+// @ts-ignore
+import {NewsState, TickersState} from "@xrpfi/backend/build/model/model";
 import "normalize.css";
 import React, {useEffect, useReducer} from "react";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import "./App.css";
 import {NewsCenter} from "./component/news/NewsCenter";
 import {scheduleRegularNewsUpdate, scheduleRegularTickersUpdate} from "./service/api";
-import {NewsState, TickersState} from "./service/model";
 import {newsReducer, UseNewsReducerContext} from "./service/NewsReducer";
 import {tickersReducer, UseTickersReducerContext} from "./service/TickersReducer";
 

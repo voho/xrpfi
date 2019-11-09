@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {News} from "../../service/model";
+import {News} from "../../../../backend/src/model/model";
 import {Button} from "../common/Button";
 import {SourcesStatus} from "../meta/SourcesStatus";
 import "./NewsDetail.scss";

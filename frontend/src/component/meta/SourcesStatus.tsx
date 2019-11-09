@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {Meta} from "../../service/model";
+import {Meta} from "../../../../backend/src/model/model";
 import {UseNewsReducerContext} from "../../service/NewsReducer";
 import "./SourcesStatus.scss";
 import {TradingChart} from "./TradingChart";

@@ -6,7 +6,7 @@ import {faVideo} from "@fortawesome/free-solid-svg-icons/faVideo";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import React, {useContext} from "react";
-import {News} from "../../service/model";
+import {News} from "../../../../backend/src/model/model";
 import {NewsSelectAction, UseNewsReducerContext} from "../../service/NewsReducer";
 import "./NewsItem.scss";
 

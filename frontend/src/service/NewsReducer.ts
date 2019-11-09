@@ -1,5 +1,5 @@
 import React from "react";
-import {Action, NewsState, Root} from "./model";
+import {Action, NewsState, Root} from "../../../backend/src/model/model";
 
 export interface NewsSelectAction extends Action {
     selected: string;
