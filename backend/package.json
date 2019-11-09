@@ -1,20 +1,16 @@
 {
   "name": "@xrpfi/backend",
   "version": "1.0.0",
-  "private": true,
-  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
-    "start": "node_modules/.bin/nodemon --exec babel-node server.js"
+    "dev": "nodemon src/server.ts",
+    "start": "tsc && node build/server"
   },
-  "author": "voho",
   "dependencies": {
-    "cors": "^2.8.5",
     "express": "^4.17.1",
+    "@types/express": "^4.17.2",
+    "@types/node": "^12.12.7",
     "nodemon": "^1.19.4",
-    "@babel/cli": "^7.7.0",
-    "@babel/core": "^7.7.2",
-    "@babel/node": "^7.7.0",
-    "@babel/preset-env": "^7.7.1"
+    "ts-node": "^8.4.1",
+    "typescript": "^3.7.2"
   }
 }

@@ -4,7 +4,7 @@ import {NewsLoadErrorAction, NewsLoadStartAction, NewsLoadSuccessAction} from ".
 import {TickersLoadSuccessAction} from "./TickersReducer";
 
 const priceUrl = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=XRP&tsyms=BTC,USD";
-const rootJsonUrl = "https://xrpfi.s3-eu-west-1.amazonaws.com/root.json";
+const rootJsonUrl = "/api/root";
 
 const TICKERS_UPDATE_INTERVAL_MS = 10000;
 const NEWS_UPDATE_INTERVAL_MS = 30000;
