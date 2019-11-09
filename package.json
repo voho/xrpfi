@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@xrpfi/frontend": "file:frontend",
+    "@xrpfi/backend": "file:backend",
     "concurrently": "^5.0.0"
   },
   "scripts": {
