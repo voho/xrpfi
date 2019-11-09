@@ -6,7 +6,6 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.xrp.fletcher.model.api.News;
 import fi.xrp.fletcher.model.source.NewsProducer;
 import fi.xrp.fletcher.model.source.NewsSourceConfiguration;
@@ -22,7 +21,6 @@ import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 import org.asynchttpclient.Dsl;
-import org.asynchttpclient.cookie.ThreadSafeCookieStore;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -32,27 +30,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> {
     private static final String BUCKET = "xrpfi";
     private static final String KEY = "root.json";
 
-    private static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(3);
-    private static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(20);
-    private static final Duration DEFAULT_FINAL_TIMEOUT = Duration.ofSeconds(40);
-    private static final int MAX_REQUEST_RETRY = 1;
-
     private static final DefaultAsyncHttpClientConfig HTTP_CLIENT_CONFIG = Dsl
             .config()
             .setFollowRedirect(true)
-            .setCookieStore(new ThreadSafeCookieStore())
-            .setMaxRequestRetry(MAX_REQUEST_RETRY)
-            .setConnectTimeout((int) DEFAULT_CONNECT_TIMEOUT.toMillis())
-            .setRequestTimeout((int) DEFAULT_HTTP_TIMEOUT.toMillis())
-            .setReadTimeout((int) DEFAULT_HTTP_TIMEOUT.toMillis())
-            .setMaxRedirects(3)
+            .setConnectTimeout(3000)
+            .setRequestTimeout(10000)
+            .setKeepAlive(true)
+            .setReadTimeout(10000)
+            .setMaxRedirects(2)
+            .setMaxRequestRetry(0)
             .build();
 
     private final AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
@@ -65,7 +57,7 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
                 final CustomS3Client customS3Client = new CustomS3Client(s3);
                 final CustomMetricsClient customMetricsClient = new CustomMetricsClient(cw);
                 final CustomHttpClient customHttpClient = new CustomHttpClient(asyncHttpClient);
-                final NewsMerger newsMerger = new NewsMergerDefault(Duration.ofDays(14), 50);
+                final NewsMerger newsMerger = new NewsMergerDefault(Duration.ofDays(14), 100);
                 final NewsProducerStatusKeeper newsProducerStatusKeeper = new NewsProducerStatusKeeperDefault(customMetricsClient);
                 final NewsSourceConfiguration newsSourceConfiguration = new NewsSourceConfiguration();
 
@@ -80,13 +72,18 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
                     newsProducerStatusKeeper.onUpdateStarted(source);
                 }
 
-                final Runnable endFuturesRunnable = () -> {
+                Executors.newCachedThreadPool().submit(() -> {
+                    Thread.sleep(40000);
                     log.info("=== Cancelling pending operations ===");
-                    futures.values().forEach(n -> n.cancel(false));
+                    //futures.values().forEach(n -> n.cancel(false));
+                    futures.values().forEach(n -> {
+                        if (!n.isDone()) {
+                            n.cancel(true);
+                        }
+                    });
                     newsProducerStatusKeeper.onGlobalFinished();
-                };
-
-                Executors.newSingleThreadScheduledExecutor().schedule(endFuturesRunnable, DEFAULT_FINAL_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+                    return null;
+                });
 
                 log.info("=== Waiting for news ===");
 
@@ -94,9 +91,8 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
 
                 for (final Map.Entry<NewsProducer, CompletableFuture<List<News>>> entry : futures.entrySet()) {
                     try {
-                        log.debug("Waiting for news...");
                         final List<News> news = entry.getValue().get();
-                        log.info("{}: Fetched {} news", entry.getKey().getTitle(), news.size());
+                        log.info("{} news from {}", news.size(), entry.getKey().getFeedUrl());
                         newsProducerStatusKeeper.onUpdateFinished(entry.getKey(), news.size());
                         result.addAll(news);
                     } catch (final Exception e) {
@@ -111,8 +107,7 @@ public class Handler implements RequestHandler<HandlerRequest, HandlerResponse> 
 
                 final HandlerResponse response = new HandlerResponse(newsMerger.getMergedNews(), newsProducerStatusKeeper.getStatuses(), newsProducerStatusKeeper.getGlobalStatus());
                 customS3Client.writeJsonToS3(BUCKET, KEY, response);
-                //System.out.println(response.getNews().toString());
-                log.info("Writing response: {} news from {} sources: {}: {}", response.getNews().size(), response.getMeta().size(), new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(response));
+                log.info("Writing response: {} news from {} sources", response.getNews().size(), response.getMeta().size());
                 return response;
             }
         } catch (final IOException e) {

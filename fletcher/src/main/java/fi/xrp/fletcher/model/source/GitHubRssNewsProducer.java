@@ -28,12 +28,12 @@ public class GitHubRssNewsProducer extends AbstractRssNewsProducer {
 
     @Override
     public String getFeedUrl() {
-        return String.format("http://github.com/%s/%s/commits/%s.atom", author, project, branch);
+        return String.format("https://github.com/%s/%s/commits/%s.atom", author, project, branch);
     }
 
     @Override
     public String getHomeUrl() {
-        return String.format("http://github.com/%s/%s/tree/%s", author, project, branch);
+        return String.format("https://github.com/%s/%s/tree/%s", author, project, branch);
     }
 
     @Override

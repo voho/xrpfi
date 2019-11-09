@@ -36,7 +36,7 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
             object.normalizeDocument();
             final SyndFeed romeFeed = input.build(object);
 
-            romeFeed.getEntries().forEach(entry -> {
+            romeFeed.getEntries().stream().limit(20).forEach(entry -> {
                 final SyndEntry rssFeedEntry = (SyndEntry) entry;
 
                 final String guid = getGuid(rssFeedEntry);
@@ -77,7 +77,7 @@ abstract class AbstractRssNewsProducer extends AbstractNewsProducer<Document> {
         final String sourceTitleFromFeed = contentToText(rssFeed.getTitleEx());
         final String sourceTitle = Strings.isNullOrEmpty(sourceTitleFromFeed) ? getTitle() : sourceTitleFromFeed;
 
-        news.setDate(rssFeedEntry.getPublishedDate().getTime());
+        news.setDate(BasicUtility.coalesce(rssFeedEntry.getPublishedDate(), rssFeedEntry.getUpdatedDate()).getTime());
         news.setGuid(guid);
         news.setTitle(contentToText(rssFeedEntry.getTitleEx()));
         news.setSourceName(sourceTitle);
