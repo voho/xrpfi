@@ -1,0 +1,20 @@
+/* User Experience */
+
+export const MAX_RETURNED_NEWS = 50;
+
+/* HTTP */
+
+export const HTTP_REQUEST_RETRY_COUNT = 3;
+export const HTTP_REQUEST_TIMEOUT_MS = 20000;
+
+/* Scheduling */
+
+export const DIVIDER_FASTEST = 1;
+export const DIVIDER_FAST = DIVIDER_FASTEST * 2;
+export const DIVIDER_MEDIUM = DIVIDER_FAST * 2;
+export const DIVIDER_SLOW = DIVIDER_MEDIUM * 2;
+export const DIVIDER_SLOWEST = DIVIDER_SLOW * 2;
+
+export const MAX_QUARTZ = DIVIDER_SLOWEST;
+export const QUARTZ_INTERVAL_MS = 3000;
+

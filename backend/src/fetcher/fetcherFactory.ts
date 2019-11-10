@@ -1,11 +1,6 @@
 import {News} from "../model/model";
+import {DIVIDER_SLOWEST} from "../utils/constants";
 import {genericRssMapper, redditRssMapper, twitterRssMapper} from "./mappers";
-
-const DIVIDER_FASTEST = 1;
-const DIVIDER_FAST = DIVIDER_FASTEST * 2;
-const DIVIDER_MEDIUM = DIVIDER_FAST * 2;
-const DIVIDER_SLOW = DIVIDER_MEDIUM * 2;
-const DIVIDER_SLOWEST = DIVIDER_SLOW * 2;
 
 type Status = "INITIALIZED" | "OK" | "WORKING" | "ERROR";
 

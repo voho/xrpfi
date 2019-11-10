@@ -1,7 +1,7 @@
 import express, {Request, Response} from "express";
 import {getMeta} from "./fetcher/fetcherLoader";
 import {scheduleFetcherRefresh} from "./fetcher/fetcherScheduler";
-import {getNews} from "./store/NewsStore";
+import {getNews} from "./store/newsStorage";
 import {logInfo} from "./utils/logger";
 
 const PORT = process.env.HTTP_PORT || 4000;

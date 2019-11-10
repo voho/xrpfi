@@ -29,7 +29,6 @@ export interface Root {
 
 export interface News {
     priority: number,
-    hash: number,
     date: number,
     guid: string,
     url: string,
@@ -43,7 +42,6 @@ export interface News {
     sourceId: string,
     sourceName: string,
     sourceHomeUrl: string,
-    oembedUrl: string | null
     avatarImageUrls: string[] | null
 }
 

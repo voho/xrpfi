@@ -1,4 +1,5 @@
 import {News} from "../model/model";
+import {MAX_RETURNED_NEWS} from "../utils/constants";
 
 let globalNews = new Map<String, News>();
 
@@ -31,5 +32,5 @@ export function addNews(news: News[]) {
 export function getNews(): News[] {
     const news = Array.from(globalNews.values());
     news.sort(sortNews);
-    return news.splice(0, 50);
+    return news.splice(0, MAX_RETURNED_NEWS);
 }

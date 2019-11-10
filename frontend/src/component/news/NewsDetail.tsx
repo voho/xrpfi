@@ -64,7 +64,6 @@ const NewsSelected: React.FC<NewsDetailProps> = (props) => {
     return (
         <>
             {news.videoId && <VideoEmbed videoId={news.videoId}/>}
-            {news.oembedUrl && <OEmbed oembedUrl={news.oembedUrl}/>}
             <h2>{props.selectedNews!.title}</h2>
             <p className={"flags"}>
                 <NewsOpen news={news}/>

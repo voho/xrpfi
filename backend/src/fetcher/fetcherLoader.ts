@@ -1,6 +1,6 @@
 import {httpGet} from "../http/httpClient";
 import {Meta} from "../model/model";
-import {addNews} from "../store/NewsStore";
+import {addNews} from "../store/newsStorage";
 import {logError, logInfo} from "../utils/logger";
 import {ALL_FETCHERS} from "./fetcherConfiguration";
 import {Fetcher} from "./fetcherFactory";
@@ -30,11 +30,15 @@ export function refreshFetcher(fetcher: Fetcher) {
     fetcher.status.status = "WORKING";
 
     function handler(response) {
-        const news = fetcher.mapper(response.body);
-        fetcher.status.lastNewsCount = news.length;
-        fetcher.status.lastUpdateEndTime = now();
-        fetcher.status.status = "OK";
-        addNews(news);
+        if (response.ok) {
+            let responseBodyTreated: string = response.text || response.body;
+            responseBodyTreated = responseBodyTreated.replace("\ufeff", "").trim();
+            const news = fetcher.mapper(responseBodyTreated);
+            fetcher.status.lastNewsCount = news.length;
+            fetcher.status.lastUpdateEndTime = now();
+            fetcher.status.status = "OK";
+            addNews(news);
+        }
     }
 
     httpGet(fetcher.fetchUrl)
