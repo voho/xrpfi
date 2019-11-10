@@ -5,9 +5,11 @@ export function twitterRssMapper(response: string): News[] {
     const news = [] as News[];
     const parser = new FeedMe();
     parser.on("item", (item) => {
+        // @ts-ignore
+        let url = item.link.href || item.link;
         news.push({
-            url: item.link,
-            guid: item.link,
+            url: url,
+            guid: url,
             sourceName: "Twitter",
             sourceHomeUrl: "http://twitter.com",
             sourceId: "twitter",
@@ -33,9 +35,11 @@ export function redditRssMapper(response: string): News[] {
     const news = [] as News[];
     const parser = new FeedMe();
     parser.on("item", (item) => {
+        // @ts-ignore
+        let url = item.link.href || item.link;
         news.push({
-            url: item.link,
-            guid: item.link,
+            url: url,
+            guid: url,
             sourceName: "Reddit",
             sourceHomeUrl: "https://www.reddit.com/",
             sourceId: "reddit",
@@ -66,9 +70,11 @@ export function genericRssMapper(response: string): News[] {
         sourceName = title.toString();
     });
     parser.on("item", (item) => {
+        // @ts-ignore
+        let url = item.link.href || item.link;
         news.push({
-            url: item.link,
-            guid: item.link,
+            url: url,
+            guid: url,
             sourceName: sourceName,
             sourceHomeUrl: ":)",
             sourceId: "news",
