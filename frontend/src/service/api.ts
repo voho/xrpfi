@@ -7,7 +7,7 @@ const priceUrl = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=XR
 const rootJsonUrl = "/api/root";
 
 const TICKERS_UPDATE_INTERVAL_MS = 10000;
-const NEWS_UPDATE_INTERVAL_MS = 30000;
+const NEWS_UPDATE_INTERVAL_MS = 5000;
 
 export function scheduleRegularTickersUpdate(dispatch: React.Dispatch<Action>) {
     const callback = () => {

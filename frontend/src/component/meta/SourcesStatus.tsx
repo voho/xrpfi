@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, {useContext} from "react";
 import {Meta} from "../../../../backend/src/model/model";
 import {UseNewsReducerContext} from "../../service/NewsReducer";
@@ -5,11 +6,18 @@ import "./SourcesStatus.scss";
 import {TradingChart} from "./TradingChart";
 
 const SourceTableStatus: React.FC<{ status: string }> = (props) => {
-    const className = props.status === "DB_UPDATE_FINISHED"
-        ? "color-positive"
-        : "color-negative";
+    function getClassName() {
+        switch (props.status) {
+            case "OK":
+                return "color-positive";
+            case "ERROR":
+                return "color-negative";
+            default:
+                return "";
+        }
+    }
 
-    return <span className={className}>{props.status}</span>;
+    return <span className={getClassName()}>{props.status}</span>;
 };
 
 const SourceTableTiming: React.FC<{ start: number, end: number }> = (props) => {
@@ -17,7 +25,9 @@ const SourceTableTiming: React.FC<{ start: number, end: number }> = (props) => {
     return (
         <>
             <br/>
-            <small>Latency: <b>{diff}</b> s</small>
+            <small>Latency: {diff} s</small>
+            <br/>
+            <small>Last update: <b>{moment(props.end).fromNow()}</b></small>
         </>
     );
 };

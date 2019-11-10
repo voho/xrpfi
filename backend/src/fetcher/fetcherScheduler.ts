@@ -1,27 +1,29 @@
-import {httpGet} from "../http/httpClient";
-import {addNews} from "../store/NewsStore";
-import {logDebug, logInfo} from "../utils/logger";
-import {Fetcher} from "./fetcherFactory";
+import {ALL_FETCHERS} from "./fetcherConfiguration";
+import {refreshFetcher} from "./fetcherLoader";
 
-export function scheduleFetcher(fetcher: Fetcher) {
-    logInfo(`Scheduling fetcher: ${fetcher.title}`);
+const MAX_QUARTZ = 4;
+const QUARTZ_INTERVAL_MS = 3000;
 
-    const intervalMs = fetcher.updateIntervalSeconds * 1000;
+export function scheduleFetcherRefresh() {
+    let quartz = 0;
 
-    function onResponse(response) {
-        const news = fetcher.mapper(response.body);
-        logDebug("Received news: " + news.length);
-        addNews(news);
+    function shouldRefreshFetcher(fetcher) {
+        return quartz % fetcher.updateFrequencyDivider == 0;
     }
 
-    function onRefresh() {
-        logInfo("Refreshing: " + fetcher.title);
-
-        httpGet(fetcher.fetchUrl)
-            .then(onResponse)
-            .catch(error => console.warn(error));
+    function tick() {
+        quartz = (quartz + 1) % MAX_QUARTZ;
     }
 
-    setInterval(onRefresh, intervalMs);
-    onRefresh();
+    function handler() {
+        ALL_FETCHERS.forEach(fetcher => {
+            if (shouldRefreshFetcher(fetcher)) {
+                refreshFetcher(fetcher);
+            }
+        });
+
+        tick();
+    }
+
+    setInterval(handler, QUARTZ_INTERVAL_MS);
 }
