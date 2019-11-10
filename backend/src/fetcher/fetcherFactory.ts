@@ -1,5 +1,5 @@
 import {News} from "../model/model";
-import {redditRssMapper, twitterRssMapper} from "./mappers";
+import {genericRssMapper, redditRssMapper, twitterRssMapper} from "./mappers";
 
 const DIVIDER_FASTEST = 1;
 const DIVIDER_FAST = DIVIDER_FASTEST * 2;
@@ -21,6 +21,8 @@ export interface FetcherStatus {
 export enum Tag {
     "twitter",
     "social",
+    "news",
+    "good",
     "official",
     "community",
     "bot",
@@ -59,6 +61,18 @@ export function getRedditFetcher(sub: string, tags: Set<Tag>): Fetcher {
         updateFrequencyDivider: DIVIDER_SLOWEST,
         status: getInitialStatus(),
         mapper: redditRssMapper
+    };
+}
+
+export function getNewsFetcher(feedUrl: string, tags: Set<Tag>): Fetcher {
+    return {
+        tags: tags,
+        title: `news://${feedUrl}`,
+        homeUrl: feedUrl,
+        fetchUrl: feedUrl,
+        updateFrequencyDivider: DIVIDER_SLOWEST,
+        status: getInitialStatus(),
+        mapper: genericRssMapper
     };
 }
 

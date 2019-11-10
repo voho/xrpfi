@@ -5,7 +5,7 @@ import {UseNewsReducerContext} from "../../service/NewsReducer";
 import "./SourcesStatus.scss";
 import {TradingChart} from "./TradingChart";
 
-const SourceTableStatus: React.FC<{ status: string }> = (props) => {
+const SourceTableStatus: React.FC<{ status: string, lastError: string | null }> = (props) => {
     function getClassName() {
         switch (props.status) {
             case "OK":
@@ -17,31 +17,27 @@ const SourceTableStatus: React.FC<{ status: string }> = (props) => {
         }
     }
 
-    return <span className={getClassName()}>{props.status}</span>;
+    return (
+        <span className={getClassName()}>{props.status}
+            <SourceTableLastError error={props.lastError}/>
+    </span>
+    );
 };
 
-const SourceTableTiming: React.FC<{ start: number, end: number }> = (props) => {
+const SourceTableLatency: React.FC<{ start: number, end: number }> = (props) => {
     const diff = (props.end - props.start) / 1000.0;
-    return (
-        <>
-            <br/>
-            <small>Latency: {diff} s</small>
-            <br/>
-            <small>Last update: <b>{moment(props.end).fromNow()}</b></small>
-        </>
-    );
+    return <small>{diff} s</small>;
+};
+
+const SourceTableTiming: React.FC<{ end: number }> = (props) => {
+    return <b>{moment(props.end).fromNow()}</b>;
 };
 
 const SourceTableLastError: React.FC<{ error: string | null }> = (props) => {
     if (!props.error) {
         return null;
     }
-    return (
-        <>
-            <br/>
-            <small>{props.error}</small>
-        </>
-    );
+    return <small><br/>{props.error}</small>;
 };
 
 const SourceTableRow: React.FC<{ row: Meta }> = (props) => {
@@ -51,11 +47,10 @@ const SourceTableRow: React.FC<{ row: Meta }> = (props) => {
                 <a href={props.row.homeUrl} target={"_blank"}>{props.row.title}</a>
                 <small> (<a href={props.row.feedUrl}>feed</a>)</small>
             </td>
-            <td>
-                <SourceTableStatus status={props.row.status}/>
-                <SourceTableTiming start={props.row.lastUpdateStartDate} end={props.row.lastUpdateEndDate}/>
-                <SourceTableLastError error={props.row.lastError}/>
-            </td>
+            <td><SourceTableStatus status={props.row.status} lastError={props.row.lastError}/></td>
+            <td><SourceTableLatency start={props.row.lastUpdateStartDate} end={props.row.lastUpdateEndDate}/></td>
+            <td><SourceTableTiming end={props.row.lastUpdateEndDate}/></td>
+            <td></td>
         </tr>
     );
 };
@@ -66,7 +61,9 @@ const SourceTable: React.FC<{ rows: Meta[] }> = (props) => {
             <thead>
             <tr>
                 <th>Source</th>
-                <th>Status and Last Error</th>
+                <th>Status</th>
+                <th>Latency</th>
+                <th>Last update</th>
             </tr>
             </thead>
             <tbody>

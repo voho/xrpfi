@@ -28,6 +28,7 @@ export interface Root {
 }
 
 export interface News {
+    priority: number,
     hash: number,
     date: number,
     guid: string,
