@@ -10,9 +10,6 @@ phases:
       - npm install --prefix backend
       - npm install --prefix backend
       - npm install
-  post_build:
-    commands:
-      - npm start
 
 artifacts:
   files:
