@@ -16,5 +16,5 @@ phases:
 
 artifacts:
   files:
-    - '../backend/build/**/*'
-    - '../frontend/build/**/*'
+    - 'backend/build/**/*'
+    - 'frontend/build/**/*'
