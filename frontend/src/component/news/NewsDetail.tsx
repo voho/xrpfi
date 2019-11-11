@@ -24,9 +24,7 @@ const NoNewsSelected = () => {
 const VideoEmbed: React.FC<{ videoId: string }> = (props) => {
     return (
         <div className="video-embed">
-            <iframe className="embed-responsive-item"
-                    src={"https://www.youtube.com/embed/" + props.videoId + "&amp;feature=share?rel=0"}
-                    frameBorder="0"/>
+            <iframe className="embed-responsive-item" src={"https://www.youtube.com/embed/" + encodeURIComponent(props.videoId) + "?rel=0"} frameBorder="0"/>
         </div>
     );
 };
@@ -54,6 +52,17 @@ const OEmbed: React.FC<{ oembedUrl: string }> = (props) => {
     );
 };
 
+const TagLine: React.FC<NewsDetailProps> = (props) => {
+    return (
+        <p className={"flags"}>
+            <NewsOpen news={props.selectedNews!}/>
+            <NewsFlags news={props.selectedNews!}/>
+            <NewsSource news={props.selectedNews!}/>
+            <NewsDate news={props.selectedNews!}/>
+        </p>
+    );
+};
+
 const NewsSelected: React.FC<NewsDetailProps> = (props) => {
     if (!props.selectedNews) {
         return <SourcesStatus/>;
@@ -61,24 +70,30 @@ const NewsSelected: React.FC<NewsDetailProps> = (props) => {
 
     const news = props.selectedNews!;
 
+    if (news.videoId) {
+        return (
+            <>
+                <VideoEmbed videoId={news.videoId}/>
+                <TagLine selectedNews={news}/>
+                <div className={"external"} dangerouslySetInnerHTML={createMarkup(news.body)}/>
+            </>
+        );
+    }
+
     return (
         <>
-            {news.videoId && <VideoEmbed videoId={news.videoId}/>}
-            <h2>{props.selectedNews!.title}</h2>
-            <p className={"flags"}>
-                <NewsOpen news={news}/>
-                <NewsFlags news={news}/>
-                <NewsSource news={news}/>
-                <NewsDate news={news}/>
-            </p>
-            <div className={"external"} dangerouslySetInnerHTML={createMarkup(news.body)}/>
+            <div className={"inside"}>
+                <h2>{news.title}</h2>
+                <TagLine selectedNews={news}/>
+                <div className={"external"} dangerouslySetInnerHTML={createMarkup(news.body)}/>
+            </div>
         </>
     );
 };
 
 export const NewsDetail: React.FC<NewsDetailProps> = (props) => {
     return (
-        <div className={"inside"}>
+        <div className={"news-detail"}>
             <NewsSelected selectedNews={props.selectedNews}/>
         </div>
     );

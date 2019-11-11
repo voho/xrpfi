@@ -41,8 +41,8 @@ function sortNews(a: News, b: News) {
     const p1 = a.date;
     const p2 = b.date;
 
-    if (p1 < p2) return -1;
-    if (p1 > p2) return 1;
+    if (p1 < p2) return 1;
+    if (p1 > p2) return -1;
 
     const t1 = a.title;
     const t2 = b.title;

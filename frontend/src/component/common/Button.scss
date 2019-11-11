@@ -3,6 +3,7 @@ button {
   border: 2px solid #528ede;
   padding: 3pt 10pt;
   color: white;
+  cursor: pointer;
   font-size: 90%;
   box-shadow: 1pt 1pt 5pt #000000;
   /* letter-spacing: 1px; */
@@ -10,6 +11,7 @@ button {
 }
 
 button:hover {
-  background: black;
-  border: 2px solid #666666;
+  background: none transparent;
+  background-color: #3873a9;
+  border: 2px solid #528ede;
 }

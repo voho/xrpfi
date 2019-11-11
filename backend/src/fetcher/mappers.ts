@@ -60,6 +60,10 @@ export function genericRssMapper(response: string): Promise<News[]> {
                     itemAsNews.tags = item.categories;
                 }
 
+                if (item.id && item.id.startsWith("yt:video:")) {
+                    itemAsNews.videoId = item.id.replace("yt:video:", "");
+                }
+
                 news.push(itemAsNews);
             });
 
