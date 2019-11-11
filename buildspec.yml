@@ -11,6 +11,8 @@ phases:
       - npm install --prefix backend
       - npm install --prefix frontend
       - npm run build --prefix frontend
+      - pwd
+      - ls -l
 
 artifacts:
   files:
