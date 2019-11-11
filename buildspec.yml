@@ -6,6 +6,7 @@ phases:
       nodejs: 10
   build:
     commands:
+      - npm install -g serve
       - npm install --prefix backend
       - npm install --prefix backend
       - npm install
