@@ -4,18 +4,19 @@
   "private": true,
   "proxy": "http://localhost:4000/",
   "dependencies": {
-    "@xrpfi/backend": "file:../backend",
+    "@fortawesome/fontawesome-free": "^5.11.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-brands-svg-icons": "^5.11.2",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.7",
-    "@fortawesome/fontawesome-free": "^5.11.2",
     "@types/jest": "24.0.20",
     "@types/node": "^12.11.7",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.3",
     "@types/react-router": "^5.1.2",
     "@types/react-router-dom": "^5.1.0",
+    "@xrpfi/backend": "file:../backend",
+    "concurrently": "^5.0.0",
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",
     "normalize.css": "^8.0.1",
@@ -27,10 +28,13 @@
     "typescript": "^3.6.4"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "client-build": "react-scripts build",
+    "client-test": "react-scripts test",
+    "client-dev": "react-scripts start",
+    "client-start": "serve -s build",
+    "build": "npm run server-build --prefix ../backend && npm run client-build",
+    "dev": "concurrently \"npm run client-dev\" \"npm run server-dev --prefix ../backend\"",
+    "start": "concurrently \"npm run client-start\" \"npm run server-start --prefix ../backend\""
   },
   "eslintConfig": {
     "extends": "react-app"
