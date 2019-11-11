@@ -22,7 +22,15 @@ export function redditRssMapper(response: string): Promise<News[]> {
 export function youtubeRssMapper(response: string): Promise<News[]> {
     return genericRssMapper(response)
         .then(news => {
-            news.forEach(n => n.sourceId = "youtube");
+            news.forEach(n => {
+                n.sourceId = "youtube";
+                n.avatarImageUrls = [
+                    `http://img.youtube.com/vi/${n.videoId}/default.jpg`,
+                    `http://img.youtube.com/vi/${n.videoId}/mqdefault.jpg`,
+                    `http://img.youtube.com/vi/${n.videoId}/hqdefault.jpg`
+                ];
+            });
+
             return news;
         });
 }

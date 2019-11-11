@@ -17,10 +17,6 @@ const NewsOpen: React.FC<{ news: News }> = (props) => {
     return <Button text={"Open in new window"} onClick={() => window.open(props.news.url)}/>;
 };
 
-const NoNewsSelected = () => {
-    return <p className={"empty-news"}>No News selected.</p>;
-};
-
 const VideoEmbed: React.FC<{ videoId: string }> = (props) => {
     return (
         <div className="video-embed">
