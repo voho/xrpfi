@@ -1,10 +1,11 @@
 import {News} from "../model/model";
-import {MAX_RETURNED_NEWS, OLD_NEWS_CUTOFF_TIME_MS, OLD_NEWS_REMOVAL_INTERVAL_MS} from "../utils/constants";
+import {MAX_RETURNED_NEWS, OLD_NEWS_CUTOFF_TIME_MS} from "../utils/constants";
 import {logInfo} from "../utils/logger";
 
 const globalNews = new Map<string, News>();
 
 export function getNews(): News[] {
+    removeOldNews();
     const news = Array.from(globalNews.values());
     news.sort(sortNews);
     return news.splice(0, MAX_RETURNED_NEWS);
@@ -14,12 +15,7 @@ export function addNews(news: News[]) {
     news.forEach(news => globalNews.set(news.guid, news));
 }
 
-export function scheduleNewsCleanupRemoval() {
-    logInfo(`Scheduled old news removal for each ${OLD_NEWS_REMOVAL_INTERVAL_MS} ms.`);
-    setInterval(cleanup, OLD_NEWS_REMOVAL_INTERVAL_MS);
-}
-
-function cleanup() {
+function removeOldNews() {
     const cutoffDate = new Date().getTime() - OLD_NEWS_CUTOFF_TIME_MS;
     const keysToRemove = new Set<string>();
 
