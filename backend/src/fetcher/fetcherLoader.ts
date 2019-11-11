@@ -18,6 +18,7 @@ export function getMeta(): Meta[] {
                 lastError: fetcher.status.lastErrorMessage,
                 lastUpdateStartDate: fetcher.status.lastUpdateStartTime,
                 lastUpdateEndDate: fetcher.status.lastUpdateEndTime,
+                lastUpdateNewsCount: fetcher.status.lastNewsCount,
                 status: fetcher.status.status,
                 title: fetcher.title
             };
@@ -29,24 +30,39 @@ export function refreshFetcher(fetcher: Fetcher) {
     fetcher.status.lastUpdateStartTime = now();
     fetcher.status.status = "WORKING";
 
-    function handler(response) {
+    function getStringResponse(response) {
+        if (!response.text) {
+            throw new Error("Response text is undefined.");
+        }
+        if (typeof response.text !== "string") {
+            throw new Error("Invalid response type: " + typeof response.text);
+        }
+        return response.text.replace("\ufeff", "").trim();
+    }
+
+    function mappedResponseHandler(news) {
+        fetcher.status.lastNewsCount = news.length;
+        fetcher.status.lastUpdateEndTime = now();
+        fetcher.status.status = "OK";
+        addNews(news.splice(0, fetcher.limit));
+    }
+
+    function responseHandler(response) {
         if (response.ok) {
-            let responseBodyTreated: string = response.text || response.body;
-            responseBodyTreated = responseBodyTreated.replace("\ufeff", "").trim();
-            const news = fetcher.mapper(responseBodyTreated);
-            fetcher.status.lastNewsCount = news.length;
-            fetcher.status.lastUpdateEndTime = now();
-            fetcher.status.status = "OK";
-            addNews(news);
+            fetcher.mapper(getStringResponse(response))
+                .then(mappedResponseHandler)
+                .catch(errorHandler);
         }
     }
 
+    function errorHandler(error) {
+        fetcher.status.lastErrorTime = now();
+        fetcher.status.lastErrorMessage = error.message;
+        fetcher.status.status = "ERROR";
+        logError(fetcher.fetchUrl + ": " + error.message);
+    }
+
     httpGet(fetcher.fetchUrl)
-        .then(handler)
-        .catch(error => {
-            fetcher.status.lastErrorTime = now();
-            fetcher.status.lastErrorMessage = error.message;
-            fetcher.status.status = "ERROR";
-            return logError(fetcher.fetchUrl + ": " + error.message);
-        });
+        .then(responseHandler)
+        .catch(errorHandler);
 }

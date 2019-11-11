@@ -7,9 +7,10 @@ export function httpGet(url) {
 
     return request
         .get(url)
+        .buffer(true)
+        .accept("xml")
         .set("Referer", "http://google.com")
         .set("User-Agent", "xrp.fi")
-        .buffer(false)
         .retry(HTTP_REQUEST_RETRY_COUNT)
         .timeout({
             deadline: HTTP_REQUEST_TIMEOUT_MS

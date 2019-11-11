@@ -40,6 +40,13 @@ const SourceTableLastError: React.FC<{ error: string | null }> = (props) => {
     return <small><br/>{props.error}</small>;
 };
 
+const SourceTableCount: React.FC<{ count: number | null }> = (props) => {
+    if (!props.count) {
+        return null;
+    }
+    return <span>{props.count}</span>;
+};
+
 const SourceTableRow: React.FC<{ row: Meta }> = (props) => {
     return (
         <tr>
@@ -50,7 +57,7 @@ const SourceTableRow: React.FC<{ row: Meta }> = (props) => {
             <td><SourceTableStatus status={props.row.status} lastError={props.row.lastError}/></td>
             <td><SourceTableLatency start={props.row.lastUpdateStartDate} end={props.row.lastUpdateEndDate}/></td>
             <td><SourceTableTiming end={props.row.lastUpdateEndDate}/></td>
-            <td></td>
+            <td><SourceTableCount count={props.row.lastUpdateNewsCount}/></td>
         </tr>
     );
 };
@@ -64,6 +71,7 @@ const SourceTable: React.FC<{ rows: Meta[] }> = (props) => {
                 <th>Status</th>
                 <th>Latency</th>
                 <th>Last update</th>
+                <th>News</th>
             </tr>
             </thead>
             <tbody>

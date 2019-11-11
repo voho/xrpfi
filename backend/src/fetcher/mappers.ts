@@ -1,27 +1,32 @@
 import Parser from "rss-parser";
 import {News} from "../model/model";
-import {logError} from "../utils/logger";
 
 const parser = new Parser();
 
-export function twitterRssMapper(response: string): News[] {
-    const news = genericRssMapper(response);
-    news.forEach(n => n.sourceId = "twitter");
-    return news;
+export function twitterRssMapper(response: string): Promise<News[]> {
+    return genericRssMapper(response)
+        .then(news => {
+            news.forEach(n => n.sourceId = "twitter");
+            return news;
+        });
 }
 
-export function redditRssMapper(response: string): News[] {
-    const news = genericRssMapper(response);
-    news.forEach(n => n.sourceId = "reddit");
-    return news;
+export function redditRssMapper(response: string): Promise<News[]> {
+    return genericRssMapper(response)
+        .then(news => {
+            news.forEach(n => n.sourceId = "reddit");
+            return news;
+        });
 }
 
-export function genericRssMapper(response: string): News[] {
-    const news = [] as News[];
-    rssToJson(response)
+export function genericRssMapper(response: string): Promise<News[]> {
+    return parser.parseString(response)
         .then(feed => {
+            const news = [] as News[];
+
             feed.items.forEach(item => {
                 const itemAsNews = {
+                    author: item.creator,
                     url: item.link,
                     title: item.title,
                     priority: 0,
@@ -31,7 +36,7 @@ export function genericRssMapper(response: string): News[] {
                     date: Date.parse(item.pubDate),
                     guid: item.link,
                     tags: [],
-                    sourceId: "",
+                    sourceId: "generic",
                     sourceName: feed.title,
                     sourceHomeUrl: feed.link,
                     sourceUrls: [],
@@ -43,15 +48,13 @@ export function genericRssMapper(response: string): News[] {
                     itemAsNews.avatarImageUrls.push(feed.image.url);
                 }
 
+                if (item.categories && item.categories.length > 0) {
+                    itemAsNews.tags = item.categories;
+                }
+
                 news.push(itemAsNews);
             });
-        })
-        .catch(error => {
-            logError(error.message);
-        });
-    return news;
-}
 
-function rssToJson(response: string): Promise<any> {
-    return parser.parseString(response);
+            return Promise.resolve(news);
+        });
 }

@@ -5,12 +5,12 @@ import {refreshFetcher} from "./fetcherLoader";
 export function scheduleFetcherRefresh() {
     let quartz = 0;
 
-    function shouldRefreshFetcher(fetcher) {
-        return quartz % fetcher.updateFrequencyDivider == 0;
-    }
-
     function tick() {
         quartz = (quartz + 1) % MAX_QUARTZ;
+    }
+
+    function shouldRefreshFetcher(fetcher) {
+        return quartz % fetcher.updateFrequencyDivider == 0;
     }
 
     function handler() {

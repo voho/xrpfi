@@ -32,7 +32,8 @@ export interface Fetcher {
     fetchUrl: string,
     updateFrequencyDivider: number,
     status: FetcherStatus,
-    mapper: ResponseToNewsMapper
+    mapper: ResponseToNewsMapper,
+    limit: number
 }
 
 export function getTwitterFetcher(alias: string, tags: Set<Tag>): Fetcher {
@@ -43,7 +44,8 @@ export function getTwitterFetcher(alias: string, tags: Set<Tag>): Fetcher {
         fetchUrl: `https://twitrss.me/twitter_user_to_rss/?user=${alias}`,
         updateFrequencyDivider: DIVIDER_SLOWEST,
         status: getInitialStatus(),
-        mapper: twitterRssMapper
+        mapper: twitterRssMapper,
+        limit: 10
     };
 }
 
@@ -55,7 +57,8 @@ export function getRedditFetcher(sub: string, tags: Set<Tag>): Fetcher {
         fetchUrl: `https://www.reddit.com/r/${sub}/.rss`,
         updateFrequencyDivider: DIVIDER_SLOWEST,
         status: getInitialStatus(),
-        mapper: redditRssMapper
+        mapper: redditRssMapper,
+        limit: 20
     };
 }
 
@@ -67,11 +70,12 @@ export function getNewsFetcher(feedUrl: string, tags: Set<Tag>): Fetcher {
         fetchUrl: feedUrl,
         updateFrequencyDivider: DIVIDER_SLOWEST,
         status: getInitialStatus(),
-        mapper: genericRssMapper
+        mapper: genericRssMapper,
+        limit: 20
     };
 }
 
-export type ResponseToNewsMapper = (response: string) => News[];
+export type ResponseToNewsMapper = (response: string) => Promise<News[]>;
 
 function getInitialStatus(): FetcherStatus {
     return {

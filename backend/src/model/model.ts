@@ -33,6 +33,7 @@ export interface News {
     guid: string,
     url: string,
     title: string,
+    author: string | null,
     body: string,
     tags: string[],
     sourceUrls: string[],
@@ -51,6 +52,7 @@ export interface Meta {
     lastError: string | null,
     lastUpdateStartDate: number,
     lastUpdateEndDate: number,
+    lastUpdateNewsCount: number,
     status: string
     title: string
 }
