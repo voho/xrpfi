@@ -1,4 +1,6 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
+import {scheduleRegularTickersUpdate} from "../../service/api";
+import {UseTickersReducerContext} from "../../service/TickersReducer";
 import "./PriceIndicator.scss";
 
 interface PriceIndicatorProps {
@@ -27,6 +29,10 @@ const Change: React.FC<{ value: number }> = (props) => {
 };
 
 export const PriceIndicator: React.FC<PriceIndicatorProps> = (props) => {
+    const context = useContext(UseTickersReducerContext);
+
+    useEffect(() => scheduleRegularTickersUpdate(context.dispatch), []);
+
     return (
         <div className={"price-indicator"}>
             <p>

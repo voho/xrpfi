@@ -1,4 +1,4 @@
-import {Fetcher, getNewsFetcher, getRedditFetcher, getTwitterFetcher, Tag} from "./fetcherFactory";
+import {Fetcher, getNewsFetcher, getRedditFetcher, getTwitterFetcher, getYouTubeFetcher, Tag} from "./fetcherFactory";
 
 // TODO https://github.com/voho/xrpfi/blob/8f9950730c1424d9c616a455091b6c7033838701/fletcher/src/main/java/fi/xrp/fletcher/model/source/config/NewsSourceConfiguration.java
 
@@ -33,6 +33,41 @@ function getRippleNewsFetcher(feedUrl: string) {
 function getGeneralNewsFetcher(feedUrl: string) {
     return getNewsFetcher(feedUrl, new Set([Tag.news, Tag.filter]));
 }
+
+function getOfficialYouTubeFetcher(channelId: string) {
+    return getYouTubeFetcher(channelId, new Set([Tag.official, Tag.social, Tag.youtube, Tag.good]));
+}
+
+function getUnofficialYouTubeFetcher(channelId: string) {
+    return getYouTubeFetcher(channelId, new Set([Tag.community, Tag.social, Tag.youtube]));
+}
+
+const OFFICIAL_YOUTUBE: Fetcher[] = [
+    getOfficialYouTubeFetcher("UCjok1uTSBUgvRYQaASz6YWw")
+];
+
+const COMMUNITY_YOUTUBE: Fetcher[] = [
+    getUnofficialYouTubeFetcher("UCg5GzcNQp5C6STqLP9vNAow"),
+    getUnofficialYouTubeFetcher("UC40BZgDu86OLrY1wtRKhOnQ"),
+    getUnofficialYouTubeFetcher("UC73iepg_YbH8ZJvwasXIP8Q"),
+    getUnofficialYouTubeFetcher("UCtQycmSrKdJ0zE0bWumO4vA"),
+    getUnofficialYouTubeFetcher("UC9t0DRLy5_dQEpb8nPKAiQA"),
+    getUnofficialYouTubeFetcher("UCGyqEtcGQQtXyUwvcy7Gmyg"),
+    getUnofficialYouTubeFetcher("UCmexsZ6pFvmXa9hOnnyRz5A"),
+    getUnofficialYouTubeFetcher("UC4nXWTjZqK4bv7feoRntSog"),
+    getUnofficialYouTubeFetcher("UCdUSSt-IEUg2eq46rD7lu_g"),
+    getUnofficialYouTubeFetcher("UCkpt3vvZ0Y0wvTX2L-lkxsg"),
+    getUnofficialYouTubeFetcher("UCEBRZGYDGPDUUDOJ9pX3tPg"),
+    getUnofficialYouTubeFetcher("UCavTvSwEoRABvnPtLg0e6LQ"),
+    getUnofficialYouTubeFetcher("UCCatR7nWbYrkVXdxXb4cGXw"),
+    getUnofficialYouTubeFetcher("UC70Q-2uXkC_5xk9-L5qhm1Q"),
+    getUnofficialYouTubeFetcher("UC-5HLi3buMzdxjdTdic3Aig"),
+    getUnofficialYouTubeFetcher("UCjpkwsuHgYx9fBE0ojsJ_-w"),
+    getUnofficialYouTubeFetcher("UCpwU7S8Y3KeOuShYy9ZZ1JQ"),
+    getUnofficialYouTubeFetcher("UCl2oCaw8hdR_kbqyqd2klIA"),
+    getUnofficialYouTubeFetcher("UCLnQ34ZBSjy2JQjeRudFEDw"),
+    getUnofficialYouTubeFetcher("UCc4Rz_T9Sb1w5rqqo9pL1Og")
+];
 
 const STAKEHOLDERS_TWITTER: Fetcher[] = [
     getStakeholderTwitterFetcher("Ripple")
@@ -179,5 +214,7 @@ export const ALL_FETCHERS: Fetcher[] = [
     ...REDDIT_COMMUNITIES,
     ...GOOD_RIPPLE_NEWS,
     ...GOOD_GENERAL_NEWS,
-    ...GENERAL_NEWS
+    ...GENERAL_NEWS,
+    ...OFFICIAL_YOUTUBE,
+    ...COMMUNITY_YOUTUBE
 ];

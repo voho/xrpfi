@@ -19,6 +19,14 @@ export function redditRssMapper(response: string): Promise<News[]> {
         });
 }
 
+export function youtubeRssMapper(response: string): Promise<News[]> {
+    return genericRssMapper(response)
+        .then(news => {
+            news.forEach(n => n.sourceId = "youtube");
+            return news;
+        });
+}
+
 export function genericRssMapper(response: string): Promise<News[]> {
     return parser.parseString(response)
         .then(feed => {

@@ -1,6 +1,7 @@
 import moment from "moment";
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {Meta} from "../../../../backend/src/model/model";
+import {scheduleRegularStatusUpdate} from "../../service/api";
 import {UseStatusReducerContext} from "../../service/StatusReducer";
 import "./SourcesStatus.scss";
 import {TradingChart} from "./TradingChart";
@@ -83,6 +84,8 @@ const SourceTable: React.FC<{ rows: Meta[] }> = (props) => {
 
 export const SourcesStatus = () => {
     const context = useContext(UseStatusReducerContext);
+
+    useEffect(() => scheduleRegularStatusUpdate(context.dispatch), []);
 
     return (
         <>

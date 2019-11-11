@@ -1,6 +1,6 @@
 import {News} from "../model/model";
 import {DIVIDER_SLOWEST} from "../utils/constants";
-import {genericRssMapper, redditRssMapper, twitterRssMapper} from "./mappers";
+import {genericRssMapper, redditRssMapper, twitterRssMapper, youtubeRssMapper} from "./mappers";
 
 type Status = "INITIALIZED" | "OK" | "WORKING" | "ERROR";
 
@@ -22,7 +22,8 @@ export enum Tag {
     "community",
     "bot",
     "reddit",
-    "filter"
+    "filter",
+    "youtube"
 }
 
 export interface Fetcher {
@@ -72,6 +73,19 @@ export function getNewsFetcher(feedUrl: string, tags: Set<Tag>): Fetcher {
         status: getInitialStatus(),
         mapper: genericRssMapper,
         limit: 20
+    };
+}
+
+export function getYouTubeFetcher(channelId: string, tags: Set<Tag>): Fetcher {
+    return {
+        tags: tags,
+        title: `youtube://${channelId}`,
+        homeUrl: `http://www.youtube.com/channel/${channelId}`,
+        fetchUrl: `http://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`,
+        updateFrequencyDivider: DIVIDER_SLOWEST,
+        status: getInitialStatus(),
+        mapper: youtubeRssMapper,
+        limit: 10
     };
 }
 
