@@ -8,9 +8,10 @@ phases:
     commands:
       - npm install -g serve
       - npm install
+      - npm run build
 
 artifacts:
   files:
-    - 'backend/build/**/*'
-    - 'frontend/build/**/*'
+    - './backend/build/**/*'
+    - './frontend/build/**/*'
     - 'package.json'
