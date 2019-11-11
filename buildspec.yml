@@ -5,7 +5,7 @@ phases:
   install:
     runtime-versions:
       nodejs: 10
-  pre-build:
+  pre_build:
     commands:
       - npm install --prefix backend
       - npm install --prefix frontend
