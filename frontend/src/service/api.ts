@@ -1,13 +1,16 @@
 import React from "react";
-import {Action, Root} from "../../../backend/src/model/model";
+import {Action} from "../../../backend/src/model/model";
 import {NewsLoadErrorAction, NewsLoadStartAction, NewsLoadSuccessAction} from "./NewsReducer";
+import {StatusLoadErrorAction, StatusLoadStartAction, StatusLoadSuccessAction} from "./StatusReducer";
 import {TickersLoadSuccessAction} from "./TickersReducer";
 
 const priceUrl = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=XRP&tsyms=BTC,USD";
-const rootJsonUrl = "/api/root";
+const newsApiUrl = "/api/news";
+const statusApiUrl = "/api/status";
 
 const TICKERS_UPDATE_INTERVAL_MS = 10000;
 const NEWS_UPDATE_INTERVAL_MS = 3000;
+const STATUS_UPDATE_INTERVAL_MS = 30000;
 
 export function scheduleRegularTickersUpdate(dispatch: React.Dispatch<Action>) {
     const callback = () => {
@@ -32,18 +35,17 @@ export function scheduleRegularTickersUpdate(dispatch: React.Dispatch<Action>) {
             .catch(error => {
                 dispatch({type: "tickers_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
             });
-
-        setTimeout(callback, TICKERS_UPDATE_INTERVAL_MS);
     };
 
     callback();
+    setInterval(callback, TICKERS_UPDATE_INTERVAL_MS);
 }
 
 export function scheduleRegularNewsUpdate(dispatch: React.Dispatch<Action>) {
     const callback = () => {
         dispatch({type: "news_load_start"} as NewsLoadStartAction);
 
-        fetch(rootJsonUrl)
+        fetch(newsApiUrl)
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Invalid response: " + response.status);
@@ -51,14 +53,42 @@ export function scheduleRegularNewsUpdate(dispatch: React.Dispatch<Action>) {
                 return response.json();
             })
             .then(newState => {
-                dispatch({type: "news_load_success", root: (newState as Root)} as NewsLoadSuccessAction);
+                if (!newState || !newState.root) {
+                    throw new Error("Invalid new state: " + newState);
+                }
+                dispatch({type: "news_load_success", news: newState.root} as NewsLoadSuccessAction);
             })
             .catch(error => {
                 dispatch({type: "news_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
             });
-
-        setTimeout(callback, NEWS_UPDATE_INTERVAL_MS);
     };
 
     callback();
+    setInterval(callback, NEWS_UPDATE_INTERVAL_MS);
+}
+
+export function scheduleRegularStatusUpdate(dispatch: React.Dispatch<Action>) {
+    const callback = () => {
+        dispatch({type: "status_load_start"} as StatusLoadStartAction);
+
+        fetch(statusApiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Invalid response: " + response.status);
+                }
+                return response.json();
+            })
+            .then(newState => {
+                if (!newState || !newState.root) {
+                    throw new Error("Invalid new state: " + newState);
+                }
+                dispatch({type: "status_load_success", status: newState.root} as StatusLoadSuccessAction);
+            })
+            .catch(error => {
+                dispatch({type: "status_load_error", errorMessage: error.toString()} as StatusLoadErrorAction);
+            });
+    };
+
+    callback();
+    setInterval(callback, STATUS_UPDATE_INTERVAL_MS);
 }

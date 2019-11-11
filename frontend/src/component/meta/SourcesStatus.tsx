@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, {useContext} from "react";
 import {Meta} from "../../../../backend/src/model/model";
-import {UseNewsReducerContext} from "../../service/NewsReducer";
+import {UseStatusReducerContext} from "../../service/StatusReducer";
 import "./SourcesStatus.scss";
 import {TradingChart} from "./TradingChart";
 
@@ -82,14 +82,14 @@ const SourceTable: React.FC<{ rows: Meta[] }> = (props) => {
 };
 
 export const SourcesStatus = () => {
-    const context = useContext(UseNewsReducerContext);
+    const context = useContext(UseStatusReducerContext);
 
     return (
         <>
             <h2>Actual Price</h2>
             <TradingChart/>
             <h2>News Sources</h2>
-            <SourceTable rows={context.state.root!.meta || []}/>
+            <SourceTable rows={context.state.status}/>
         </>
     );
 };

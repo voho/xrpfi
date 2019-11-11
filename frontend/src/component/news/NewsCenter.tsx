@@ -29,10 +29,10 @@ export const NewsCenter = () => {
                 <NewsControl/>
             </div>
             <div className={"news-site-list"}>
-                {context.state.root && <NewsList news={context.state.root!.news}/>}
+                {context.state.news && <NewsList news={context.state.news}/>}
             </div>
             <div className={"news-site-detail"}>
-                {context.state.root && <NewsDetail selectedNews={findNews(context.state.root!.news, context.state.selectedNewsGuid)}/>}
+                {context.state.news && <NewsDetail selectedNews={findNews(context.state.news, context.state.selectedNewsGuid)}/>}
             </div>
         </>
     );

@@ -1,5 +1,5 @@
 import express, {Request, Response} from "express";
-import {getMeta} from "./fetcher/fetcherLoader";
+import {getStatus} from "./fetcher/fetcherLoader";
 import {scheduleFetcherRefresh} from "./fetcher/fetcherScheduler";
 import {getNews} from "./store/newsStorage";
 import {logInfo} from "./utils/logger";
@@ -9,8 +9,12 @@ const app = express();
 
 scheduleFetcherRefresh();
 
-app.get("/api/root", (req: Request, res: Response) => {
-    res.json({news: getNews(), meta: getMeta()});
+app.get("/api/news", (req: Request, res: Response) => {
+    res.json({root: getNews()});
+});
+
+app.get("/api/status", (req: Request, res: Response) => {
+    res.json({root: getStatus()});
 });
 
 app.listen(PORT, () => {

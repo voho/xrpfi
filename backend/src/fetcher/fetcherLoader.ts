@@ -9,7 +9,7 @@ function now() {
     return new Date().getTime();
 }
 
-export function getMeta(): Meta[] {
+export function getStatus(): Meta[] {
     return ALL_FETCHERS
         .map(fetcher => {
             return {

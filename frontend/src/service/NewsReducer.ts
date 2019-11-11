@@ -1,5 +1,5 @@
 import React from "react";
-import {Action, NewsState, Root} from "../../../backend/src/model/model";
+import {Action, News, NewsState} from "../../../backend/src/model/model";
 
 export interface NewsSelectAction extends Action {
     selected: string;
@@ -10,7 +10,7 @@ export interface NewsLoadStartAction extends Action {
 }
 
 export interface NewsLoadSuccessAction extends Action {
-    root: Root
+    news: News[]
 }
 
 export interface NewsLoadErrorAction extends Action {
@@ -32,7 +32,7 @@ export const newsReducer = (state: NewsState, action: Action): NewsState => {
         case "news_load_start":
             return {...state, loading: true, error: undefined};
         case "news_load_success":
-            return {...state, loading: false, root: (action as NewsLoadSuccessAction).root};
+            return {...state, loading: false, news: (action as NewsLoadSuccessAction).news};
         case "news_load_error":
             return {...state, loading: false, error: (action as NewsLoadErrorAction).errorMessage};
         default:

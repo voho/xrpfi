@@ -5,8 +5,14 @@ export interface Action {
 export interface NewsState {
     loading: boolean,
     error?: string,
-    root?: Root,
+    news: News[],
     selectedNewsGuid?: string
+}
+
+export interface StatusState {
+    loading: boolean,
+    error?: string,
+    status: Meta[]
 }
 
 export interface TickersState {
@@ -20,11 +26,6 @@ export interface Tickers {
     xrp_usd_price: number,
     xrp_btc_change1d: number,
     xrp_usb_change1d: number
-}
-
-export interface Root {
-    news: News[],
-    meta: Meta[]
 }
 
 export interface News {
