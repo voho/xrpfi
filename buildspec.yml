@@ -1,4 +1,4 @@
-# main command: npm run start --prefix frontend
+# main command: npm run start --prefix backend
 version: 0.2
 
 phases:
@@ -7,12 +7,9 @@ phases:
       nodejs: 10
   build:
     commands:
-      - npm install -g serve
       - npm install --prefix backend
       - npm install --prefix frontend
-      - npm run build --prefix frontend
-      - pwd
-      - ls -l
+      - npm run build --prefix backend
 
 artifacts:
   files:

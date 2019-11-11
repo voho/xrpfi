@@ -2,7 +2,6 @@
   "name": "@xrpfi/frontend",
   "version": "1.0.0",
   "private": true,
-  "proxy": "http://localhost:4000/",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
@@ -15,7 +14,6 @@
     "@types/react-dom": "^16.9.3",
     "@types/react-router": "^5.1.2",
     "@types/react-router-dom": "^5.1.0",
-    "@xrpfi/backend": "file:../backend",
     "concurrently": "^5.0.0",
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",
@@ -30,11 +28,7 @@
   "scripts": {
     "client-build": "react-scripts build",
     "client-test": "react-scripts test",
-    "client-dev": "react-scripts start",
-    "client-start": "serve -s build",
-    "build": "npm run server-build --prefix ../backend && npm run client-build",
-    "dev": "concurrently \"npm run client-dev\" \"npm run server-dev --prefix ../backend\"",
-    "start": "concurrently \"npm run client-start\" \"npm run server-start --prefix ../backend\""
+    "client-start": "react-scripts start"
   },
   "eslintConfig": {
     "extends": "react-app"
