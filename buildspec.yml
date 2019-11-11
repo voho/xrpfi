@@ -9,7 +9,6 @@ phases:
       - npm install
   post_build:
     commands:
-      - echo Build completed on `date`
       - npm start
 
 artifacts:
