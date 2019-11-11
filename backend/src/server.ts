@@ -5,7 +5,7 @@ import {scheduleFetcherRefresh} from "./fetcher/fetcherScheduler";
 import {getNews} from "./store/newsStorage";
 import {logInfo} from "./utils/logger";
 
-const PORT = process.env.HTTP_PORT || 8080;
+const PORT = 8081;
 const app = express();
 
 scheduleFetcherRefresh();
