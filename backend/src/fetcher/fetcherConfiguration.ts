@@ -26,20 +26,20 @@ function getGeneralCommunityRedditFetcher(sub: string) {
     return getRedditFetcher(sub, new Set([Tag.community, Tag.social, Tag.reddit, Tag.filter]));
 }
 
-function getRippleNewsFetcher(feedUrl: string) {
-    return getNewsFetcher(feedUrl, new Set([Tag.good, Tag.news]));
+function getRippleNewsFetcher(feedUrl: string, quality = 100) {
+    return getNewsFetcher(feedUrl, new Set([Tag.good, Tag.news]), quality);
 }
 
-function getGeneralNewsFetcher(feedUrl: string) {
-    return getNewsFetcher(feedUrl, new Set([Tag.news, Tag.filter]));
+function getGeneralNewsFetcher(feedUrl: string, quality = 5) {
+    return getNewsFetcher(feedUrl, new Set([Tag.news, Tag.filter]), quality);
 }
 
-function getOfficialYouTubeFetcher(channelId: string) {
-    return getYouTubeFetcher(channelId, new Set([Tag.official, Tag.social, Tag.youtube, Tag.good]));
+function getOfficialYouTubeFetcher(channelId: string, quality = 100) {
+    return getYouTubeFetcher(channelId, new Set([Tag.official, Tag.social, Tag.youtube, Tag.good]), quality);
 }
 
-function getUnofficialYouTubeFetcher(channelId: string) {
-    return getYouTubeFetcher(channelId, new Set([Tag.community, Tag.social, Tag.youtube]));
+function getUnofficialYouTubeFetcher(channelId: string, quality = 5) {
+    return getYouTubeFetcher(channelId, new Set([Tag.community, Tag.social, Tag.youtube]), quality);
 }
 
 const OFFICIAL_YOUTUBE: Fetcher[] = [

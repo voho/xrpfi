@@ -32,8 +32,8 @@ function removeOldNews() {
 }
 
 function sortNews(a: News, b: News) {
-    const o1 = -a.priority;
-    const o2 = -b.priority;
+    const o1 = -a.quality;
+    const o2 = -b.quality;
 
     if (o1 < o2) return -1;
     if (o1 > o2) return 1;

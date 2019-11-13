@@ -29,7 +29,6 @@ export interface Tickers {
 }
 
 export interface News {
-    priority: number,
     date: number,
     guid: string,
     url: string,
@@ -44,7 +43,22 @@ export interface News {
     sourceId: string,
     sourceName: string,
     sourceHomeUrl: string,
-    avatarImageUrls: string[] | null
+    avatarImageUrls: string[] | null,
+    quality: number,
+    custom: any,
+    rating: Rating | null,
+    stats: Stats | null
+}
+
+interface Stats {
+    views: number
+}
+
+interface Rating {
+    avg: number,
+    min: number,
+    max: number,
+    count: number
 }
 
 export interface Meta {

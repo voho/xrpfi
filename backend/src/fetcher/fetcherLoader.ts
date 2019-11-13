@@ -44,13 +44,14 @@ export function refreshFetcher(fetcher: Fetcher) {
         fetcher.status.lastNewsCount = news.length;
         fetcher.status.lastUpdateEndTime = now();
         fetcher.status.status = "OK";
-        addNews(news.splice(0, fetcher.limit));
+        addNews(news);
     }
 
     function responseHandler(response) {
         if (response.ok) {
-            fetcher.mapper(getStringResponse(response))
-                .then(mappedResponseHandler)
+            fetcher.mapper(fetcher, getStringResponse(response))
+                .then(news => news.filter(fetcher.filter))
+                .then(news => news.splice(0, fetcher.limit))
                 .catch(errorHandler);
         }
     }

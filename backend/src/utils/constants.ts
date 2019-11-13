@@ -2,6 +2,7 @@
 
 export const MAX_RETURNED_NEWS = 50;
 export const OLD_NEWS_CUTOFF_TIME_MS = 14 * 24 * 3600 * 1000;
+export const RELEVANT_KEYWORDS = ["ripple", "xrp", "ilp", "dlt"];
 
 /* HTTP */
 
