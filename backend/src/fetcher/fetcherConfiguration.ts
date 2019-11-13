@@ -1,46 +1,7 @@
-import {Fetcher, getNewsFetcher, getRedditFetcher, getTwitterFetcher, getYouTubeFetcher, Tag} from "./fetcherFactory";
+import {Fetcher, Tag} from "../model/fetcher";
+import {getNewsFetcher, getRedditFetcher, getTwitterFetcher, getYouTubeFetcher} from "./fetcherFactory";
 
 // TODO https://github.com/voho/xrpfi/blob/8f9950730c1424d9c616a455091b6c7033838701/fletcher/src/main/java/fi/xrp/fletcher/model/source/config/NewsSourceConfiguration.java
-
-function getStakeholderTwitterFetcher(alias: string) {
-    return getTwitterFetcher(alias, new Set([Tag.official, Tag.social, Tag.twitter]));
-}
-
-function getInstitutionTwitterFetcher(alias: string) {
-    return getTwitterFetcher(alias, new Set([Tag.good, Tag.official, Tag.social, Tag.twitter, Tag.filter]));
-}
-
-function getCommunityTwitterFetcher(alias: string) {
-    return getTwitterFetcher(alias, new Set([Tag.community, Tag.social, Tag.twitter, Tag.filter]));
-}
-
-function getExchangeTwitterFetcher(alias: string) {
-    return getTwitterFetcher(alias, new Set([Tag.official, Tag.social, Tag.twitter, Tag.filter]));
-}
-
-function getXrpCommunityRedditFetcher(alias: string) {
-    return getTwitterFetcher(alias, new Set([Tag.community, Tag.social, Tag.reddit]));
-}
-
-function getGeneralCommunityRedditFetcher(sub: string) {
-    return getRedditFetcher(sub, new Set([Tag.community, Tag.social, Tag.reddit, Tag.filter]));
-}
-
-function getRippleNewsFetcher(feedUrl: string, quality = 100) {
-    return getNewsFetcher(feedUrl, new Set([Tag.good, Tag.news]), quality);
-}
-
-function getGeneralNewsFetcher(feedUrl: string, quality = 5) {
-    return getNewsFetcher(feedUrl, new Set([Tag.news, Tag.filter]), quality);
-}
-
-function getOfficialYouTubeFetcher(channelId: string, quality = 100) {
-    return getYouTubeFetcher(channelId, new Set([Tag.official, Tag.social, Tag.youtube, Tag.good]), quality);
-}
-
-function getUnofficialYouTubeFetcher(channelId: string, quality = 5) {
-    return getYouTubeFetcher(channelId, new Set([Tag.community, Tag.social, Tag.youtube]), quality);
-}
 
 const OFFICIAL_YOUTUBE: Fetcher[] = [
     getOfficialYouTubeFetcher("UCjok1uTSBUgvRYQaASz6YWw")
@@ -70,7 +31,7 @@ const COMMUNITY_YOUTUBE: Fetcher[] = [
 ];
 
 const STAKEHOLDERS_TWITTER: Fetcher[] = [
-    getStakeholderTwitterFetcher("Ripple")
+    getStakeholderTwitterFetcher("Ripple", 100)
 ];
 
 const INSTITUTIONS_TWITTER: Fetcher[] = [
@@ -115,6 +76,7 @@ const EXCHANGES_TWITTER: Fetcher[] = [
     getExchangeTwitterFetcher("BitMEXdotcom"),
     getExchangeTwitterFetcher("Bitstamp"),
     getExchangeTwitterFetcher("BittrexExchange"),
+    getExchangeTwitterFetcher("BitrueOfficial"),
     getExchangeTwitterFetcher("binance"),
     getExchangeTwitterFetcher("cryptaldash"),
     getExchangeTwitterFetcher("DXdotExchange"),
@@ -122,10 +84,9 @@ const EXCHANGES_TWITTER: Fetcher[] = [
     getExchangeTwitterFetcher("HuobiGlobal"),
     getExchangeTwitterFetcher("krakenfx"),
     getExchangeTwitterFetcher("NYSE"),
-    getExchangeTwitterFetcher("OKEX"),
+    getExchangeTwitterFetcher("OKEx"),
     getExchangeTwitterFetcher("Poloniex"),
     getExchangeTwitterFetcher("LCX"),
-    getExchangeTwitterFetcher("Ripple"),
     getExchangeTwitterFetcher("upbitexchange"),
     getExchangeTwitterFetcher("UpholdInc"),
     getExchangeTwitterFetcher("xrpunited"),
@@ -133,8 +94,8 @@ const EXCHANGES_TWITTER: Fetcher[] = [
 ];
 
 const REDDIT_COMMUNITIES: Fetcher[] = [
-    getXrpCommunityRedditFetcher("Ripple"),
-    getXrpCommunityRedditFetcher("XRP"),
+    getXrpCommunityRedditFetcher("Ripple", 50),
+    getXrpCommunityRedditFetcher("XRP", 50),
     getGeneralCommunityRedditFetcher("CryptoCurrency"),
     getGeneralCommunityRedditFetcher("CryptoMarkets"),
     getGeneralCommunityRedditFetcher("Crypto_Currency_News"),
@@ -143,16 +104,16 @@ const REDDIT_COMMUNITIES: Fetcher[] = [
 ];
 
 const GOOD_RIPPLE_NEWS: Fetcher[] = [
-    getRippleNewsFetcher("http://xrpcommunity.blog/rss/"),
-    getRippleNewsFetcher("http://ripple.com/category/insights/news/feed/"),
-    getRippleNewsFetcher("http://thexrpdaily.com/index.php/feed/")
+    getRippleNewsFetcher("http://xrpcommunity.blog/rss/", 80),
+    getRippleNewsFetcher("http://ripple.com/category/insights/news/feed/", 100),
+    getRippleNewsFetcher("http://thexrpdaily.com/index.php/feed/", 10)
 ];
 
 const GOOD_GENERAL_NEWS: Fetcher[] = [
     getGeneralNewsFetcher("http://decryptmedia.com/feed/"),
-    getGeneralNewsFetcher("http://www.forbes.com/money/feed2/"),
-    getGeneralNewsFetcher("http://feeds.finance.yahoo.com/rss/2.0/headline?s=xrp-usd&lang=en-US"),
-    getGeneralNewsFetcher("http://feeds.finance.yahoo.com/rss/2.0/headline?s=xrp-btc&lang=en-US")
+    getGeneralNewsFetcher("http://www.forbes.com/money/feed2/", 80),
+    getGeneralNewsFetcher("http://feeds.finance.yahoo.com/rss/2.0/headline?s=xrp-usd&lang=en-US", 20),
+    getGeneralNewsFetcher("http://feeds.finance.yahoo.com/rss/2.0/headline?s=xrp-btc&lang=en-US", 20)
 ];
 
 const GENERAL_NEWS: Fetcher[] = [
@@ -218,3 +179,44 @@ export const ALL_FETCHERS: Fetcher[] = [
     ...OFFICIAL_YOUTUBE,
     ...COMMUNITY_YOUTUBE
 ];
+
+
+function getStakeholderTwitterFetcher(alias: string, quality = 1) {
+    return getTwitterFetcher(alias, new Set([Tag.official, Tag.social, Tag.twitter]), quality);
+}
+
+function getInstitutionTwitterFetcher(alias: string, quality = 1) {
+    return getTwitterFetcher(alias, new Set([Tag.good, Tag.official, Tag.social, Tag.twitter, Tag.filter]), quality);
+}
+
+function getCommunityTwitterFetcher(alias: string, quality = 1) {
+    return getTwitterFetcher(alias, new Set([Tag.community, Tag.social, Tag.twitter, Tag.filter]), quality);
+}
+
+function getExchangeTwitterFetcher(alias: string, quality = 10) {
+    return getTwitterFetcher(alias, new Set([Tag.official, Tag.social, Tag.twitter, Tag.filter]), quality);
+}
+
+function getXrpCommunityRedditFetcher(alias: string, quality = 2) {
+    return getTwitterFetcher(alias, new Set([Tag.community, Tag.social, Tag.reddit]), quality);
+}
+
+function getGeneralCommunityRedditFetcher(sub: string, quality = 1) {
+    return getRedditFetcher(sub, new Set([Tag.community, Tag.social, Tag.reddit, Tag.filter]), quality);
+}
+
+function getRippleNewsFetcher(feedUrl: string, quality = 100) {
+    return getNewsFetcher(feedUrl, new Set([Tag.good, Tag.news]), quality);
+}
+
+function getGeneralNewsFetcher(feedUrl: string, quality = 5) {
+    return getNewsFetcher(feedUrl, new Set([Tag.news, Tag.filter]), quality);
+}
+
+function getOfficialYouTubeFetcher(channelId: string, quality = 100) {
+    return getYouTubeFetcher(channelId, new Set([Tag.official, Tag.social, Tag.youtube, Tag.good]), quality);
+}
+
+function getUnofficialYouTubeFetcher(channelId: string, quality = 5) {
+    return getYouTubeFetcher(channelId, new Set([Tag.community, Tag.social, Tag.youtube]), quality);
+}

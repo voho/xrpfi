@@ -1,44 +1,6 @@
-import {News} from "../model/model";
+import {Fetcher, FetcherStatus, Tag} from "../model/fetcher";
 import {DIVIDER_SLOWEST} from "../utils/constants";
-import {genericRssMapper, getTagBasedFilter, redditRssMapper, twitterRssMapper, youtubeRssMapper} from "./mappers";
-
-type Status = "INITIALIZED" | "OK" | "WORKING" | "ERROR";
-
-export interface FetcherStatus {
-    status: Status,
-    lastUpdateStartTime: number,
-    lastUpdateEndTime: number,
-    lastErrorTime: number,
-    lastNewsCount: number,
-    lastErrorMessage: string | null
-}
-
-export enum Tag {
-    "twitter",
-    "social",
-    "news",
-    "good",
-    "official",
-    "community",
-    "bot",
-    "reddit",
-    "filter",
-    "youtube"
-}
-
-export interface Fetcher {
-    tags: Set<Tag>,
-    customFields: string[],
-    title: string,
-    homeUrl: string,
-    fetchUrl: string,
-    updateFrequencyDivider: number,
-    status: FetcherStatus,
-    mapper: ResponseToNewsMapper,
-    filter: NewsFilter,
-    limit: number,
-    quality: number
-}
+import {genericRssMapper, getTagBasedFilter, redditRssMapper, twitterRssMapper, youtubeRssMapper} from "./fetcherMappers";
 
 export function getTwitterFetcher(alias: string, tags: Set<Tag>, quality = 1): Fetcher {
     return {
@@ -103,10 +65,6 @@ export function getYouTubeFetcher(channelId: string, tags: Set<Tag>, quality = 2
         quality
     };
 }
-
-export type ResponseToNewsMapper = (fetcher: Fetcher, response: string) => Promise<News[]>;
-
-export type NewsFilter = (news: News) => boolean;
 
 function getInitialStatus(): FetcherStatus {
     return {

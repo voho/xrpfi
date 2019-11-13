@@ -71,7 +71,7 @@ const SourceTable: React.FC<{ rows: Meta[] }> = (props) => {
                 <th>Source</th>
                 <th>Status</th>
                 <th>Latency</th>
-                <th>Last update</th>
+                <th>Updated</th>
                 <th>News</th>
             </tr>
             </thead>

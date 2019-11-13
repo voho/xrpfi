@@ -3,9 +3,9 @@ import * as path from "path";
 import {getStatus} from "./fetcher/fetcherLoader";
 import {scheduleFetcherRefresh} from "./fetcher/fetcherScheduler";
 import {getNews} from "./store/newsStorage";
+import {PORT} from "./utils/constants";
 import {logInfo} from "./utils/logger";
 
-const PORT = 8081;
 const app = express();
 
 scheduleFetcherRefresh();

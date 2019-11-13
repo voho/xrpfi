@@ -1,8 +1,7 @@
+import Parser from "rss-parser";
+import {Fetcher, Tag} from "../model/fetcher";
 import {News} from "../model/model";
 import {RELEVANT_KEYWORDS} from "../utils/constants";
-import {Fetcher, Tag} from "./fetcherFactory";
-
-let Parser = require("rss-parser");
 
 export function twitterRssMapper(fetcher: Fetcher, response: string): Promise<News[]> {
     return genericRssMapper(fetcher, response)
@@ -14,7 +13,7 @@ export function twitterRssMapper(fetcher: Fetcher, response: string): Promise<Ne
 
 export function redditRssMapper(fetcher: Fetcher, response: string): Promise<News[]> {
     return genericRssMapper(fetcher, response)
-        .then(news => {
+        .then((news: News[]) => {
             news.forEach(n => n.sourceId = "reddit");
             return news;
         });
@@ -22,8 +21,8 @@ export function redditRssMapper(fetcher: Fetcher, response: string): Promise<New
 
 export function youtubeRssMapper(fetcher: Fetcher, response: string): Promise<News[]> {
     return genericRssMapper(fetcher, response)
-        .then(news => {
-            news.forEach(n => {
+        .then((news: News[]) => {
+            news.forEach((n: News) => {
                 n.sourceId = "youtube";
                 n.avatarImageUrls = [
                     `http://img.youtube.com/vi/${n.videoId}/default.jpg`,
@@ -55,32 +54,32 @@ export function youtubeRssMapper(fetcher: Fetcher, response: string): Promise<Ne
 }
 
 export function genericRssMapper(fetcher: Fetcher, response: string): Promise<News[]> {
-    const parser = new Parser({customFields: fetcher.customFields});
+    const parser = new Parser({customFields: {item: fetcher.customFields}});
 
     return parser.parseString(response)
-        .then(meta => {
+        .then((meta: any) => {
             const news = [] as News[];
 
-            meta.items.forEach(item => {
+            meta.items.forEach((item: any) => {
                 const itemAsNews = {
                     author: item.author,
                     url: item.link,
                     title: item.title,
                     priority: 0,
                     body: item.content,
-                    imageUrls: [],
-                    avatarImageUrls: [],
+                    imageUrls: [] as string[],
+                    avatarImageUrls: [] as string[],
                     date: Date.parse(item.pubDate),
                     guid: item.link,
-                    tags: [],
+                    tags: [] as string[],
                     sourceId: "generic",
                     sourceName: meta.title,
                     sourceHomeUrl: meta.link,
-                    sourceUrls: [],
-                    externalUrls: [],
+                    sourceUrls: [] as string[],
+                    externalUrls: [] as string[],
                     videoId: null,
                     quality: 0,
-                    custom: {},
+                    custom: {} as any,
                     rating: null,
                     stats: null
                 };
@@ -95,7 +94,7 @@ export function genericRssMapper(fetcher: Fetcher, response: string): Promise<Ne
 
                 fetcher.customFields.forEach(customField => {
                     if (item[customField]) {
-                        itemAsNews.custom[customField] = item[customField];
+                        itemAsNews.custom[customField] = item[customField] as any;
                     }
                 });
 
@@ -108,7 +107,7 @@ export function genericRssMapper(fetcher: Fetcher, response: string): Promise<Ne
 
 export function getTagBasedFilter(tags: Set<Tag>) {
     if (tags.has(Tag.filter)) {
-        return (news) => isRelevant(news);
+        return (news: News) => isRelevant(news);
     }
     return (() => true);
 }
