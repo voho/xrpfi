@@ -52,6 +52,7 @@ export function refreshFetcher(fetcher: Fetcher) {
             fetcher.mapper(fetcher, getStringResponse(response))
                 .then(news => news.filter(fetcher.filter))
                 .then(news => news.splice(0, fetcher.limit))
+                .then(mappedResponseHandler)
                 .catch(errorHandler);
         }
     }
