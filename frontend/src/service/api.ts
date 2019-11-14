@@ -63,7 +63,7 @@ export function scheduleRegularNewsUpdate(dispatch: React.Dispatch<Action>) {
             });
     };
 
-    setTimeout(callback, TICKERS_UPDATE_INTERVAL_MS);
+    callback();
     setInterval(callback, NEWS_UPDATE_INTERVAL_MS);
 }
 

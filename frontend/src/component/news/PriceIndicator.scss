@@ -1,13 +1,12 @@
 .news-control {
   padding: 1em;
-  text-align: center;
 
   .price-indicator {
     padding: 2em 0;
   }
 
   .price-symbol {
-    font-size: 90%;
+
   }
 
   .price-value {
@@ -18,7 +17,7 @@
 
   .price-change, .price-change-label {
     font-size: 80%;
-    padding: 0 3pt;
+    padding: 0 2pt;
   }
 
   .color-negative {

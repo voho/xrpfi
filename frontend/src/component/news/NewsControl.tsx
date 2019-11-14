@@ -13,7 +13,7 @@ export const NewsControl = () => {
 
     return (
         <div className={"news-control"}>
-            <img src={logoSrc} width={50} alt={"XRP"}/><br/>
+            <img src={logoSrc} width={30} alt={"XRP"}/><br/>
             <PriceIndicator symbol={"XRP/USD"} price={tickers.xrp_usd_price} change={tickers.xrp_usb_change1d} changeLabel={"1d"}/>
             <PriceIndicator symbol={"XRP/BTC"} price={tickers.xrp_btc_price} change={tickers.xrp_btc_change1d} changeLabel={"1d"}/>
             <LoadingIndicator title={"Tickers"} loading={tickerContext.state.loading} error={tickerContext.state.error}/>
