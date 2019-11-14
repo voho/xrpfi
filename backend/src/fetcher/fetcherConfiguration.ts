@@ -43,6 +43,7 @@ const INSTITUTIONS_TWITTER: Fetcher[] = [
     getInstitutionTwitterFetcher("PolySignInc"),
     getInstitutionTwitterFetcher("Temenos"),
     getInstitutionTwitterFetcher("crypto"),
+    getInstitutionTwitterFetcher("GrayscaleInvest"),
     getInstitutionTwitterFetcher("swiftcommunity"),
     getInstitutionTwitterFetcher("WorldBank"),
     getInstitutionTwitterFetcher("WeissRatings")
@@ -58,11 +59,17 @@ const COMMUNITY_TWITTER: Fetcher[] = [
     getCommunityTwitterFetcher("wietsewind"),
     getCommunityTwitterFetcher("stevevargas"),
     getCommunityTwitterFetcher("XrpMr"),
+    getCommunityTwitterFetcher("XRPNews_"),
     getCommunityTwitterFetcher("xrpcryptowolf"),
-    getCommunityTwitterFetcher("whale_alert"),
+    getCommunityTwitterFetcher("TheCryptHawk"),
     getCommunityTwitterFetcher("lightningsignal"),
     getCommunityTwitterFetcher("Paisan26849860"),
     getCommunityTwitterFetcher("zerpslurp")
+
+];
+
+const COMMUNITY_TWITTER_BOTS: Fetcher[] = [
+    getCommunityTwitterBotFetcher("whale_alert")
 ];
 
 const EXCHANGES_TWITTER: Fetcher[] = [
@@ -172,6 +179,7 @@ export const ALL_FETCHERS: Fetcher[] = [
     ...INSTITUTIONS_TWITTER,
     ...EXCHANGES_TWITTER,
     ...COMMUNITY_TWITTER,
+    ...COMMUNITY_TWITTER_BOTS,
     ...REDDIT_COMMUNITIES,
     ...GOOD_RIPPLE_NEWS,
     ...GOOD_GENERAL_NEWS,
@@ -191,6 +199,10 @@ function getInstitutionTwitterFetcher(alias: string, quality = 1) {
 
 function getCommunityTwitterFetcher(alias: string, quality = 1) {
     return getTwitterFetcher(alias, new Set([Tag.community, Tag.social, Tag.twitter, Tag.filter]), quality);
+}
+
+function getCommunityTwitterBotFetcher(alias: string, quality = 2) {
+    return getTwitterFetcher(alias, new Set([Tag.community, Tag.social, Tag.twitter, Tag.filter, Tag.bot]), quality);
 }
 
 function getExchangeTwitterFetcher(alias: string, quality = 10) {

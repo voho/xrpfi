@@ -6,7 +6,8 @@
     "server-build": "tsc",
     "server-start": "node build/server",
     "build": "npm run client-build --prefix ../frontend && npm run server-build",
-    "start": "npm run server-start"
+    "start": "npm run server-start",
+    "dev": "npm run server-dev"
   },
   "dependencies": {
     "@types/express": "^4.17.2",

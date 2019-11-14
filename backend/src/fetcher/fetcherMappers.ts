@@ -24,16 +24,16 @@ export function youtubeRssMapper(fetcher: Fetcher, response: string): Promise<Ne
         .then((news: News[]) => {
             news.forEach((n: News) => {
                 n.sourceId = "youtube";
+                if (n.custom["yt:videoId"]) {
+                    n.videoId = n.custom["yt:videoId"];
+                }
                 n.avatarImageUrls = [
                     `http://img.youtube.com/vi/${n.videoId}/default.jpg`,
                     `http://img.youtube.com/vi/${n.videoId}/mqdefault.jpg`,
                     `http://img.youtube.com/vi/${n.videoId}/hqdefault.jpg`
                 ];
-                if (n.custom["yt:videoId"]) {
-                    n.videoId = n.custom["yt:videoId"];
-                }
                 if (n.custom["media:group"]) {
-                    n.body = n.custom["media:group"]["media:description"][0];
+                    n.body = "<pre>" + n.custom["media:group"]["media:description"][0] + "</pre>";
                     const community = n.custom["media:group"]["media:community"][0];
                     const rating = community["media:starRating"][0].$;
                     const stats = community["media:statistics"][0].$;

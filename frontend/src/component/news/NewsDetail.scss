@@ -28,6 +28,10 @@
       margin-top: 1em;
     }
 
+    .external pre {
+      font-size: 80%;
+    }
+
     .empty-news {
       font-size: 200%;
       text-align: center;
@@ -36,18 +40,18 @@
 
   .flags {
     padding: 1em 0;
-  }
 
-  .flags span {
-    padding-right: 1em;
-  }
+    span {
+      padding-right: 1em;
+    }
 
-  .flags svg {
-    padding-right: 3pt;
-  }
+    svg {
+      padding-right: 3pt;
+    }
 
-  .flags button {
-    margin-right: 1em;
+    button {
+      margin-right: 1em;
+    }
   }
 
   .video-embed {

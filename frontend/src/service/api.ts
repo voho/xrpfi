@@ -9,7 +9,7 @@ const newsApiUrl = "/api/news";
 const statusApiUrl = "/api/status";
 
 const TICKERS_UPDATE_INTERVAL_MS = 10000;
-const NEWS_UPDATE_INTERVAL_MS = 3000;
+const NEWS_UPDATE_INTERVAL_MS = 10000;
 const STATUS_UPDATE_INTERVAL_MS = 30000;
 
 export function scheduleRegularTickersUpdate(dispatch: React.Dispatch<Action>) {
@@ -63,7 +63,7 @@ export function scheduleRegularNewsUpdate(dispatch: React.Dispatch<Action>) {
             });
     };
 
-    callback();
+    setTimeout(callback, TICKERS_UPDATE_INTERVAL_MS);
     setInterval(callback, NEWS_UPDATE_INTERVAL_MS);
 }
 
