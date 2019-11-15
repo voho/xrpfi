@@ -82,7 +82,7 @@ export function scheduleRegularStatusUpdate(dispatch: React.Dispatch<Action>) {
                 if (!newState || !newState.root) {
                     throw new Error("Invalid new state: " + newState);
                 }
-                dispatch({type: "status_load_success", status: newState.root} as StatusLoadSuccessAction);
+                dispatch({type: "status_load_success", status: newState.root, tags: newState.tags} as StatusLoadSuccessAction);
             })
             .catch(error => {
                 dispatch({type: "status_load_error", errorMessage: error.toString()} as StatusLoadErrorAction);

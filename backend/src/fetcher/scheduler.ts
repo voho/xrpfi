@@ -1,7 +1,7 @@
 import {Fetcher} from "../model/fetcher";
 import {MAX_QUARTZ, QUARTZ_INTERVAL_MS} from "../utils/constants";
-import {ALL_FETCHERS} from "./fetcherConfiguration";
-import {refreshFetcher} from "./fetcherLoader";
+import {ALL_FETCHERS} from "./configuration";
+import {refreshFetcher} from "./loader";
 
 export function scheduleFetcherRefresh() {
     let quartz = 0;

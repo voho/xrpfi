@@ -6,7 +6,8 @@ export interface StatusLoadStartAction extends Action {
 }
 
 export interface StatusLoadSuccessAction extends Action {
-    status: Meta[]
+    status: Meta[],
+    tags: string[]
 }
 
 export interface StatusLoadErrorAction extends Action {

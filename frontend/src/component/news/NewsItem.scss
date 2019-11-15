@@ -1,16 +1,21 @@
+@import "../../App";
+
 .news-item {
-  background-color: #161616;
+  background-color: lighten($main-bg, 10%);
+  border: 1px solid lighten($main-bg, 10%);
+  border-radius: 2pt;
   display: flex;
   margin: 5pt;
   padding: 1ex 1em;
   align-items: center;
 
   &:hover {
-    background-color: #202020;
+    background-color: lighten($main-bg, 15%);
   }
 
   &.active {
-    background-color: #262626;
+    background-color: lighten($main-bg, 20%);
+    border: 1px solid lighten($main-bg, 50%);
   }
 
   img {
@@ -30,12 +35,8 @@
     padding: 0 0 1ex 0;
   }
 
-  .news-item-flags {
-    color: #666666;
-  }
-
   .news-item-flags a {
-    color: #999999;
+    color: $main-fg;
   }
 
   .news-item-flags span {

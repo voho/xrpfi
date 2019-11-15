@@ -1,8 +1,7 @@
-// @ts-ignore
-import {NewsState, StatusState, TickersState} from "@xrpfi/backend/build/model/model";
 import "normalize.css";
 import React, {useReducer} from "react";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
+import {NewsState, StatusState, TickersState} from "../../backend/src/model/model";
 import "./App.scss";
 import {NewsCenter} from "./component/news/NewsCenter";
 import {newsReducer, UseNewsReducerContext} from "./service/NewsReducer";

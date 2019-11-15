@@ -1,3 +1,5 @@
+@import "../../App";
+
 .news-control {
   padding: 1em;
 
@@ -11,7 +13,7 @@
 
   .price-value {
     display: inline-block;
-    color: #ccc;
+    color: lighten($main-fg, 20%);
     font-size: 120%;
   }
 

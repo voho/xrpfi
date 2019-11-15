@@ -1,29 +1,9 @@
 import {httpGet} from "../http/httpClient";
 import {Fetcher} from "../model/fetcher";
-import {Meta, News} from "../model/model";
+import {News} from "../model/model";
 import {addNews} from "../store/newsStorage";
 import {logError, logInfo} from "../utils/logger";
-import {ALL_FETCHERS} from "./fetcherConfiguration";
-
-function now() {
-    return new Date().getTime();
-}
-
-export function getStatus(): Meta[] {
-    return ALL_FETCHERS
-        .map((fetcher: Fetcher) => {
-            return {
-                feedUrl: fetcher.fetchUrl,
-                homeUrl: fetcher.homeUrl,
-                lastError: fetcher.status.lastErrorMessage,
-                lastUpdateStartDate: fetcher.status.lastUpdateStartTime,
-                lastUpdateEndDate: fetcher.status.lastUpdateEndTime,
-                lastUpdateNewsCount: fetcher.status.lastNewsCount,
-                status: fetcher.status.status,
-                title: fetcher.title
-            };
-        });
-}
+import {now} from "../utils/time";
 
 export function refreshFetcher(fetcher: Fetcher) {
     logInfo(`Scheduling fetcher: ${fetcher.title}`);

@@ -1,7 +1,7 @@
 import express, {Request, Response} from "express";
 import * as path from "path";
-import {getStatus} from "./fetcher/fetcherLoader";
-import {scheduleFetcherRefresh} from "./fetcher/fetcherScheduler";
+import {scheduleFetcherRefresh} from "./fetcher/scheduler";
+import {getStatus, getTags} from "./fetcher/status";
 import {getNews} from "./store/newsStorage";
 import {PORT} from "./utils/constants";
 import {logInfo} from "./utils/logger";
@@ -15,7 +15,7 @@ app.get("/api/news", (req: Request, res: Response) => {
 });
 
 app.get("/api/status", (req: Request, res: Response) => {
-    res.json({root: getStatus()});
+    res.json({root: getStatus(), tags: getTags()});
 });
 
 app.use(express.static(path.join(__dirname, "../../frontend/build")));

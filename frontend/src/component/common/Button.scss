@@ -1,17 +1,18 @@
+@import "../../App";
+
 button {
-  background-color: #528ede;
-  border: 2px solid #528ede;
+  border: 2px solid darken($link-fg, 30%);
+  border-radius: 5pt;
   padding: 3pt 10pt;
   color: white;
   cursor: pointer;
   font-size: 90%;
-  box-shadow: 1pt 1pt 5pt #000000;
-  /* letter-spacing: 1px; */
-  background: linear-gradient(0deg, #226cde, #378ede);
+  box-shadow: 1pt 1pt 5pt darken($link-fg, 80%);
+  background: $link-fg linear-gradient(0, darken($link-fg, 10%), darken($link-fg, 20%));
 }
 
 button:hover {
-  background: none transparent;
-  background-color: #3873a9;
-  border: 2px solid #528ede;
+  background: lighten($link-fg, 10%) none;
+  border: 2px solid darken($link-fg, 10%);
+  color: darken($link-fg, 80%);
 }

@@ -1,5 +1,6 @@
-import {Fetcher, Tag} from "../model/fetcher";
-import {getNewsFetcher, getRedditFetcher, getTwitterFetcher, getYouTubeFetcher} from "./fetcherFactory";
+import {Fetcher, FetcherStatus, Tag} from "../model/fetcher";
+import {DIVIDER_SLOWEST} from "../utils/constants";
+import {genericRssMapper, getTagBasedFilter, redditRssMapper, twitterRssMapper, youtubeRssMapper} from "./mappers";
 
 // TODO https://github.com/voho/xrpfi/blob/8f9950730c1424d9c616a455091b6c7033838701/fletcher/src/main/java/fi/xrp/fletcher/model/source/config/NewsSourceConfiguration.java
 
@@ -113,7 +114,7 @@ const REDDIT_COMMUNITIES: Fetcher[] = [
 const GOOD_RIPPLE_NEWS: Fetcher[] = [
     getRippleNewsFetcher("http://xrpcommunity.blog/rss/", 80),
     getRippleNewsFetcher("http://ripple.com/category/insights/news/feed/", 100),
-    getRippleNewsFetcher("http://thexrpdaily.com/index.php/feed/", 10)
+    getRippleNewsFetcher("http://thexrpdaily.com/feed/", 10)
 ];
 
 const GOOD_GENERAL_NEWS: Fetcher[] = [
@@ -142,14 +143,12 @@ const GENERAL_NEWS: Fetcher[] = [
     getGeneralNewsFetcher("http://cryptocoinspy.com/feed/"),
     getGeneralNewsFetcher("http://cryptocrimson.com/feed/"),
     getGeneralNewsFetcher("http://cryptocurrencyfacts.com/blog/feed/"),
-    getGeneralNewsFetcher("http://cryptocurrencynews.com/feed/"),
     getGeneralNewsFetcher("http://cryptodaily.co.uk/feed/"),
-    getGeneralNewsFetcher("http://cryptoinsider.com/feed/"),
     getGeneralNewsFetcher("http://cryptoninjas.net/feed"),
     getGeneralNewsFetcher("http://cryptodailygazette.com/feed/"),
     getGeneralNewsFetcher("http://ethereumworldnews.com/feed/"),
     getGeneralNewsFetcher("http://feeds.feedburner.com/CoinDesk"),
-    getGeneralNewsFetcher("http://forklog.net/feed"),
+    getGeneralNewsFetcher("http://forklog.media/category/news/feed/"),
     getGeneralNewsFetcher("http://icoinblog.com/feed/"),
     getGeneralNewsFetcher("http://masterthecrypto.com/feed/"),
     getGeneralNewsFetcher("http://news.bitcoin.com/feed/"),
@@ -231,4 +230,80 @@ function getOfficialYouTubeFetcher(channelId: string, quality = 100) {
 
 function getUnofficialYouTubeFetcher(channelId: string, quality = 5) {
     return getYouTubeFetcher(channelId, new Set([Tag.community, Tag.social, Tag.youtube]), quality);
+}
+
+
+export function getTwitterFetcher(alias: string, tags: Set<Tag>, quality = 1): Fetcher {
+    return {
+        tags: tags,
+        customFields: [],
+        title: `@${alias} at twitter`,
+        homeUrl: `https://twitter.com/${alias}`,
+        fetchUrl: `https://twitrss.me/twitter_user_to_rss/?user=${alias}`,
+        updateFrequencyDivider: DIVIDER_SLOWEST,
+        status: getInitialStatus(),
+        mapper: twitterRssMapper,
+        filter: getTagBasedFilter(tags),
+        limit: 10,
+        quality
+    };
+}
+
+export function getRedditFetcher(sub: string, tags: Set<Tag>, quality = 2): Fetcher {
+    return {
+        tags: tags,
+        customFields: [],
+        title: `/r/${sub}`,
+        homeUrl: `https://www.reddit.com/r/${sub}/`,
+        fetchUrl: `https://www.reddit.com/r/${sub}/.rss`,
+        updateFrequencyDivider: DIVIDER_SLOWEST,
+        status: getInitialStatus(),
+        mapper: redditRssMapper,
+        filter: getTagBasedFilter(tags),
+        limit: 20,
+        quality
+    };
+}
+
+export function getNewsFetcher(feedUrl: string, tags: Set<Tag>, quality = 2): Fetcher {
+    return {
+        tags: tags,
+        customFields: [],
+        title: `news://${feedUrl}`,
+        homeUrl: feedUrl,
+        fetchUrl: feedUrl,
+        updateFrequencyDivider: DIVIDER_SLOWEST,
+        status: getInitialStatus(),
+        mapper: genericRssMapper,
+        filter: getTagBasedFilter(tags),
+        limit: 20,
+        quality
+    };
+}
+
+export function getYouTubeFetcher(channelId: string, tags: Set<Tag>, quality = 2): Fetcher {
+    return {
+        tags: tags,
+        customFields: ["yt:videoId", "media:group"],
+        title: `youtube://${channelId}`,
+        homeUrl: `http://www.youtube.com/channel/${channelId}`,
+        fetchUrl: `http://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`,
+        updateFrequencyDivider: DIVIDER_SLOWEST,
+        status: getInitialStatus(),
+        mapper: youtubeRssMapper,
+        filter: getTagBasedFilter(tags),
+        limit: 10,
+        quality
+    };
+}
+
+function getInitialStatus(): FetcherStatus {
+    return {
+        status: "INITIALIZED",
+        lastUpdateStartTime: 0,
+        lastUpdateEndTime: 0,
+        lastErrorTime: 0,
+        lastNewsCount: 0,
+        lastErrorMessage: null
+    };
 }
