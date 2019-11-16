@@ -2,7 +2,7 @@
   "name": "@xrpfi/backend",
   "version": "1.0.0",
   "scripts": {
-    "server-dev": "nodemon src/server.ts",
+    "server-dev": "nodemon",
     "server-build": "tsc",
     "server-start": "node build/server",
     "build": "npm run client-build --prefix ../frontend && npm run server-build",
@@ -19,5 +19,13 @@
     "superagent": "^5.1.0",
     "ts-node": "^8.4.1",
     "typescript": "^3.7.2"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src",
+      "../frontend/src"
+    ],
+    "ext": "ts,tsx",
+    "exec": "npm run client-build --prefix ../frontend && node -r ts-node/register src/server.ts"
   }
 }
