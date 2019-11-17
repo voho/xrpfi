@@ -2,6 +2,7 @@ import {faStar as faStarRegular} from "@fortawesome/free-regular-svg-icons/faSta
 import {faStar as faStarSolid} from "@fortawesome/free-solid-svg-icons/faStar";
 import {faStarHalfAlt} from "@fortawesome/free-solid-svg-icons/faStarHalfAlt";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import "MediaRating.scss";
 import React from "react";
 
 const NONE = <FontAwesomeIcon icon={faStarRegular}/>;
@@ -20,25 +21,25 @@ function normalize(min: number, max: number, value: number) {
 }
 
 function starts(normalized: number) {
-    if (normalized < 0.5) {
+    if (normalized < 0.1) {
         return <span>{NONE}{NONE}{NONE}{NONE}{NONE}</span>;
-    } else if (normalized < 1) {
+    } else if (normalized < 0.2) {
         return <span>{HALF}{NONE}{NONE}{NONE}{NONE}</span>;
-    } else if (normalized < 1.5) {
+    } else if (normalized < 0.3) {
         return <span>{FULL}{NONE}{NONE}{NONE}{NONE}</span>;
-    } else if (normalized < 2) {
+    } else if (normalized < 0.4) {
         return <span>{FULL}{HALF}{NONE}{NONE}{NONE}</span>;
-    } else if (normalized < 2.5) {
+    } else if (normalized < 0.5) {
         return <span>{FULL}{FULL}{NONE}{NONE}{NONE}</span>;
-    } else if (normalized < 3) {
+    } else if (normalized < 0.6) {
         return <span>{FULL}{FULL}{HALF}{NONE}{NONE}</span>;
-    } else if (normalized < 3.5) {
+    } else if (normalized < 0.7) {
         return <span>{FULL}{FULL}{FULL}{NONE}{NONE}</span>;
-    } else if (normalized < 4) {
+    } else if (normalized < 0.8) {
         return <span>{FULL}{FULL}{FULL}{HALF}{NONE}</span>;
-    } else if (normalized < 4.5) {
+    } else if (normalized < 0.9) {
         return <span>{FULL}{FULL}{FULL}{FULL}{NONE}</span>;
-    } else if (normalized < 5) {
+    } else if (normalized < 1) {
         return <span>{FULL}{FULL}{FULL}{FULL}{HALF}</span>;
     } else {
         return <span>{FULL}{FULL}{FULL}{FULL}{FULL}</span>;
