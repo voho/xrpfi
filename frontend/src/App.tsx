@@ -8,10 +8,14 @@ import {newsReducer, UseNewsReducerContext} from "./service/NewsReducer";
 import {statusReducer, UseStatusReducerContext} from "./service/StatusReducer";
 import {tickersReducer, UseTickersReducerContext} from "./service/TickersReducer";
 
+const initialNewsState: NewsState = {loading: false, news: []};
+const initialStatusState: StatusState = {loading: false, status: [], tags: [], selectedTags: []};
+const initialTickerState: TickersState = {loading: false};
+
 export const App: React.FC = () => {
-    const [newsState, newsDispatch] = useReducer(newsReducer, {loading: false, news: []} as NewsState);
-    const [statusState, statusDispatch] = useReducer(statusReducer, {loading: false, status: []} as StatusState);
-    const [tickersState, tickersDispatch] = useReducer(tickersReducer, {loading: false} as TickersState);
+    const [newsState, newsDispatch] = useReducer(newsReducer, initialNewsState);
+    const [statusState, statusDispatch] = useReducer(statusReducer, initialStatusState);
+    const [tickersState, tickersDispatch] = useReducer(tickersReducer, initialTickerState);
 
     return (
         <UseNewsReducerContext.Provider value={{state: newsState, dispatch: newsDispatch}}>

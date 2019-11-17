@@ -7,6 +7,7 @@ export function twitterRssMapper(fetcher: Fetcher, response: string): Promise<Ne
     return genericRssMapper(fetcher, response)
         .then(news => {
             news.forEach(n => n.sourceId = "twitter");
+            news.forEach(n => n.oembedUrl = "https://publish.twitter.com/oembed?url=" + encodeURIComponent(n.url));
             return news;
         });
 }
@@ -77,6 +78,7 @@ export function genericRssMapper(fetcher: Fetcher, response: string): Promise<Ne
                     sourceHomeUrl: meta.link,
                     sourceUrls: [] as string[],
                     externalUrls: [] as string[],
+                    oembedUrl: null,
                     videoId: null,
                     quality: 0,
                     custom: {} as any,

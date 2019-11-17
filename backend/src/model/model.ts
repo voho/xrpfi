@@ -12,7 +12,9 @@ export interface NewsState {
 export interface StatusState {
     loading: boolean,
     error?: string,
-    status: Meta[]
+    status: Meta[],
+    tags: string[],
+    selectedTags: string[]
 }
 
 export interface TickersState {
@@ -39,6 +41,7 @@ export interface News {
     sourceUrls: string[],
     externalUrls: string[]
     imageUrls: string[],
+    oembedUrl: string | null,
     videoId: string | null,
     sourceId: string,
     sourceName: string,

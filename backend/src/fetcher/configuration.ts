@@ -104,6 +104,7 @@ const EXCHANGES_TWITTER: Fetcher[] = [
 const REDDIT_COMMUNITIES: Fetcher[] = [
     getXrpCommunityRedditFetcher("Ripple", 50),
     getXrpCommunityRedditFetcher("XRP", 50),
+    getXrpCommunityRedditFetcher("RippleTalk", 50),
     getGeneralCommunityRedditFetcher("CryptoCurrency"),
     getGeneralCommunityRedditFetcher("CryptoMarkets"),
     getGeneralCommunityRedditFetcher("Crypto_Currency_News"),

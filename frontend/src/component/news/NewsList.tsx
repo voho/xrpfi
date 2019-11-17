@@ -1,6 +1,7 @@
 import React, {useContext} from "react";
 import {News} from "../../../../backend/src/model/model";
 import {NewsSelectAction, UseNewsReducerContext} from "../../service/NewsReducer";
+import {UseStatusReducerContext} from "../../service/StatusReducer";
 import "./NewsDetail.scss";
 import {NewsItem} from "./NewsItem";
 
@@ -9,15 +10,26 @@ interface NewsListProps {
 }
 
 export const NewsList: React.FC<NewsListProps> = (props) => {
-    const context = useContext(UseNewsReducerContext);
+    const newsContext = useContext(UseNewsReducerContext);
+    const statusContext = useContext(UseStatusReducerContext);
 
-    function selectNews(guid: string) {
-        context.dispatch({type: "news_select", selected: guid} as NewsSelectAction);
+    function isAllowed(news: News): boolean {
+        let has = false;
+        news.tags.forEach(tag => {
+            if (statusContext.state.selectedTags.includes(tag)) {
+                has = true;
+            }
+        });
+        return has;
     }
 
-    function handleSelectNeighbour(delta: number) {
-        const guids = context.state.news.map(a => a.guid);
-        const selIndex = guids.indexOf(context.state.selectedNewsGuid || "");
+    function selectNews(guid: string): void {
+        newsContext.dispatch({type: "news_select", selected: guid} as NewsSelectAction);
+    }
+
+    function handleSelectNeighbour(delta: number): void {
+        const guids = newsContext.state.news.map(a => a.guid);
+        const selIndex = guids.indexOf(newsContext.state.selectedNewsGuid || "");
         if (selIndex !== -1) {
             const newIndex = selIndex + delta;
             if (newIndex >= 0 && newIndex < guids.length) {
@@ -43,7 +55,7 @@ export const NewsList: React.FC<NewsListProps> = (props) => {
 
     return (
         <>
-            {props.news.map(news => <NewsItem news={news}/>)}
+            {props.news.filter(news => isAllowed(news)).map(news => <NewsItem news={news}/>)}
         </>
     );
 };

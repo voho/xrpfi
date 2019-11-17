@@ -21,7 +21,7 @@ export function getStatus(): Meta[] {
 export function getTags(): string[] {
     const tags = [] as string[];
     for (let tag in Tag) {
-        tags.push(tag);
+        tags.push(Tag[tag]);
     }
     return tags;
 }

@@ -12,16 +12,16 @@ export interface FetcherStatus {
 }
 
 export enum Tag {
-    "twitter",
-    "social",
-    "news",
-    "good",
-    "official",
-    "community",
-    "bot",
-    "reddit",
-    "filter",
-    "youtube"
+    twitter = "twitter",
+    social = "social",
+    news = "news",
+    good = "good",
+    official = "official",
+    community = "community",
+    bot = "bot",
+    reddit = "reddit",
+    filter = "filter",
+    youtube = "youtube"
 }
 
 export interface Fetcher {
