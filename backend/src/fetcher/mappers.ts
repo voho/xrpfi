@@ -72,7 +72,7 @@ export function genericRssMapper(fetcher: Fetcher, response: string): Promise<Ne
                     avatarImageUrls: [] as string[],
                     date: Date.parse(item.pubDate),
                     guid: item.link,
-                    tags: [] as string[],
+                    tags: [...fetcher.tags],
                     sourceId: "generic",
                     sourceName: meta.title,
                     sourceHomeUrl: meta.link,
