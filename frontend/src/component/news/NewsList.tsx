@@ -1,7 +1,6 @@
+import {News} from "@xrpfi/common/build/model";
 import React, {useContext} from "react";
-import {News} from "../../../../backend/src/model/model";
 import {NewsSelectAction, UseNewsReducerContext} from "../../service/NewsReducer";
-import {UseStatusReducerContext} from "../../service/StatusReducer";
 import "./NewsDetail.scss";
 import {NewsItem} from "./NewsItem";
 
@@ -11,17 +10,6 @@ interface NewsListProps {
 
 export const NewsList: React.FC<NewsListProps> = (props) => {
     const newsContext = useContext(UseNewsReducerContext);
-    const statusContext = useContext(UseStatusReducerContext);
-
-    function isAllowed(news: News): boolean {
-        let has = false;
-        news.tags.forEach(tag => {
-            if (statusContext.state.selectedTags.includes(tag)) {
-                has = true;
-            }
-        });
-        return has;
-    }
 
     function selectNews(guid: string): void {
         newsContext.dispatch({type: "news_select", selected: guid} as NewsSelectAction);
@@ -55,7 +43,7 @@ export const NewsList: React.FC<NewsListProps> = (props) => {
 
     return (
         <>
-            {props.news.filter(news => isAllowed(news)).map(news => <NewsItem news={news}/>)}
+            {props.news.map(news => <NewsItem news={news}/>)}
         </>
     );
 };

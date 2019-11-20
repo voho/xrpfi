@@ -1,6 +1,6 @@
+import {News} from "@xrpfi/common/build/model";
 import {httpGet} from "../http/httpClient";
 import {Fetcher} from "../model/fetcher";
-import {News} from "../model/model";
 import {addNews} from "../store/newsStorage";
 import {logError, logInfo} from "../utils/logger";
 import {now} from "../utils/time";

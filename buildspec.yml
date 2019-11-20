@@ -8,6 +8,7 @@ phases:
   build:
     commands:
       - npm install typescript -g
+      - npm install --prefix common
       - npm install --prefix backend
       - npm install --prefix frontend
       - npm run build --prefix backend

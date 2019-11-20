@@ -1,5 +1,6 @@
-import {Fetcher, FetcherStatus, Tag} from "../model/fetcher";
-import {DIVIDER_SLOWEST} from "../utils/constants";
+import {TagId} from "@xrpfi/common/build/model";
+import {DIVIDER_SLOWEST} from "../../../common/src/constants";
+import {Fetcher, FetcherStatus} from "../model/fetcher";
 import {genericRssMapper, getTagBasedFilter, redditRssMapper, twitterRssMapper, youtubeRssMapper} from "./mappers";
 
 // TODO https://github.com/voho/xrpfi/blob/8f9950730c1424d9c616a455091b6c7033838701/fletcher/src/main/java/fi/xrp/fletcher/model/source/config/NewsSourceConfiguration.java
@@ -190,51 +191,51 @@ export const ALL_FETCHERS: Fetcher[] = [
 
 
 function getStakeholderTwitterFetcher(alias: string, quality = 1) {
-    return getTwitterFetcher(alias, new Set([Tag.official, Tag.social, Tag.twitter]), quality);
+    return getTwitterFetcher(alias, new Set(["official", "social", "twitter"]), quality);
 }
 
 function getInstitutionTwitterFetcher(alias: string, quality = 1) {
-    return getTwitterFetcher(alias, new Set([Tag.good, Tag.official, Tag.social, Tag.twitter, Tag.filter]), quality);
+    return getTwitterFetcher(alias, new Set(["good", "official", "social", "twitter", "filter"]), quality);
 }
 
 function getCommunityTwitterFetcher(alias: string, quality = 1) {
-    return getTwitterFetcher(alias, new Set([Tag.community, Tag.social, Tag.twitter, Tag.filter]), quality);
+    return getTwitterFetcher(alias, new Set(["community", "social", "twitter", "filter"]), quality);
 }
 
 function getCommunityTwitterBotFetcher(alias: string, quality = 2) {
-    return getTwitterFetcher(alias, new Set([Tag.community, Tag.social, Tag.twitter, Tag.filter, Tag.bot]), quality);
+    return getTwitterFetcher(alias, new Set(["community", "social", "twitter", "filter", "bot"]), quality);
 }
 
 function getExchangeTwitterFetcher(alias: string, quality = 10) {
-    return getTwitterFetcher(alias, new Set([Tag.official, Tag.social, Tag.twitter, Tag.filter]), quality);
+    return getTwitterFetcher(alias, new Set(["official", "social", "twitter", "filter"]), quality);
 }
 
 function getXrpCommunityRedditFetcher(alias: string, quality = 2) {
-    return getTwitterFetcher(alias, new Set([Tag.community, Tag.social, Tag.reddit]), quality);
+    return getTwitterFetcher(alias, new Set(["community", "social", "reddit"]), quality);
 }
 
 function getGeneralCommunityRedditFetcher(sub: string, quality = 1) {
-    return getRedditFetcher(sub, new Set([Tag.community, Tag.social, Tag.reddit, Tag.filter]), quality);
+    return getRedditFetcher(sub, new Set(["community", "social", "reddit", "filter"]), quality);
 }
 
 function getRippleNewsFetcher(feedUrl: string, quality = 100) {
-    return getNewsFetcher(feedUrl, new Set([Tag.good, Tag.news]), quality);
+    return getNewsFetcher(feedUrl, new Set(["good", "news"]), quality);
 }
 
 function getGeneralNewsFetcher(feedUrl: string, quality = 5) {
-    return getNewsFetcher(feedUrl, new Set([Tag.news, Tag.filter]), quality);
+    return getNewsFetcher(feedUrl, new Set(["news", "filter"]), quality);
 }
 
 function getOfficialYouTubeFetcher(channelId: string, quality = 100) {
-    return getYouTubeFetcher(channelId, new Set([Tag.official, Tag.social, Tag.youtube, Tag.good]), quality);
+    return getYouTubeFetcher(channelId, new Set(["official", "social", "youtube", "good"]), quality);
 }
 
 function getUnofficialYouTubeFetcher(channelId: string, quality = 5) {
-    return getYouTubeFetcher(channelId, new Set([Tag.community, Tag.social, Tag.youtube]), quality);
+    return getYouTubeFetcher(channelId, new Set(["community", "social", "youtube"]), quality);
 }
 
 
-export function getTwitterFetcher(alias: string, tags: Set<Tag>, quality = 1): Fetcher {
+export function getTwitterFetcher(alias: string, tags: Set<TagId>, quality = 1): Fetcher {
     return {
         tags: tags,
         customFields: [],
@@ -250,7 +251,7 @@ export function getTwitterFetcher(alias: string, tags: Set<Tag>, quality = 1): F
     };
 }
 
-export function getRedditFetcher(sub: string, tags: Set<Tag>, quality = 2): Fetcher {
+export function getRedditFetcher(sub: string, tags: Set<TagId>, quality = 2): Fetcher {
     return {
         tags: tags,
         customFields: [],
@@ -266,7 +267,7 @@ export function getRedditFetcher(sub: string, tags: Set<Tag>, quality = 2): Fetc
     };
 }
 
-export function getNewsFetcher(feedUrl: string, tags: Set<Tag>, quality = 2): Fetcher {
+export function getNewsFetcher(feedUrl: string, tags: Set<TagId>, quality = 2): Fetcher {
     return {
         tags: tags,
         customFields: [],
@@ -282,7 +283,7 @@ export function getNewsFetcher(feedUrl: string, tags: Set<Tag>, quality = 2): Fe
     };
 }
 
-export function getYouTubeFetcher(channelId: string, tags: Set<Tag>, quality = 2): Fetcher {
+export function getYouTubeFetcher(channelId: string, tags: Set<TagId>, quality = 2): Fetcher {
     return {
         tags: tags,
         customFields: ["yt:videoId", "media:group"],

@@ -1,5 +1,5 @@
+import {News} from "@xrpfi/common/build/model";
 import React, {useEffect, useState} from "react";
-import {News} from "../../../../backend/src/model/model";
 import {Button} from "../common/Button";
 import {MediaRating} from "../common/MediaRating";
 import {SourcesStatus} from "../meta/SourcesStatus";
@@ -42,7 +42,7 @@ const OEmbed: React.FC<{ oembedUrl: string }> = (props) => {
             .catch(error => {
                 setHtml("Error: " + error.message);
             });
-    }, []);
+    });
 
     return (
         <div dangerouslySetInnerHTML={createMarkup(html)}/>

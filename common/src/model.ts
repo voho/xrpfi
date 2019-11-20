@@ -6,15 +6,14 @@ export interface NewsState {
     loading: boolean,
     error?: string,
     news: News[],
-    selectedNewsGuid?: string
+    selectedNewsGuid?: string,
+    selectedTagIds: TagId[]
 }
 
 export interface StatusState {
     loading: boolean,
     error?: string,
-    status: Meta[],
-    tags: string[],
-    selectedTags: string[]
+    status: Meta[]
 }
 
 export interface TickersState {
@@ -37,7 +36,7 @@ export interface News {
     title: string,
     author: string | null,
     body: string,
-    tags: string[],
+    tags: TagId[],
     sourceUrls: string[],
     externalUrls: string[]
     imageUrls: string[],
@@ -73,4 +72,29 @@ export interface Meta {
     lastUpdateNewsCount: number,
     status: string
     title: string
+}
+
+export interface TagMeta {
+    id: TagId,
+    title: string
+}
+
+export type TagId = "twitter" | "social" | "news" | "good" | "official" | "community" | "bot" | "reddit" | "filter" | "youtube";
+
+export const KNOWN_TAGS: TagMeta[] = [
+    {id: "twitter", title: "Twitter"},
+    {id: "social", title: "social"},
+    {id: "news", title: "news"},
+    {id: "good", title: "good"},
+    {id: "official", title: "official"},
+    {id: "community", title: "community"},
+    {id: "bot", title: "bot"},
+    {id: "reddit", title: "reddit"},
+    {id: "filter", title: "filter"},
+    {id: "youtube", title: "youtube"}
+];
+
+export interface NewsQueryByTags {
+    whitelist: TagId[] | null,
+    blacklist: TagId[] | null
 }

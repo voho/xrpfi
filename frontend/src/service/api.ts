@@ -1,5 +1,6 @@
+import {NEWS_UPDATE_INTERVAL_MS, STATUS_UPDATE_INTERVAL_MS, TICKERS_UPDATE_INTERVAL_MS} from "@xrpfi/common/build/constants";
+import {Action, NewsState, TagId} from "@xrpfi/common/build/model";
 import React from "react";
-import {Action} from "../../../backend/src/model/model";
 import {NewsLoadErrorAction, NewsLoadStartAction, NewsLoadSuccessAction} from "./NewsReducer";
 import {StatusLoadErrorAction, StatusLoadStartAction, StatusLoadSuccessAction} from "./StatusReducer";
 import {TickersLoadSuccessAction} from "./TickersReducer";
@@ -8,13 +9,23 @@ const priceUrl = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=XR
 const newsApiUrl = "/api/news";
 const statusApiUrl = "/api/status";
 
-const TICKERS_UPDATE_INTERVAL_MS = 10000;
-const NEWS_UPDATE_INTERVAL_MS = 10000;
-const STATUS_UPDATE_INTERVAL_MS = 30000;
+function getPriceUrl(): string {
+    return priceUrl;
+}
+
+function getNewsApiUrl(selectedTagIds: TagId[]): string {
+    const params = new URLSearchParams();
+    params.append("whitelist", selectedTagIds.join(","));
+    return newsApiUrl + "?" + params.toString();
+}
+
+function getStatusApiUrl(): string {
+    return statusApiUrl;
+}
 
 export function scheduleRegularTickersUpdate(dispatch: React.Dispatch<Action>) {
     const callback = () => {
-        fetch(priceUrl)
+        fetch(getPriceUrl())
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Invalid response: " + response.status);
@@ -41,11 +52,11 @@ export function scheduleRegularTickersUpdate(dispatch: React.Dispatch<Action>) {
     setInterval(callback, TICKERS_UPDATE_INTERVAL_MS);
 }
 
-export function scheduleRegularNewsUpdate(dispatch: React.Dispatch<Action>) {
+export function scheduleRegularNewsUpdate(state: NewsState, dispatch: React.Dispatch<Action>) {
     const callback = () => {
         dispatch({type: "news_load_start"} as NewsLoadStartAction);
 
-        fetch(newsApiUrl)
+        fetch(getNewsApiUrl(state.selectedTagIds))
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Invalid response: " + response.status);
@@ -71,7 +82,7 @@ export function scheduleRegularStatusUpdate(dispatch: React.Dispatch<Action>) {
     const callback = () => {
         dispatch({type: "status_load_start"} as StatusLoadStartAction);
 
-        fetch(statusApiUrl)
+        fetch(getStatusApiUrl())
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Invalid response: " + response.status);
@@ -82,7 +93,7 @@ export function scheduleRegularStatusUpdate(dispatch: React.Dispatch<Action>) {
                 if (!newState || !newState.root) {
                     throw new Error("Invalid new state: " + newState);
                 }
-                dispatch({type: "status_load_success", status: newState.root, tags: newState.tags} as StatusLoadSuccessAction);
+                dispatch({type: "status_load_success", status: newState.root} as StatusLoadSuccessAction);
             })
             .catch(error => {
                 dispatch({type: "status_load_error", errorMessage: error.toString()} as StatusLoadErrorAction);

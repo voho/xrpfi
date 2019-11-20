@@ -1,5 +1,5 @@
-import {Fetcher, Tag} from "../model/fetcher";
-import {Meta} from "../model/model";
+import {KNOWN_TAGS, Meta, TagMeta} from "@xrpfi/common/build/model";
+import {Fetcher} from "../model/fetcher";
 import {ALL_FETCHERS} from "./configuration";
 
 export function getStatus(): Meta[] {
@@ -18,10 +18,6 @@ export function getStatus(): Meta[] {
         });
 }
 
-export function getTags(): string[] {
-    const tags = [] as string[];
-    for (let tag in Tag) {
-        tags.push(Tag[tag]);
-    }
-    return tags;
+export function getTags(): TagMeta[] {
+    return KNOWN_TAGS;
 }

@@ -2,8 +2,8 @@ import {faStar as faStarRegular} from "@fortawesome/free-regular-svg-icons/faSta
 import {faStar as faStarSolid} from "@fortawesome/free-solid-svg-icons/faStar";
 import {faStarHalfAlt} from "@fortawesome/free-solid-svg-icons/faStarHalfAlt";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import "MediaRating.scss";
 import React from "react";
+import "./MediaRating.scss";
 
 const NONE = <FontAwesomeIcon icon={faStarRegular}/>;
 const HALF = <FontAwesomeIcon icon={faStarHalfAlt}/>;

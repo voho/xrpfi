@@ -1,4 +1,4 @@
-import {News} from "./model";
+import {News, TagId} from "@xrpfi/common/build/model";
 
 type Status = "INITIALIZED" | "OK" | "WORKING" | "ERROR";
 
@@ -11,21 +11,8 @@ export interface FetcherStatus {
     lastErrorMessage: string | null
 }
 
-export enum Tag {
-    twitter = "twitter",
-    social = "social",
-    news = "news",
-    good = "good",
-    official = "official",
-    community = "community",
-    bot = "bot",
-    reddit = "reddit",
-    filter = "filter",
-    youtube = "youtube"
-}
-
 export interface Fetcher {
-    tags: Set<Tag>,
+    tags: Set<TagId>,
     customFields: string[],
     title: string,
     homeUrl: string,

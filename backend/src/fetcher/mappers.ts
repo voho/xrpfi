@@ -1,7 +1,7 @@
+import {News, TagId} from "@xrpfi/common/build/model";
 import Parser from "rss-parser";
-import {Fetcher, Tag} from "../model/fetcher";
-import {News} from "../model/model";
-import {RELEVANT_KEYWORDS} from "../utils/constants";
+import {RELEVANT_KEYWORDS} from "../../../common/src/constants";
+import {Fetcher} from "../model/fetcher";
 
 export function twitterRssMapper(fetcher: Fetcher, response: string): Promise<News[]> {
     return genericRssMapper(fetcher, response)
@@ -107,8 +107,8 @@ export function genericRssMapper(fetcher: Fetcher, response: string): Promise<Ne
         });
 }
 
-export function getTagBasedFilter(tags: Set<Tag>) {
-    if (tags.has(Tag.filter)) {
+export function getTagBasedFilter(tags: Set<TagId>) {
+    if (tags.has("filter")) {
         return (news: News) => isRelevant(news);
     }
     return (() => true);

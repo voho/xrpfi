@@ -1,5 +1,6 @@
+import {TagId} from "@xrpfi/common/build/model";
 import React from "react";
-import {Action, News, NewsState} from "../../../backend/src/model/model";
+import {Action, News, NewsState} from "../../../common/src/model";
 
 export interface NewsSelectAction extends Action {
     selected: string;
@@ -17,13 +18,27 @@ export interface NewsLoadErrorAction extends Action {
     errorMessage: string;
 }
 
+export interface ToggleTagEnabledAction extends Action {
+    tag: TagId
+}
+
 interface UseNewsReducerContextState {
     state: NewsState,
     dispatch: React.Dispatch<Action>
 }
 
+function toggleTagVisible(selectedTags: TagId[], toggledTag: TagId): TagId[] {
+    if (selectedTags.includes(toggledTag)) {
+        return selectedTags.filter(t => t !== toggledTag);
+    } else {
+        return [...selectedTags, toggledTag];
+    }
+}
+
 export const newsReducer = (state: NewsState, action: Action): NewsState => {
     switch (action.type) {
+        case "toggle_tag_visible":
+            return {...state, selectedTagIds: toggleTagVisible(state.selectedTagIds, (action as ToggleTagEnabledAction).tag)};
         case "news_select":
             if (state.selectedNewsGuid === (action as NewsSelectAction).selected) {
                 return {...state, selectedNewsGuid: undefined};

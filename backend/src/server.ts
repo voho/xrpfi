@@ -1,9 +1,10 @@
+import {PORT} from "@xrpfi/common/build/constants";
+import {NewsQueryByTags, TagId} from "@xrpfi/common/build/model";
 import express, {Request, Response} from "express";
 import * as path from "path";
 import {scheduleFetcherRefresh} from "./fetcher/scheduler";
 import {getStatus, getTags} from "./fetcher/status";
 import {getNews} from "./store/newsStorage";
-import {PORT} from "./utils/constants";
 import {logInfo} from "./utils/logger";
 
 const app = express();
@@ -11,7 +12,21 @@ const app = express();
 scheduleFetcherRefresh();
 
 app.get("/api/news", (req: Request, res: Response) => {
-    res.json({root: getNews()});
+    function splitOrNull(value: any): TagId[] | null {
+        if (value) {
+            return value.toString().split(",");
+        }
+        return null;
+    }
+
+    function getQuery(req: Request): NewsQueryByTags {
+        return {
+            whitelist: splitOrNull(req.params["whitelist"]),
+            blacklist: splitOrNull(req.params["blacklist"])
+        };
+    }
+
+    res.json({root: getNews(getQuery(req))});
 });
 
 app.get("/api/status", (req: Request, res: Response) => {
