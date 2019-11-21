@@ -1,5 +1,5 @@
+import {Action, Meta, StatusState} from "@xrpfi/common/build/model";
 import React from "react";
-import {Action, Meta, StatusState} from "../../../common/src/model";
 
 export interface StatusLoadStartAction extends Action {
 }

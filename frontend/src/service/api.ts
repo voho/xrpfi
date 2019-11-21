@@ -1,5 +1,5 @@
 import {NEWS_UPDATE_INTERVAL_MS, STATUS_UPDATE_INTERVAL_MS, TICKERS_UPDATE_INTERVAL_MS} from "@xrpfi/common/build/constants";
-import {Action, NewsState, TagId} from "@xrpfi/common/build/model";
+import {Action, TagId} from "@xrpfi/common/build/model";
 import React from "react";
 import {NewsLoadErrorAction, NewsLoadStartAction, NewsLoadSuccessAction} from "./NewsReducer";
 import {StatusLoadErrorAction, StatusLoadStartAction, StatusLoadSuccessAction} from "./StatusReducer";
@@ -52,11 +52,11 @@ export function scheduleRegularTickersUpdate(dispatch: React.Dispatch<Action>) {
     setInterval(callback, TICKERS_UPDATE_INTERVAL_MS);
 }
 
-export function scheduleRegularNewsUpdate(state: NewsState, dispatch: React.Dispatch<Action>) {
+export function scheduleRegularNewsUpdate(context) {
     const callback = () => {
-        dispatch({type: "news_load_start"} as NewsLoadStartAction);
+        context.dispatch({type: "news_load_start"} as NewsLoadStartAction);
 
-        fetch(getNewsApiUrl(state.selectedTagIds))
+        fetch(getNewsApiUrl(context.state.selectedTagIds))
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Invalid response: " + response.status);
@@ -67,10 +67,10 @@ export function scheduleRegularNewsUpdate(state: NewsState, dispatch: React.Disp
                 if (!newState || !newState.root) {
                     throw new Error("Invalid new state: " + newState);
                 }
-                dispatch({type: "news_load_success", news: newState.root} as NewsLoadSuccessAction);
+                context.dispatch({type: "news_load_success", news: newState.root} as NewsLoadSuccessAction);
             })
             .catch(error => {
-                dispatch({type: "news_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
+                context.dispatch({type: "news_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
             });
     };
 

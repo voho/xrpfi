@@ -21,7 +21,7 @@ function findNews(param: News[], selected?: string): News | undefined {
 export const NewsCenter = () => {
     const context = useContext(UseNewsReducerContext);
 
-    useEffect(() => { scheduleRegularNewsUpdate(context.state, context.dispatch); }, []);
+    useEffect(() => { scheduleRegularNewsUpdate(context); }, []);
 
     return (
         <>
