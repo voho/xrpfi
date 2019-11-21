@@ -1,6 +1,6 @@
+import {RELEVANT_KEYWORDS} from "@xrpfi/common/build/constants";
 import {News, TagId} from "@xrpfi/common/build/model";
 import Parser from "rss-parser";
-import {RELEVANT_KEYWORDS} from "../../../common/src/constants";
 import {Fetcher} from "../model/fetcher";
 
 export function twitterRssMapper(fetcher: Fetcher, response: string): Promise<News[]> {

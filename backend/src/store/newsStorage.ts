@@ -1,5 +1,5 @@
+import {MAX_RETURNED_NEWS, OLD_NEWS_CUTOFF_TIME_MS} from "@xrpfi/common/build/constants";
 import {News, NewsQueryByTags} from "@xrpfi/common/build/model";
-import {MAX_RETURNED_NEWS, OLD_NEWS_CUTOFF_TIME_MS} from "../../../common/src/constants";
 import {logInfo} from "../utils/logger";
 
 const globalNews = new Map<string, News>();
