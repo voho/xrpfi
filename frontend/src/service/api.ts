@@ -23,83 +23,86 @@ function getStatusApiUrl(): string {
     return statusApiUrl;
 }
 
-export function scheduleRegularTickersUpdate(dispatch: React.Dispatch<Action>) {
-    const callback = () => {
-        fetch(getPriceUrl())
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Invalid response: " + response.status);
+function updateTickers(dispatch: React.Dispatch<Action>) {
+    fetch(getPriceUrl())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Invalid response: " + response.status);
+            }
+            return response.json();
+        })
+        .then(responseJson => {
+            dispatch({
+                type: "tickers_load_success",
+                tickers: {
+                    xrp_btc_price: responseJson.RAW.XRP.BTC.PRICE * 100000000,
+                    xrp_usd_price: responseJson.RAW.XRP.USD.PRICE,
+                    xrp_btc_change1d: responseJson.RAW.XRP.BTC.CHANGEPCT24HOUR / 100.0,
+                    xrp_usb_change1d: responseJson.RAW.XRP.USD.CHANGEPCT24HOUR / 100.0
                 }
-                return response.json();
-            })
-            .then(responseJson => {
-                dispatch({
-                    type: "tickers_load_success",
-                    tickers: {
-                        xrp_btc_price: responseJson.RAW.XRP.BTC.PRICE * 100000000,
-                        xrp_usd_price: responseJson.RAW.XRP.USD.PRICE,
-                        xrp_btc_change1d: responseJson.RAW.XRP.BTC.CHANGEPCT24HOUR / 100.0,
-                        xrp_usb_change1d: responseJson.RAW.XRP.USD.CHANGEPCT24HOUR / 100.0
-                    }
-                } as TickersLoadSuccessAction);
-            })
-            .catch(error => {
-                dispatch({type: "tickers_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
-            });
-    };
+            } as TickersLoadSuccessAction);
+        })
+        .catch(error => {
+            dispatch({type: "tickers_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
+        });
+}
 
+function updateNews(selectedTagIds: TagId[], dispatch: React.Dispatch<Action>) {
+    dispatch({type: "news_load_start"} as NewsLoadStartAction);
+
+    fetch(getNewsApiUrl(selectedTagIds))
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Invalid response: " + response.status);
+            }
+            return response.json();
+        })
+        .then(newState => {
+            if (!newState || !newState.root) {
+                throw new Error("Invalid new state: " + newState);
+            }
+            dispatch({type: "news_load_success", news: newState.root} as NewsLoadSuccessAction);
+        })
+        .catch(error => {
+            dispatch({type: "news_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
+        });
+}
+
+function updateStatus(dispatch: React.Dispatch<Action>) {
+    dispatch({type: "status_load_start"} as StatusLoadStartAction);
+
+    fetch(getStatusApiUrl())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Invalid response: " + response.status);
+            }
+            return response.json();
+        })
+        .then(newState => {
+            if (!newState || !newState.root) {
+                throw new Error("Invalid new state: " + newState);
+            }
+            dispatch({type: "status_load_success", status: newState.root} as StatusLoadSuccessAction);
+        })
+        .catch(error => {
+            dispatch({type: "status_load_error", errorMessage: error.toString()} as StatusLoadErrorAction);
+        });
+}
+
+export function scheduleRegularTickersUpdate(dispatch: React.Dispatch<Action>) {
+    const callback = () => updateTickers(dispatch);
     callback();
     setInterval(callback, TICKERS_UPDATE_INTERVAL_MS);
 }
 
 export function scheduleRegularNewsUpdate(context) {
-    const callback = () => {
-        context.dispatch({type: "news_load_start"} as NewsLoadStartAction);
-
-        fetch(getNewsApiUrl(context.state.selectedTagIds))
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Invalid response: " + response.status);
-                }
-                return response.json();
-            })
-            .then(newState => {
-                if (!newState || !newState.root) {
-                    throw new Error("Invalid new state: " + newState);
-                }
-                context.dispatch({type: "news_load_success", news: newState.root} as NewsLoadSuccessAction);
-            })
-            .catch(error => {
-                context.dispatch({type: "news_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
-            });
-    };
-
+    const callback = () => updateNews(context.state.selectedTagIds, context.dispatch);
     callback();
     setInterval(callback, NEWS_UPDATE_INTERVAL_MS);
 }
 
-export function scheduleRegularStatusUpdate(dispatch: React.Dispatch<Action>) {
-    const callback = () => {
-        dispatch({type: "status_load_start"} as StatusLoadStartAction);
-
-        fetch(getStatusApiUrl())
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Invalid response: " + response.status);
-                }
-                return response.json();
-            })
-            .then(newState => {
-                if (!newState || !newState.root) {
-                    throw new Error("Invalid new state: " + newState);
-                }
-                dispatch({type: "status_load_success", status: newState.root} as StatusLoadSuccessAction);
-            })
-            .catch(error => {
-                dispatch({type: "status_load_error", errorMessage: error.toString()} as StatusLoadErrorAction);
-            });
-    };
-
+export function scheduleRegularStatusUpdate(context) {
+    const callback = () => updateStatus(context.dispatch);
     callback();
     setInterval(callback, STATUS_UPDATE_INTERVAL_MS);
 }
