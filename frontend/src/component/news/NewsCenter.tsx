@@ -1,6 +1,6 @@
 import {News} from "@xrpfi/common/build/model";
 import React, {useContext, useEffect} from "react";
-import {scheduleRegularNewsUpdate} from "../../service/api";
+import {updateNews} from "../../service/api";
 import {UseNewsReducerContext} from "../../service/NewsReducer";
 import "./NewsCenter.scss";
 import {NewsControl} from "./NewsControl";
@@ -21,7 +21,14 @@ function findNews(param: News[], selected?: string): News | undefined {
 export const NewsCenter = () => {
     const context = useContext(UseNewsReducerContext);
 
-    useEffect(() => { scheduleRegularNewsUpdate(context); }, []);
+    useEffect(() => {
+        const interval = setInterval(() => {
+
+            updateNews(context);
+
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <>

@@ -22,7 +22,7 @@ function getStatusApiUrl(): string {
     return statusApiUrl;
 }
 
-function updateTickers(context) {
+export function updateTickers(context) {
     fetch(getPriceUrl())
         .then(response => {
             if (!response.ok) {
@@ -46,7 +46,7 @@ function updateTickers(context) {
         });
 }
 
-function updateNews(context) {
+export function updateNews(context) {
     context.dispatch({type: "news_load_start"} as NewsLoadStartAction);
 
     console.log("News: " + JSON.stringify(context.state));
@@ -69,7 +69,7 @@ function updateNews(context) {
         });
 }
 
-function updateStatus(context) {
+export function updateStatus(context) {
     context.dispatch({type: "status_load_start"} as StatusLoadStartAction);
 
     fetch(getStatusApiUrl())
@@ -96,8 +96,7 @@ export function scheduleRegularTickersUpdate(context) {
     setInterval(callback, TICKERS_UPDATE_INTERVAL_MS);
 }
 
-export function scheduleRegularNewsUpdate(context) {
-    const callback = () => updateNews(context);
+export function scheduleRegularNewsUpdate(callback) {
     callback();
     setInterval(callback, NEWS_UPDATE_INTERVAL_MS);
 }
