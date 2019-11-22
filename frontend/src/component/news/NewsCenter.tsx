@@ -1,5 +1,6 @@
+import {NEWS_UPDATE_INTERVAL_MS} from "@xrpfi/common/build/constants";
 import {News} from "@xrpfi/common/build/model";
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useRef} from "react";
 import {updateNews} from "../../service/api";
 import {UseNewsReducerContext} from "../../service/NewsReducer";
 import "./NewsCenter.scss";
@@ -20,13 +21,16 @@ function findNews(param: News[], selected?: string): News | undefined {
 
 export const NewsCenter = () => {
     const context = useContext(UseNewsReducerContext);
+    const stateRef = useRef(context.state);
+    stateRef.current = context.state;
 
     useEffect(() => {
-        const interval = setInterval(() => {
-
-            updateNews(context);
-
-        }, 1000);
+        const interval = setInterval(
+            () => {
+                updateNews(context.dispatch, stateRef.current);
+            },
+            NEWS_UPDATE_INTERVAL_MS
+        );
         return () => clearInterval(interval);
     }, []);
 

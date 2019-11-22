@@ -1,4 +1,4 @@
-import {NEWS_UPDATE_INTERVAL_MS, STATUS_UPDATE_INTERVAL_MS, TICKERS_UPDATE_INTERVAL_MS} from "@xrpfi/common/build/constants";
+import {STATUS_UPDATE_INTERVAL_MS, TICKERS_UPDATE_INTERVAL_MS} from "@xrpfi/common/build/constants";
 import {TagId} from "@xrpfi/common/build/model";
 import {NewsLoadErrorAction, NewsLoadStartAction, NewsLoadSuccessAction} from "./NewsReducer";
 import {StatusLoadErrorAction, StatusLoadStartAction, StatusLoadSuccessAction} from "./StatusReducer";
@@ -46,12 +46,12 @@ export function updateTickers(context) {
         });
 }
 
-export function updateNews(context) {
-    context.dispatch({type: "news_load_start"} as NewsLoadStartAction);
+export function updateNews(dispatch, state) {
+    dispatch({type: "news_load_start"} as NewsLoadStartAction);
 
-    console.log("News: " + JSON.stringify(context.state));
+    console.log("Loading news: " + JSON.stringify(state.selectedTagIds));
 
-    fetch(getNewsApiUrl(context.state.selectedTagIds))
+    fetch(getNewsApiUrl(state.selectedTagIds))
         .then(response => {
             if (!response.ok) {
                 throw new Error("Invalid response: " + response.status);
@@ -62,10 +62,10 @@ export function updateNews(context) {
             if (!newState || !newState.root) {
                 throw new Error("Invalid new state: " + newState);
             }
-            context.dispatch({type: "news_load_success", news: newState.root} as NewsLoadSuccessAction);
+            dispatch({type: "news_load_success", news: newState.root} as NewsLoadSuccessAction);
         })
         .catch(error => {
-            context.dispatch({type: "news_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
+            dispatch({type: "news_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
         });
 }
 
@@ -94,11 +94,6 @@ export function scheduleRegularTickersUpdate(context) {
     const callback = () => updateTickers(context);
     callback();
     setInterval(callback, TICKERS_UPDATE_INTERVAL_MS);
-}
-
-export function scheduleRegularNewsUpdate(callback) {
-    callback();
-    setInterval(callback, NEWS_UPDATE_INTERVAL_MS);
 }
 
 export function scheduleRegularStatusUpdate(context) {

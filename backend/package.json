@@ -1,6 +1,7 @@
 {
   "name": "@xrpfi/backend",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "server-dev": "nodemon",
     "server-build": "tsc",
@@ -28,6 +29,6 @@
       "../frontend/src"
     ],
     "ext": "ts,tsx",
-    "exec": "npm run build --prefix ../common && npm run client-build --prefix ../frontend && node -r ts-node/register src/server.ts"
+    "exec": "npm run build --prefix ../common && npm run client-build --prefix ../frontend && npm run server-build && node -r ts-node/register src/server.ts"
   }
 }
