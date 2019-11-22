@@ -31,7 +31,7 @@ const Change: React.FC<{ value: number }> = (props) => {
 export const PriceIndicator: React.FC<PriceIndicatorProps> = (props) => {
     const context = useContext(UseTickersReducerContext);
 
-    useEffect(() => scheduleRegularTickersUpdate(context.dispatch), []);
+    useEffect(() => scheduleRegularTickersUpdate(context), []);
 
     return (
         <div className={"price-indicator"}>

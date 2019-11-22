@@ -35,6 +35,8 @@ function toggleTagVisible(selectedTags: TagId[], toggledTag: TagId): TagId[] {
 }
 
 export const newsReducer = (state: NewsState, action: Action): NewsState => {
+    console.log("State: " + JSON.stringify(state.selectedTagIds) + " and received: " + JSON.stringify(action));
+
     switch (action.type) {
         case "toggle_tag_visible":
             return {...state, selectedTagIds: toggleTagVisible(state.selectedTagIds, (action as ToggleTagEnabledAction).tag)};
