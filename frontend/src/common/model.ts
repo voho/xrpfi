@@ -76,22 +76,23 @@ export interface Meta {
 
 export interface TagMeta {
     id: TagId,
-    title: string
+    title: string,
+    customer: boolean
 }
 
 export type TagId = "twitter" | "social" | "news" | "good" | "official" | "community" | "bot" | "reddit" | "filter" | "youtube";
 
 export const KNOWN_TAGS: TagMeta[] = [
-    {id: "twitter", title: "Twitter"},
-    {id: "social", title: "social"},
-    {id: "news", title: "news"},
-    {id: "good", title: "good"},
-    {id: "official", title: "official"},
-    {id: "community", title: "community"},
-    {id: "bot", title: "bot"},
-    {id: "reddit", title: "reddit"},
-    {id: "filter", title: "filter"},
-    {id: "youtube", title: "youtube"}
+    {id: "twitter", title: "Twitter", customer: true},
+    {id: "social", title: "Social", customer: true},
+    {id: "news", title: "News", customer: true},
+    {id: "good", title: "Good", customer: false},
+    {id: "official", title: "Official", customer: true},
+    {id: "community", title: "Community", customer: true},
+    {id: "bot", title: "Bot", customer: true},
+    {id: "reddit", title: "Reddit", customer: true},
+    {id: "filter", title: "Filtered", customer: false},
+    {id: "youtube", title: "YouTube", customer: true}
 ];
 
 export interface NewsQueryByTags {

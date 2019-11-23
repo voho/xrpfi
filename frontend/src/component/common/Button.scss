@@ -1,18 +1,20 @@
 @import "../../App";
 
-button {
-  border: 2px solid darken($link-fg, 30%);
-  border-radius: 5pt;
-  padding: 3pt 10pt;
-  color: white;
+.button {
+  background: darken($link-fg, 30%);
+  border: 2px solid darken($link-fg, 10%);
+  border-radius: 2pt;
+  padding: 2pt 5pt;
+  color: lighten($link-fg, 70%);
   cursor: pointer;
   font-size: 90%;
+  display: inline-block;
+  margin: 2pt;
   box-shadow: 1pt 1pt 5pt darken($link-fg, 80%);
-  background: $link-fg linear-gradient(0, darken($link-fg, 10%), darken($link-fg, 20%));
 }
 
-button:hover {
-  background: lighten($link-fg, 10%) none;
+.button:hover {
+  background: darken($link-fg, 80%);
   border: 2px solid darken($link-fg, 10%);
-  color: darken($link-fg, 80%);
+  color: white;
 }

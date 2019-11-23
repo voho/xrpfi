@@ -85,7 +85,7 @@ const SourceTable: React.FC<{ rows: Meta[] }> = (props) => {
 export const SourcesStatus = () => {
     const context = useContext(UseStatusReducerContext);
 
-    useEffect(() => scheduleRegularStatusUpdate(context), []);
+    useEffect(() => scheduleRegularStatusUpdate(context.state, context.dispatch), []);
 
     return (
         <>

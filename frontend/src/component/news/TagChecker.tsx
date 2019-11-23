@@ -25,7 +25,7 @@ const SingleTagChecker: React.FC<{ tag: TagMeta }> = (props) => {
 export const TagChecker: React.FC = () => {
     return (
         <div className={"tag-checker"}>
-            {KNOWN_TAGS.map((tag: TagMeta) => {
+            {KNOWN_TAGS.filter(tag => tag.customer).map((tag: TagMeta) => {
                 return <SingleTagChecker tag={tag}/>;
             })}
         </div>

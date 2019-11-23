@@ -10,7 +10,7 @@ import {newsReducer, UseNewsReducerContext} from "./service/NewsReducer";
 import {statusReducer, UseStatusReducerContext} from "./service/StatusReducer";
 import {tickersReducer, UseTickersReducerContext} from "./service/TickersReducer";
 
-const initialNewsState: NewsState = {loading: false, news: [], selectedTagIds: ["news"]};
+const initialNewsState: NewsState = {loading: false, news: [], selectedTagIds: ["good", "news"]};
 const initialStatusState: StatusState = {loading: false, status: []};
 const initialTickerState: TickersState = {loading: false};
 

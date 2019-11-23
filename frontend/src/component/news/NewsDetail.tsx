@@ -56,6 +56,7 @@ const TagLine: React.FC<NewsDetailProps> = (props) => {
             <NewsSource news={props.selectedNews!}/>
             <NewsDate news={props.selectedNews!}/>
             <NewsRating news={props.selectedNews!}/>
+            <NewsTags news={props.selectedNews!}/>
         </p>
     );
 };
@@ -70,6 +71,15 @@ const NewsRating: React.FC<{ news: News }> = (props) => {
             max={props.news.rating!.max}
             avg={props.news.rating!.avg}
             count={props.news.rating!.count}/>
+    );
+};
+
+const NewsTags: React.FC<{ news: News }> = (props) => {
+    if (!props.news.tags) {
+        return null;
+    }
+    return (
+        <p>Tags: {props.news.tags.join(", ")}</p>
     );
 };
 

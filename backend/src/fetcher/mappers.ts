@@ -107,8 +107,8 @@ export function genericRssMapper(fetcher: Fetcher, response: string): Promise<Ne
         });
 }
 
-export function getTagBasedFilter(tags: Set<TagId>) {
-    if (tags.has("filter")) {
+export function getTagBasedFilter(tags: TagId[]) {
+    if (tags.includes("filter")) {
         return (news: News) => isRelevant(news);
     }
     return (() => true);

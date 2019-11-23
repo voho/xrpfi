@@ -1,5 +1,6 @@
+import * as React from "react";
 import {STATUS_UPDATE_INTERVAL_MS, TICKERS_UPDATE_INTERVAL_MS} from "../common/constants";
-import {TagId} from "../common/model";
+import {Action, NewsState, StatusState, TagId} from "../common/model";
 import {NewsLoadErrorAction, NewsLoadStartAction, NewsLoadSuccessAction} from "./NewsReducer";
 import {StatusLoadErrorAction, StatusLoadStartAction, StatusLoadSuccessAction} from "./StatusReducer";
 import {TickersLoadSuccessAction} from "./TickersReducer";
@@ -14,7 +15,7 @@ function getPriceUrl(): string {
 
 function getNewsApiUrl(selectedTagIds: TagId[]): string {
     const params = new URLSearchParams();
-    params.append("whitelist", selectedTagIds.join(","));
+    params.append("whitelist", selectedTagIds.join("-"));
     return newsApiUrl + "?" + params.toString();
 }
 
@@ -22,7 +23,7 @@ function getStatusApiUrl(): string {
     return statusApiUrl;
 }
 
-export function updateTickers(context) {
+export function updateTickers(dispatch: React.Dispatch<Action>) {
     fetch(getPriceUrl())
         .then(response => {
             if (!response.ok) {
@@ -31,7 +32,7 @@ export function updateTickers(context) {
             return response.json();
         })
         .then(responseJson => {
-            context.dispatch({
+            dispatch({
                 type: "tickers_load_success",
                 tickers: {
                     xrp_btc_price: responseJson.RAW.XRP.BTC.PRICE * 100000000,
@@ -42,11 +43,11 @@ export function updateTickers(context) {
             } as TickersLoadSuccessAction);
         })
         .catch(error => {
-            context.dispatch({type: "tickers_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
+            dispatch({type: "tickers_load_error", errorMessage: error.toString()} as NewsLoadErrorAction);
         });
 }
 
-export function updateNews(dispatch, state) {
+export function updateNews(state: NewsState, dispatch: React.Dispatch<Action>) {
     dispatch({type: "news_load_start"} as NewsLoadStartAction);
 
     console.log("Loading news: " + JSON.stringify(state.selectedTagIds));
@@ -69,8 +70,8 @@ export function updateNews(dispatch, state) {
         });
 }
 
-export function updateStatus(context) {
-    context.dispatch({type: "status_load_start"} as StatusLoadStartAction);
+export function updateStatus(state: StatusState, dispatch: React.Dispatch<Action>) {
+    dispatch({type: "status_load_start"} as StatusLoadStartAction);
 
     fetch(getStatusApiUrl())
         .then(response => {
@@ -83,21 +84,21 @@ export function updateStatus(context) {
             if (!newState || !newState.root) {
                 throw new Error("Invalid new state: " + newState);
             }
-            context.dispatch({type: "status_load_success", status: newState.root} as StatusLoadSuccessAction);
+            dispatch({type: "status_load_success", status: newState.root} as StatusLoadSuccessAction);
         })
         .catch(error => {
-            context.dispatch({type: "status_load_error", errorMessage: error.toString()} as StatusLoadErrorAction);
+            dispatch({type: "status_load_error", errorMessage: error.toString()} as StatusLoadErrorAction);
         });
 }
 
-export function scheduleRegularTickersUpdate(context) {
-    const callback = () => updateTickers(context);
+export function scheduleRegularTickersUpdate(dispatch: React.Dispatch<Action>) {
+    const callback = () => updateTickers(dispatch);
     callback();
     setInterval(callback, TICKERS_UPDATE_INTERVAL_MS);
 }
 
-export function scheduleRegularStatusUpdate(context) {
-    const callback = () => updateStatus(context);
+export function scheduleRegularStatusUpdate(state: StatusState, dispatch: React.Dispatch<Action>) {
+    const callback = () => updateStatus(state, dispatch);
     callback();
     setInterval(callback, STATUS_UPDATE_INTERVAL_MS);
 }

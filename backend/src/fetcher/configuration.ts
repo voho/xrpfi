@@ -191,53 +191,53 @@ export const ALL_FETCHERS: Fetcher[] = [
 
 
 function getStakeholderTwitterFetcher(alias: string, quality = 1) {
-    return getTwitterFetcher(alias, new Set(["official", "social", "twitter"]), quality);
+    return getTwitterFetcher(alias, ["official", "social", "twitter"], quality);
 }
 
 function getInstitutionTwitterFetcher(alias: string, quality = 1) {
-    return getTwitterFetcher(alias, new Set(["good", "official", "social", "twitter", "filter"]), quality);
+    return getTwitterFetcher(alias, ["good", "official", "social", "twitter", "filter"], quality);
 }
 
 function getCommunityTwitterFetcher(alias: string, quality = 1) {
-    return getTwitterFetcher(alias, new Set(["community", "social", "twitter", "filter"]), quality);
+    return getTwitterFetcher(alias, ["community", "social", "twitter", "filter"], quality);
 }
 
 function getCommunityTwitterBotFetcher(alias: string, quality = 2) {
-    return getTwitterFetcher(alias, new Set(["community", "social", "twitter", "filter", "bot"]), quality);
+    return getTwitterFetcher(alias, ["community", "social", "twitter", "filter", "bot"], quality);
 }
 
 function getExchangeTwitterFetcher(alias: string, quality = 10) {
-    return getTwitterFetcher(alias, new Set(["official", "social", "twitter", "filter"]), quality);
+    return getTwitterFetcher(alias, ["official", "social", "twitter", "filter"], quality);
 }
 
 function getXrpCommunityRedditFetcher(alias: string, quality = 2) {
-    return getTwitterFetcher(alias, new Set(["community", "social", "reddit"]), quality);
+    return getTwitterFetcher(alias, ["community", "social", "reddit"], quality);
 }
 
 function getGeneralCommunityRedditFetcher(sub: string, quality = 1) {
-    return getRedditFetcher(sub, new Set(["community", "social", "reddit", "filter"]), quality);
+    return getRedditFetcher(sub, ["community", "social", "reddit", "filter"], quality);
 }
 
 function getRippleNewsFetcher(feedUrl: string, quality = 100) {
-    return getNewsFetcher(feedUrl, new Set(["good", "news"]), quality);
+    return getNewsFetcher(feedUrl, ["good", "news"], quality);
 }
 
 function getGeneralNewsFetcher(feedUrl: string, quality = 5) {
-    return getNewsFetcher(feedUrl, new Set(["news", "filter"]), quality);
+    return getNewsFetcher(feedUrl, ["news", "filter"], quality);
 }
 
 function getOfficialYouTubeFetcher(channelId: string, quality = 100) {
-    return getYouTubeFetcher(channelId, new Set(["official", "social", "youtube", "good"]), quality);
+    return getYouTubeFetcher(channelId, ["official", "social", "youtube", "good"], quality);
 }
 
 function getUnofficialYouTubeFetcher(channelId: string, quality = 5) {
-    return getYouTubeFetcher(channelId, new Set(["community", "social", "youtube"]), quality);
+    return getYouTubeFetcher(channelId, ["community", "social", "youtube"], quality);
 }
 
 
-export function getTwitterFetcher(alias: string, tags: Set<TagId>, quality = 1): Fetcher {
+export function getTwitterFetcher(alias: string, tags: TagId[], quality = 1): Fetcher {
     return {
-        tags: tags,
+        tags: new Set<TagId>(tags),
         customFields: [],
         title: `@${alias} at twitter`,
         homeUrl: `https://twitter.com/${alias}`,
@@ -251,9 +251,9 @@ export function getTwitterFetcher(alias: string, tags: Set<TagId>, quality = 1):
     };
 }
 
-export function getRedditFetcher(sub: string, tags: Set<TagId>, quality = 2): Fetcher {
+export function getRedditFetcher(sub: string, tags: TagId[], quality = 2): Fetcher {
     return {
-        tags: tags,
+        tags: new Set<TagId>(tags),
         customFields: [],
         title: `/r/${sub}`,
         homeUrl: `https://www.reddit.com/r/${sub}/`,
@@ -267,9 +267,9 @@ export function getRedditFetcher(sub: string, tags: Set<TagId>, quality = 2): Fe
     };
 }
 
-export function getNewsFetcher(feedUrl: string, tags: Set<TagId>, quality = 2): Fetcher {
+export function getNewsFetcher(feedUrl: string, tags: TagId[], quality = 2): Fetcher {
     return {
-        tags: tags,
+        tags: new Set<TagId>(tags),
         customFields: [],
         title: `news://${feedUrl}`,
         homeUrl: feedUrl,
@@ -283,9 +283,9 @@ export function getNewsFetcher(feedUrl: string, tags: Set<TagId>, quality = 2): 
     };
 }
 
-export function getYouTubeFetcher(channelId: string, tags: Set<TagId>, quality = 2): Fetcher {
+export function getYouTubeFetcher(channelId: string, tags: TagId[], quality = 2): Fetcher {
     return {
-        tags: tags,
+        tags: new Set<TagId>(tags),
         customFields: ["yt:videoId", "media:group"],
         title: `youtube://${channelId}`,
         homeUrl: `http://www.youtube.com/channel/${channelId}`,

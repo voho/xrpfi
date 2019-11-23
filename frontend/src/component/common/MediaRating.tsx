@@ -20,7 +20,7 @@ function normalize(min: number, max: number, value: number) {
     return (value - min) / (max - min);
 }
 
-function starts(normalized: number) {
+function stars(normalized: number) {
     if (normalized < 0.1) {
         return <span>{NONE}{NONE}{NONE}{NONE}{NONE}</span>;
     } else if (normalized < 0.2) {
@@ -49,5 +49,5 @@ function starts(normalized: number) {
 export const MediaRating: React.FC<MediaRatingProps> = (props) => {
     const normalized = normalize(props.min, props.max, props.avg);
 
-    return <span className={"media-rating"}>{starts(normalized)} rated {props.count}x</span>;
+    return <span className={"media-rating"}>{stars(normalized)} rated {props.count}x</span>;
 };

@@ -18,7 +18,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "sourceMap": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "jsx": "react",
     "rootDir": "./src"
   },

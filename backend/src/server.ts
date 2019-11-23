@@ -14,15 +14,15 @@ scheduleFetcherRefresh();
 app.get("/api/news", (req: Request, res: Response) => {
     function splitOrNull(value: any): TagId[] | null {
         if (value) {
-            return value.toString().split(",");
+            return value.toString().split("-");
         }
         return null;
     }
 
     function getQuery(req: Request): NewsQueryByTags {
         return {
-            whitelist: splitOrNull(req.params["whitelist"]),
-            blacklist: splitOrNull(req.params["blacklist"])
+            whitelist: splitOrNull(req.query["whitelist"]),
+            blacklist: splitOrNull(req.query["blacklist"])
         };
     }
 
@@ -33,7 +33,14 @@ app.get("/api/status", (req: Request, res: Response) => {
     res.json({root: getStatus(), tags: getTags()});
 });
 
-const frontendBuildRoot = path.join(__dirname, "../../../../frontend/build");
+function getFrontendRootDir() {
+    if (__dirname.includes("build")) {
+        return path.join(__dirname, "../../../../frontend/build");
+    }
+    return path.join(__dirname, "../../frontend/build");
+}
+
+const frontendBuildRoot = getFrontendRootDir();
 logInfo("Backend build root: " + __dirname);
 logInfo("Frontend build root: " + frontendBuildRoot);
 app.use(express.static(frontendBuildRoot));

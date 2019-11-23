@@ -1,9 +1,32 @@
 import React, {useContext} from "react";
+import {News} from "../../common/model";
 import {UseNewsReducerContext} from "../../service/NewsReducer";
 import "./NewsCenter.scss";
 import {NewsControl} from "./NewsControl";
 import {NewsDetail} from "./NewsDetail";
 import {NewsList} from "./NewsList";
+
+const NewsListWrapper: React.FC<{ news?: News[] }> = (props) => {
+    if (!props.news) {
+        return null;
+    }
+    return (
+        <div className={"news-site-list"}>
+            <NewsList news={props.news!}/>
+        </div>
+    );
+};
+
+const NewsDetailWrapper: React.FC<{ news?: News }> = (props) => {
+    if (!props.news) {
+        return null;
+    }
+    return (
+        <div className={"news-site-detail"}>
+            <NewsDetail selectedNews={props.news!}/>
+        </div>
+    );
+};
 
 export const NewsCenter = () => {
     const context = useContext(UseNewsReducerContext);
@@ -13,12 +36,8 @@ export const NewsCenter = () => {
             <div className={"news-site-menu"}>
                 <NewsControl/>
             </div>
-            <div className={"news-site-list"}>
-                {context.state.news && <NewsList news={context.state.news}/>}
-            </div>
-            <div className={"news-site-detail"}>
-                {context.state.news && <NewsDetail selectedNews={context.state.selectedNews}/>}
-            </div>
+            <NewsListWrapper news={context.state.news}/>
+            <NewsDetailWrapper news={context.state.selectedNews}/>
         </>
     );
 };
