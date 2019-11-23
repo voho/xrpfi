@@ -25,12 +25,11 @@ export const NewsCenter = () => {
     stateRef.current = context.state;
 
     useEffect(() => {
-        const interval = setInterval(
-            () => {
-                updateNews(context.dispatch, stateRef.current);
-            },
-            NEWS_UPDATE_INTERVAL_MS
-        );
+        function updateNewsCallback() {
+            updateNews(context.dispatch, stateRef.current);
+        }
+
+        const interval = setInterval(updateNewsCallback, NEWS_UPDATE_INTERVAL_MS);
         return () => clearInterval(interval);
     }, []);
 

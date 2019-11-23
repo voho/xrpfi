@@ -33,7 +33,10 @@ app.get("/api/status", (req: Request, res: Response) => {
     res.json({root: getStatus(), tags: getTags()});
 });
 
-app.use(express.static(path.join(__dirname, "../../frontend/build")));
+const frontendBuildRoot = path.join(__dirname, "../../../../frontend/build");
+logInfo("Backend build root: " + __dirname);
+logInfo("Frontend build root: " + frontendBuildRoot);
+app.use(express.static(frontendBuildRoot));
 
 app.listen(PORT, () => {
     logInfo(`Server listening at port ${PORT}.`);
