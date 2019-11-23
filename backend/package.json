@@ -5,7 +5,7 @@
   "scripts": {
     "server-dev": "nodemon",
     "server-build": "tsc",
-    "server-start": "node build/server",
+    "server-start": "node ./build/backend/src/server.js",
     "build": "npm run client-build --prefix ../frontend && npm run server-build",
     "start": "npm run server-start",
     "dev": "npm run server-dev"
@@ -27,6 +27,6 @@
       "../frontend/src"
     ],
     "ext": "ts,tsx",
-    "exec": "npm run client-build --prefix ../frontend && npm run server-build && node -r ts-node/register src/server.ts"
+    "exec": "npm run client-build --prefix ../frontend && npm run server-build && node -r ts-node/register ./src/server.ts"
   }
 }
