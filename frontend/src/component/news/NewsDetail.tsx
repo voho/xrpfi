@@ -38,6 +38,10 @@ const OEmbed: React.FC<{ oembedUrl: string }> = (props) => {
                     setHtml(json.html);
                 }
             })
+            .then(() => {
+                // @ts-ignore
+                twttr.widgets.load();
+            })
             .catch(error => {
                 setHtml("Error: " + error.message);
             });
@@ -50,14 +54,18 @@ const OEmbed: React.FC<{ oembedUrl: string }> = (props) => {
 
 const TagLine: React.FC<NewsDetailProps> = (props) => {
     return (
-        <p className={"flags"}>
-            <NewsOpen news={props.selectedNews!}/>
-            <NewsFlags news={props.selectedNews!}/>
-            <NewsSource news={props.selectedNews!}/>
-            <NewsDate news={props.selectedNews!}/>
-            <NewsRating news={props.selectedNews!}/>
-            <NewsTags news={props.selectedNews!}/>
-        </p>
+        <>
+            <p className={"flags"}>
+                <NewsOpen news={props.selectedNews!}/>
+                <NewsFlags news={props.selectedNews!}/>
+                <NewsSource news={props.selectedNews!}/>
+                <NewsDate news={props.selectedNews!}/>
+            </p>
+            <p className={"flags"}>
+                <NewsRating news={props.selectedNews!}/>
+                <NewsTags news={props.selectedNews!}/>
+            </p>
+        </>
     );
 };
 

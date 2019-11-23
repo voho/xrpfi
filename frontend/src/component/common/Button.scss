@@ -4,13 +4,14 @@
   background: darken($link-fg, 30%);
   border: 2px solid darken($link-fg, 10%);
   border-radius: 2pt;
-  padding: 2pt 5pt;
+  padding: 1pt 5pt;
   color: lighten($link-fg, 70%);
   cursor: pointer;
-  font-size: 90%;
+  font-size: 80%;
   display: inline-block;
-  margin: 2pt;
+  margin: 0 5pt;
   box-shadow: 1pt 1pt 5pt darken($link-fg, 80%);
+  text-transform: uppercase;
 }
 
 .button:hover {
