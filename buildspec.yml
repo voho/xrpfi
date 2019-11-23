@@ -17,3 +17,4 @@ artifacts:
   files:
     - 'backend/**/*'
     - 'frontend/build/**/*'
+    - 'common/build/**/*'
