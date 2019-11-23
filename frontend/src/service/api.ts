@@ -1,5 +1,5 @@
-import {STATUS_UPDATE_INTERVAL_MS, TICKERS_UPDATE_INTERVAL_MS} from "@xrpfi/common/build/constants";
-import {TagId} from "@xrpfi/common/build/model";
+import {STATUS_UPDATE_INTERVAL_MS, TICKERS_UPDATE_INTERVAL_MS} from "../../../common/src/constants";
+import {TagId} from "../../../common/src/model";
 import {NewsLoadErrorAction, NewsLoadStartAction, NewsLoadSuccessAction} from "./NewsReducer";
 import {StatusLoadErrorAction, StatusLoadStartAction, StatusLoadSuccessAction} from "./StatusReducer";
 import {TickersLoadSuccessAction} from "./TickersReducer";

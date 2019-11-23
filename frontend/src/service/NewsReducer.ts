@@ -1,5 +1,5 @@
-import {Action, News, NewsState, TagId} from "@xrpfi/common/build/model";
 import React from "react";
+import {Action, News, NewsState, TagId} from "../../../common/src/model";
 
 export interface NewsSelectAction extends Action {
     selected: string;

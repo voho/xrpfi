@@ -6,12 +6,11 @@
     "server-dev": "nodemon",
     "server-build": "tsc",
     "server-start": "node build/server",
-    "build": "npm run build --prefix ../common && npm run client-build --prefix ../frontend && npm run server-build",
+    "build": "npm run client-build --prefix ../frontend && npm run server-build",
     "start": "npm run server-start",
     "dev": "npm run server-dev"
   },
   "dependencies": {
-    "@xrpfi/common": "file:../common",
     "@types/express": "^4.17.2",
     "@types/node": "^12.12.7",
     "@types/superagent": "^4.1.4",
@@ -29,6 +28,6 @@
       "../frontend/src"
     ],
     "ext": "ts,tsx",
-    "exec": "npm run build --prefix ../common && npm run client-build --prefix ../frontend && npm run server-build && node -r ts-node/register src/server.ts"
+    "exec": "npm run client-build --prefix ../frontend && npm run server-build && node -r ts-node/register src/server.ts"
   }
 }

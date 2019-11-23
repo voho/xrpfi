@@ -1,6 +1,6 @@
-import {NEWS_UPDATE_INTERVAL_MS} from "@xrpfi/common/build/constants";
-import {News} from "@xrpfi/common/build/model";
 import React, {useContext, useEffect, useRef} from "react";
+import {NEWS_UPDATE_INTERVAL_MS} from "../../../../common/src/constants";
+import {News} from "../../../../common/src/model";
 import {updateNews} from "../../service/api";
 import {UseNewsReducerContext} from "../../service/NewsReducer";
 import "./NewsCenter.scss";

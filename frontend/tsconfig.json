@@ -19,7 +19,11 @@
     "noEmit": true,
     "sourceMap": false,
     "noImplicitAny": false,
-    "jsx": "react"
+    "jsx": "react",
+    "rootDirs": [
+      "./src",
+      "../../common/src"
+    ]
   },
   "include": [
     "src",

@@ -1,4 +1,4 @@
-import {News, TagId} from "@xrpfi/common/build/model";
+import {News, TagId} from "../../../common/src/model";
 
 type Status = "INITIALIZED" | "OK" | "WORKING" | "ERROR";
 

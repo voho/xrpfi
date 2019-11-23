@@ -1,4 +1,4 @@
-import {MAX_QUARTZ, QUARTZ_INTERVAL_MS} from "@xrpfi/common/build/constants";
+import {MAX_QUARTZ, QUARTZ_INTERVAL_MS} from "../../../common/src/constants";
 import {Fetcher} from "../model/fetcher";
 import {ALL_FETCHERS} from "./configuration";
 import {refreshFetcher} from "./loader";

@@ -1,5 +1,5 @@
-import {News} from "@xrpfi/common/build/model";
 import React, {useContext} from "react";
+import {News} from "../../../../common/src/model";
 import {NewsSelectAction, UseNewsReducerContext} from "../../service/NewsReducer";
 import "./NewsDetail.scss";
 import {NewsItem} from "./NewsItem";

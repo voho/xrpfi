@@ -1,5 +1,5 @@
-import {Action, Tickers, TickersState} from "@xrpfi/common/build/model";
 import React from "react";
+import {Action, Tickers, TickersState} from "../../../common/src/model";
 
 export interface TickersLoadSuccessAction extends Action {
     tickers: Tickers

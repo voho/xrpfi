@@ -1,5 +1,5 @@
-import {News} from "@xrpfi/common/build/model";
 import React, {useEffect, useState} from "react";
+import {News} from "../../../../common/src/model";
 import {Button} from "../common/Button";
 import {MediaRating} from "../common/MediaRating";
 import {SourcesStatus} from "../meta/SourcesStatus";

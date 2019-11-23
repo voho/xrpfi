@@ -1,5 +1,5 @@
-import {DIVIDER_SLOWEST} from "@xrpfi/common/build/constants";
-import {TagId} from "@xrpfi/common/build/model";
+import {DIVIDER_SLOWEST} from "../../../common/src/constants";
+import {TagId} from "../../../common/src/model";
 import {Fetcher, FetcherStatus} from "../model/fetcher";
 import {genericRssMapper, getTagBasedFilter, redditRssMapper, twitterRssMapper, youtubeRssMapper} from "./mappers";
 

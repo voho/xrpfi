@@ -5,11 +5,15 @@
     "moduleResolution": "node",
     "allowJs": false,
     "outDir": "./build",
-    "rootDir": "./src",
+    "rootDirs": [
+      "./src",
+      "../../common/src"
+    ],
     "esModuleInterop": true,
     "sourceMap": false
   },
   "include": [
-    "src"
+    "src",
+    "../common/src"
   ]
 }

@@ -1,4 +1,4 @@
-import {News} from "@xrpfi/common/build/model";
+import {News} from "../../../common/src/model";
 import {httpGet} from "../http/httpClient";
 import {Fetcher} from "../model/fetcher";
 import {addNews} from "../store/newsStorage";

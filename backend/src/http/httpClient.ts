@@ -1,5 +1,5 @@
-import {HTTP_REQUEST_RETRY_COUNT, HTTP_REQUEST_TIMEOUT_MS} from "@xrpfi/common/build/constants";
 import request from "superagent";
+import {HTTP_REQUEST_RETRY_COUNT, HTTP_REQUEST_TIMEOUT_MS} from "../../../common/src/constants";
 
 export function httpGet(url: string) {
     return request

@@ -4,9 +4,9 @@ import {faRedditAlien} from "@fortawesome/free-brands-svg-icons/faRedditAlien";
 import {faTwitter} from "@fortawesome/free-brands-svg-icons/faTwitter";
 import {faVideo} from "@fortawesome/free-solid-svg-icons/faVideo";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {News} from "@xrpfi/common/build/model";
 import moment from "moment";
 import React, {useContext} from "react";
+import {News} from "../../../../common/src/model";
 import {NewsSelectAction, UseNewsReducerContext} from "../../service/NewsReducer";
 import "./NewsItem.scss";
 
