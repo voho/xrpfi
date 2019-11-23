@@ -4,5 +4,8 @@
   "private": true,
   "scripts": {
     "build": "tsc"
+  },
+  "dependencies": {
+    "typescript": "^3.7.2"
   }
 }
