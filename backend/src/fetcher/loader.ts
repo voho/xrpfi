@@ -1,4 +1,4 @@
-import {News} from "../../../common/src/model";
+import {News} from "../../../frontend/src/common/model";
 import {httpGet} from "../http/httpClient";
 import {Fetcher} from "../model/fetcher";
 import {addNews} from "../store/newsStorage";

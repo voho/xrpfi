@@ -1,5 +1,5 @@
 import React from "react";
-import {Action, Meta, StatusState} from "../../../common/src/model";
+import {Action, Meta, StatusState} from "../common/model";
 
 export interface StatusLoadStartAction extends Action {
 }

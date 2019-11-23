@@ -1,7 +1,7 @@
 import express, {Request, Response} from "express";
 import * as path from "path";
-import {PORT} from "../../common/src/constants";
-import {NewsQueryByTags, TagId} from "../../common/src/model";
+import {PORT} from "../../frontend/src/common/constants";
+import {NewsQueryByTags, TagId} from "../../frontend/src/common/model";
 import {scheduleFetcherRefresh} from "./fetcher/scheduler";
 import {getStatus, getTags} from "./fetcher/status";
 import {getNews} from "./store/newsStorage";

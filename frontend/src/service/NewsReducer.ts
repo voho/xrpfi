@@ -1,5 +1,5 @@
 import React from "react";
-import {Action, News, NewsState, TagId} from "../../../common/src/model";
+import {Action, News, NewsState, TagId} from "../common/model";
 
 export interface NewsSelectAction extends Action {
     selected: string;

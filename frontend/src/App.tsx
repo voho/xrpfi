@@ -1,8 +1,8 @@
 import "normalize.css";
 import React, {useReducer} from "react";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
-import {NewsState, StatusState, TickersState} from "../../common/src/model";
 import "./App.scss";
+import {NewsState, StatusState, TickersState} from "./common/model";
 import {NewsCenter} from "./component/news/NewsCenter";
 import {newsReducer, UseNewsReducerContext} from "./service/NewsReducer";
 import {statusReducer, UseStatusReducerContext} from "./service/StatusReducer";

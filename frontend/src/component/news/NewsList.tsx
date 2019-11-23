@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {News} from "../../../../common/src/model";
+import {News} from "../../common/model";
 import {NewsSelectAction, UseNewsReducerContext} from "../../service/NewsReducer";
 import "./NewsDetail.scss";
 import {NewsItem} from "./NewsItem";

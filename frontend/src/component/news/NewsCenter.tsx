@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef} from "react";
-import {NEWS_UPDATE_INTERVAL_MS} from "../../../../common/src/constants";
-import {News} from "../../../../common/src/model";
+import {NEWS_UPDATE_INTERVAL_MS} from "../../common/constants";
+import {News} from "../../common/model";
 import {updateNews} from "../../service/api";
 import {UseNewsReducerContext} from "../../service/NewsReducer";
 import "./NewsCenter.scss";

@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, {useContext, useEffect} from "react";
-import {Meta} from "../../../../common/src/model";
+import {Meta} from "../../common/model";
 import {scheduleRegularStatusUpdate} from "../../service/api";
 import {UseStatusReducerContext} from "../../service/StatusReducer";
 import "./SourcesStatus.scss";

@@ -24,7 +24,6 @@
   "nodemonConfig": {
     "watch": [
       "src",
-      "../common/src",
       "../frontend/src"
     ],
     "ext": "ts,tsx",

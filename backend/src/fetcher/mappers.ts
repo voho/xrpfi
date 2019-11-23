@@ -1,6 +1,6 @@
 import Parser from "rss-parser";
-import {RELEVANT_KEYWORDS} from "../../../common/src/constants";
-import {News, TagId} from "../../../common/src/model";
+import {RELEVANT_KEYWORDS} from "../../../frontend/src/common/constants";
+import {News, TagId} from "../../../frontend/src/common/model";
 import {Fetcher} from "../model/fetcher";
 
 export function twitterRssMapper(fetcher: Fetcher, response: string): Promise<News[]> {

@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {KNOWN_TAGS, TagMeta} from "../../../../common/src/model";
+import {KNOWN_TAGS, TagMeta} from "../../common/model";
 import {ToggleTagEnabledAction, UseNewsReducerContext} from "../../service/NewsReducer";
 
 const SingleTagChecker: React.FC<{ tag: TagMeta }> = (props) => {

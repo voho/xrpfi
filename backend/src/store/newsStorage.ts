@@ -1,5 +1,5 @@
-import {MAX_RETURNED_NEWS, OLD_NEWS_CUTOFF_TIME_MS} from "../../../common/src/constants";
-import {News, NewsQueryByTags} from "../../../common/src/model";
+import {MAX_RETURNED_NEWS, OLD_NEWS_CUTOFF_TIME_MS} from "../../../frontend/src/common/constants";
+import {News, NewsQueryByTags} from "../../../frontend/src/common/model";
 import {logInfo} from "../utils/logger";
 
 const globalNews = new Map<string, News>();

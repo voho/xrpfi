@@ -20,13 +20,9 @@
     "sourceMap": false,
     "noImplicitAny": false,
     "jsx": "react",
-    "rootDirs": [
-      "./src",
-      "../../common/src"
-    ]
+    "rootDir": "./src"
   },
   "include": [
-    "src",
-    "../common/src"
+    "src"
   ]
 }

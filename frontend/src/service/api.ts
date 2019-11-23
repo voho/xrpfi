@@ -1,5 +1,5 @@
-import {STATUS_UPDATE_INTERVAL_MS, TICKERS_UPDATE_INTERVAL_MS} from "../../../common/src/constants";
-import {TagId} from "../../../common/src/model";
+import {STATUS_UPDATE_INTERVAL_MS, TICKERS_UPDATE_INTERVAL_MS} from "../common/constants";
+import {TagId} from "../common/model";
 import {NewsLoadErrorAction, NewsLoadStartAction, NewsLoadSuccessAction} from "./NewsReducer";
 import {StatusLoadErrorAction, StatusLoadStartAction, StatusLoadSuccessAction} from "./StatusReducer";
 import {TickersLoadSuccessAction} from "./TickersReducer";

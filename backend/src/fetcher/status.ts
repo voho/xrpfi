@@ -1,4 +1,4 @@
-import {KNOWN_TAGS, Meta, TagMeta} from "../../../common/src/model";
+import {KNOWN_TAGS, Meta, TagMeta} from "../../../frontend/src/common/model";
 import {Fetcher} from "../model/fetcher";
 import {ALL_FETCHERS} from "./configuration";
 

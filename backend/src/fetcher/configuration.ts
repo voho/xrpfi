@@ -1,5 +1,5 @@
-import {DIVIDER_SLOWEST} from "../../../common/src/constants";
-import {TagId} from "../../../common/src/model";
+import {DIVIDER_SLOWEST} from "../../../frontend/src/common/constants";
+import {TagId} from "../../../frontend/src/common/model";
 import {Fetcher, FetcherStatus} from "../model/fetcher";
 import {genericRssMapper, getTagBasedFilter, redditRssMapper, twitterRssMapper, youtubeRssMapper} from "./mappers";
 

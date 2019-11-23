@@ -1,4 +1,4 @@
-import {News, TagId} from "../../../common/src/model";
+import {News, TagId} from "../../../frontend/src/common/model";
 
 type Status = "INITIALIZED" | "OK" | "WORKING" | "ERROR";
 
