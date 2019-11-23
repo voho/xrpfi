@@ -3,7 +3,9 @@ import React, {useReducer} from "react";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import "./App.scss";
 import {NewsState, StatusState, TickersState} from "./common/model";
+import {SourcesStatus} from "./component/meta/SourcesStatus";
 import {NewsCenter} from "./component/news/NewsCenter";
+import {NewsUpdateScheduler} from "./component/news/NewsUpdateScheduler";
 import {newsReducer, UseNewsReducerContext} from "./service/NewsReducer";
 import {statusReducer, UseStatusReducerContext} from "./service/StatusReducer";
 import {tickersReducer, UseTickersReducerContext} from "./service/TickersReducer";
@@ -21,9 +23,11 @@ export const App: React.FC = () => {
         <UseNewsReducerContext.Provider value={{state: newsState, dispatch: newsDispatch}}>
             <UseTickersReducerContext.Provider value={{state: tickersState, dispatch: tickersDispatch}}>
                 <UseStatusReducerContext.Provider value={{state: statusState, dispatch: statusDispatch}}>
+                    <NewsUpdateScheduler newsState={newsState} newsDispatch={newsDispatch}/>
                     <BrowserRouter>
                         <Switch>
                             <Route path={"/"} component={NewsCenter}/>
+                            <Route path={"/status"} component={SourcesStatus}/>
                             <Redirect to={"/"}/>
                         </Switch>
                     </BrowserRouter>

@@ -75,7 +75,7 @@ export const NewsItem: React.FC<NewsItemProps> = (props) => {
 
     const classes = ["news-item"];
 
-    if (context.state.selectedNewsGuid === props.news.guid) {
+    if (context.state.selectedNews && context.state.selectedNews.guid === props.news.guid) {
         classes.push("active");
     }
 

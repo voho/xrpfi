@@ -6,7 +6,7 @@ export interface NewsState {
     loading: boolean,
     error?: string,
     news: News[],
-    selectedNewsGuid?: string,
+    selectedNews?: News,
     selectedTagIds: TagId[]
 }
 

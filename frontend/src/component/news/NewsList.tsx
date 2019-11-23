@@ -16,8 +16,11 @@ export const NewsList: React.FC<NewsListProps> = (props) => {
     }
 
     function handleSelectNeighbour(delta: number): void {
+        if (!newsContext.state.selectedNews) {
+            return;
+        }
         const guids = newsContext.state.news.map(a => a.guid);
-        const selIndex = guids.indexOf(newsContext.state.selectedNewsGuid || "");
+        const selIndex = guids.indexOf(newsContext.state.selectedNews!.guid || "");
         if (selIndex !== -1) {
             const newIndex = selIndex + delta;
             if (newIndex >= 0 && newIndex < guids.length) {

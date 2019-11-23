@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {News} from "../../common/model";
 import {Button} from "../common/Button";
 import {MediaRating} from "../common/MediaRating";
-import {SourcesStatus} from "../meta/SourcesStatus";
 import "./NewsDetail.scss";
 import {NewsDate, NewsFlags, NewsSource} from "./NewsItem";
 
@@ -76,7 +75,7 @@ const NewsRating: React.FC<{ news: News }> = (props) => {
 
 const NewsSelected: React.FC<NewsDetailProps> = (props) => {
     if (!props.selectedNews) {
-        return <SourcesStatus/>;
+        return <p>Hello! Please select a news.</p>;
     }
 
     const news = props.selectedNews!;
