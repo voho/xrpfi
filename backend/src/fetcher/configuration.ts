@@ -71,7 +71,9 @@ const COMMUNITY_TWITTER: Fetcher[] = [
 ];
 
 const COMMUNITY_TWITTER_BOTS: Fetcher[] = [
-    getCommunityTwitterBotFetcher("whale_alert")
+    getCommunityTwitterBotFetcher("whale_alert"),
+    getCommunityTwitterBotFetcher("xrpl_monitor"),
+    getCommunityTwitterBotFetcher("LiquidityB")
 ];
 
 const EXCHANGES_TWITTER: Fetcher[] = [
@@ -203,7 +205,7 @@ function getCommunityTwitterFetcher(alias: string, quality = 1) {
 }
 
 function getCommunityTwitterBotFetcher(alias: string, quality = 2) {
-    return getTwitterFetcher(alias, ["community", "social", "twitter", "filter", "bot"], quality);
+    return getTwitterFetcher(alias, ["community", "social", "twitter", "bot"], quality);
 }
 
 function getExchangeTwitterFetcher(alias: string, quality = 10) {

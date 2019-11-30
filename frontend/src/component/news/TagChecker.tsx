@@ -1,5 +1,6 @@
 import React, {useContext} from "react";
 import {KNOWN_TAGS, TagMeta} from "../../common/model";
+import {updateNews} from "../../service/api";
 import {ToggleTagEnabledAction, UseNewsReducerContext} from "../../service/NewsReducer";
 
 const SingleTagChecker: React.FC<{ tag: TagMeta }> = (props) => {
@@ -7,6 +8,9 @@ const SingleTagChecker: React.FC<{ tag: TagMeta }> = (props) => {
 
     function toggleEnabled(): void {
         context.dispatch({type: "toggle_tag_visible", tag: props.tag.id} as ToggleTagEnabledAction);
+
+        // update now
+        updateNews(context.state, context.dispatch);
     }
 
     function isEnabled(): boolean {
