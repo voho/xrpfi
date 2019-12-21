@@ -1,6 +1,7 @@
 import React, {useContext} from "react";
 import {News} from "../../common/model";
 import {UseNewsReducerContext} from "../../service/NewsReducer";
+import {PriceChartEmbed} from "../trade/PriceChartEmbed";
 import "./NewsCenter.scss";
 import {NewsControl} from "./NewsControl";
 import {NewsDetail} from "./NewsDetail";
@@ -19,7 +20,7 @@ const NewsListWrapper: React.FC<{ news?: News[] }> = (props) => {
 
 const NewsDetailWrapper: React.FC<{ news?: News }> = (props) => {
     if (!props.news) {
-        return null;
+        return <PriceChartEmbed/>;
     }
     return (
         <div className={"news-site-detail"}>

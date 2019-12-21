@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {News} from "../../common/model";
+import {KNOWN_TAGS, News, TagMeta} from "../../common/model";
 import {Button} from "../common/Button";
 import {MediaRating} from "../common/MediaRating";
 import "./NewsDetail.scss";
@@ -13,8 +13,17 @@ function createMarkup(html: string) {
     return {__html: html};
 }
 
+function getTagById(tagId: string): TagMeta | null {
+    const tagsFound = KNOWN_TAGS.filter(tag => tag.id === tagId);
+    if (tagsFound.length === 1) {
+        return tagsFound[0];
+    }
+    return null;
+}
+
+
 const NewsOpen: React.FC<{ news: News }> = (props) => {
-    return <Button text={"Open in new window"} onClick={() => window.open(props.news.url)}/>;
+    return <span><Button text={"Open in new window"} onClick={() => window.open(props.news.url)}/></span>;
 };
 
 const VideoEmbed: React.FC<{ videoId: string }> = (props) => {
@@ -54,18 +63,21 @@ const OEmbed: React.FC<{ oembedUrl: string }> = (props) => {
 
 const TagLine: React.FC<NewsDetailProps> = (props) => {
     return (
-        <>
-            <p className={"flags"}>
-                <NewsOpen news={props.selectedNews!}/>
-                <NewsFlags news={props.selectedNews!}/>
-                <NewsSource news={props.selectedNews!}/>
-                <NewsDate news={props.selectedNews!}/>
-            </p>
-            <p className={"flags"}>
-                <NewsRating news={props.selectedNews!}/>
-                <NewsTags news={props.selectedNews!}/>
-            </p>
-        </>
+        <p className={"flags"}>
+            <NewsOpen news={props.selectedNews!}/>
+            <NewsFlags news={props.selectedNews!}/>
+            <NewsSource news={props.selectedNews!}/>
+            <NewsDate news={props.selectedNews!}/>
+            <NewsRating news={props.selectedNews!}/>
+        </p>
+    );
+};
+
+const FooterLine: React.FC<NewsDetailProps> = (props) => {
+    return (
+        <p className={"flags"}>
+            <NewsTags news={props.selectedNews!}/>
+        </p>
     );
 };
 
@@ -87,7 +99,7 @@ const NewsTags: React.FC<{ news: News }> = (props) => {
         return null;
     }
     return (
-        <p>Tags: {props.news.tags.join(", ")}</p>
+        <p>Tags: {props.news.tags.map(getTagById).map(tag => tag ? tag.title : "N/A").join(", ")}</p>
     );
 };
 
@@ -117,6 +129,7 @@ const NewsSelected: React.FC<NewsDetailProps> = (props) => {
             <h2>{news.title}</h2>
             <TagLine selectedNews={news}/>
             <div className={"external"} dangerouslySetInnerHTML={createMarkup(news.body)}/>
+            <FooterLine selectedNews={news}/>
         </div>
     );
 };

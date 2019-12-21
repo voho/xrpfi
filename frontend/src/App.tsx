@@ -4,7 +4,7 @@ import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import "./App.scss";
 import {NEWS_UPDATE_INTERVAL_MS} from "./common/constants";
 import {useInterval} from "./common/hooks";
-import {NewsState, StatusState, TickersState} from "./common/model";
+import {KNOWN_TAGS, NewsState, StatusState, TickersState} from "./common/model";
 import {SourcesStatus} from "./component/meta/SourcesStatus";
 import {NewsCenter} from "./component/news/NewsCenter";
 import {updateNews} from "./service/api";
@@ -12,7 +12,7 @@ import {newsReducer, UseNewsReducerContext} from "./service/NewsReducer";
 import {statusReducer, UseStatusReducerContext} from "./service/StatusReducer";
 import {tickersReducer, UseTickersReducerContext} from "./service/TickersReducer";
 
-const initialNewsState: NewsState = {loading: false, news: [], selectedTagIds: ["good", "news"]};
+const initialNewsState: NewsState = {loading: false, news: [], selectedTagIds: KNOWN_TAGS.map(tag => tag.id)};
 const initialStatusState: StatusState = {loading: false, status: []};
 const initialTickerState: TickersState = {loading: false};
 
