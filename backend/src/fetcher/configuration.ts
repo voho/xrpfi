@@ -123,6 +123,7 @@ const GOOD_RIPPLE_NEWS: Fetcher[] = [
 
 const GOOD_GENERAL_NEWS: Fetcher[] = [
     getGeneralNewsFetcher("http://decryptmedia.com/feed/"),
+    getGeneralNewsFetcher("http://nakamoto.com/rss/", 80),
     getGeneralNewsFetcher("http://www.forbes.com/money/feed2/", 80),
     getGeneralNewsFetcher("http://feeds.finance.yahoo.com/rss/2.0/headline?s=xrp-usd&lang=en-US", 20),
     getGeneralNewsFetcher("http://feeds.finance.yahoo.com/rss/2.0/headline?s=xrp-btc&lang=en-US", 20)
