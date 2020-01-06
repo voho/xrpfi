@@ -12,7 +12,8 @@ import {newsReducer, UseNewsReducerContext} from "./service/NewsReducer";
 import {statusReducer, UseStatusReducerContext} from "./service/StatusReducer";
 import {tickersReducer, UseTickersReducerContext} from "./service/TickersReducer";
 
-const initialNewsState: NewsState = {loading: false, news: [], selectedTagIds: KNOWN_TAGS.map(tag => tag.id)};
+const initialSelectedTagIds = KNOWN_TAGS.map(tag => tag.id).filter(tagId => tagId !== "twitter");
+const initialNewsState: NewsState = {loading: false, news: [], selectedTagIds: initialSelectedTagIds};
 const initialStatusState: StatusState = {loading: false, status: []};
 const initialTickerState: TickersState = {loading: false};
 
