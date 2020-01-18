@@ -42,7 +42,7 @@ div, p {
 }
 
 *::-webkit-scrollbar-track {
-  background-color: lighten($main-bg, 5%);
+  background-color: $main-bg;
 }
 
 *::-webkit-scrollbar {
@@ -50,7 +50,6 @@ div, p {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: lighten($main-bg, 20%);
-  border: 1px solid $main-bg;
+  background-color: lighten($main-bg, 30%);
   border-radius: 5pt;
 }

@@ -1,6 +1,7 @@
 @import "../../App";
 
 .news-site-menu {
+  min-width: 7em;
 }
 
 .news-site-list {
@@ -8,8 +9,6 @@
   align-self: stretch;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  min-width: 40%;
-  max-width: 50%;
   width: 45%;
 }
 
@@ -18,7 +17,5 @@
   align-self: stretch;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  min-width: 40%;
-  max-width: 50%;
   width: 45%;
 }

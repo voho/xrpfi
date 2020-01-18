@@ -52,7 +52,7 @@ const INSTITUTIONS_TWITTER: Fetcher[] = [
 ];
 
 const COMMUNITY_TWITTER: Fetcher[] = [
-    getCommunityTwitterFetcher("BankXRP"),
+    /*getCommunityTwitterFetcher("BankXRP"),
     getCommunityTwitterFetcher("c3_nik"),
     getCommunityTwitterFetcher("hodor7777"),
     getCommunityTwitterFetcher("XrpCenter"),
@@ -66,8 +66,7 @@ const COMMUNITY_TWITTER: Fetcher[] = [
     getCommunityTwitterFetcher("TheCryptHawk"),
     getCommunityTwitterFetcher("lightningsignal"),
     getCommunityTwitterFetcher("Paisan26849860"),
-    getCommunityTwitterFetcher("zerpslurp")
-
+    getCommunityTwitterFetcher("zerpslurp")*/
 ];
 
 const COMMUNITY_TWITTER_BOTS: Fetcher[] = [
