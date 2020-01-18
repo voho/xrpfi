@@ -35,7 +35,11 @@
   }
 
   .news-item-flags a {
-    color: $main-fg;
+    color: lighten($main-fg, 20%);
+  }
+
+  .news-item-flags a:hover {
+    text-decoration: underline;
   }
 
   .news-item-flags span {
