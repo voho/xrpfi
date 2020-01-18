@@ -70,9 +70,9 @@ const COMMUNITY_TWITTER: Fetcher[] = [
 ];
 
 const COMMUNITY_TWITTER_BOTS: Fetcher[] = [
-    getCommunityTwitterBotFetcher("whale_alert"),
+    /*getCommunityTwitterBotFetcher("whale_alert"),
     getCommunityTwitterBotFetcher("xrpl_monitor"),
-    getCommunityTwitterBotFetcher("LiquidityB")
+    getCommunityTwitterBotFetcher("LiquidityB")*/
 ];
 
 const EXCHANGES_TWITTER: Fetcher[] = [
