@@ -241,7 +241,7 @@ export function getTwitterFetcher(alias: string, tags: TagId[], quality = 1): Fe
     return {
         tags: new Set<TagId>(tags),
         customFields: [],
-        title: `@${alias} at twitter`,
+        title: `@${alias}`,
         homeUrl: `https://twitter.com/${alias}`,
         fetchUrl: `https://twitrss.me/twitter_user_to_rss/?user=${alias}`,
         updateFrequencyDivider: DIVIDER_SLOWEST,

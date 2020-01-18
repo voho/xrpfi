@@ -49,4 +49,9 @@
   .news-item-main {
     flex-grow: 1;
   }
+
+  .news-item-title {
+    word-break: break-word;
+    white-space: pre-line;
+  }
 }

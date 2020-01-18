@@ -8,6 +8,7 @@ export function twitterRssMapper(fetcher: Fetcher, response: string): Promise<Ne
         .then(news => {
             news.forEach(n => n.sourceId = "twitter");
             news.forEach(n => n.oembedUrl = "https://publish.twitter.com/oembed?conversation=none&omit_script=true&theme=dark&url=" + encodeURIComponent(n.url));
+            news.forEach(n => n.title = fetcher.title);
             return news;
         });
 }
